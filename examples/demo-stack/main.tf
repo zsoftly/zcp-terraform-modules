@@ -35,3 +35,35 @@ module "load_balancing_security" {
   port_forwards          = try(each.value.port_forwards, {})
   load_balancer_rules    = try(each.value.load_balancer_rules, {})
 }
+
+module "kubernetes" {
+  for_each = var.kubernetes_clusters
+
+  source = "../../modules/kubernetes"
+
+  name                     = each.value.name
+  description              = each.value.description
+  zone                     = var.zone
+  kubernetes_version       = each.value.kubernetes_version
+  service_offering         = each.value.service_offering
+  worker_count             = each.value.worker_count
+  control_plane_count      = each.value.control_plane_count
+  etcd_count               = each.value.etcd_count
+  node_root_disk_size      = each.value.node_root_disk_size
+  node_offerings           = each.value.node_offerings
+  node_templates           = each.value.node_templates
+  autoscaling_enabled      = each.value.autoscaling_enabled
+  autoscaling_min_size     = each.value.autoscaling_min_size
+  autoscaling_max_size     = each.value.autoscaling_max_size
+  network_id               = each.value.network_id
+  keypair                  = each.value.keypair
+  hypervisor               = each.value.hypervisor
+  cni_configuration_id     = each.value.cni_configuration_id
+  cni_config_details       = each.value.cni_config_details
+  project                  = var.project
+  domain_id                = each.value.domain_id
+  account                  = each.value.account
+  docker_registry_url      = each.value.docker_registry_url
+  docker_registry_username = each.value.docker_registry_username
+  docker_registry_password = try(var.kubernetes_docker_registry_passwords[each.key], null)
+}

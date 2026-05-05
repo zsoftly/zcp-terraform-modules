@@ -277,3 +277,84 @@ check "load_balancing_security_network_key_exists" {
     error_message = "Each load_balancing_security network_key must reference an existing network key inside its networking_vpc_key."
   }
 }
+
+variable "kubernetes_clusters" {
+  description = "Map of CKS clusters to create. Defaults to empty so the networking dry run remains lightweight."
+  type = map(object({
+    name                = string
+    description         = optional(string)
+    kubernetes_version  = optional(string, "1.34.3")
+    service_offering    = string
+    worker_count        = optional(number, 1)
+    control_plane_count = optional(number, 1)
+    etcd_count          = optional(number, 0)
+    node_root_disk_size = optional(number, 25)
+    node_offerings = optional(object({
+      control = optional(string)
+      worker  = optional(string)
+      etcd    = optional(string)
+    }), {})
+    node_templates = optional(object({
+      control = optional(string)
+      worker  = optional(string)
+      etcd    = optional(string)
+    }), {})
+    autoscaling_enabled      = optional(bool, false)
+    autoscaling_min_size     = optional(number)
+    autoscaling_max_size     = optional(number)
+    network_id               = optional(string)
+    keypair                  = optional(string)
+    hypervisor               = optional(string, "KVM")
+    cni_configuration_id     = optional(string)
+    cni_config_details       = optional(map(string))
+    domain_id                = optional(string)
+    account                  = optional(string)
+    docker_registry_url      = optional(string)
+    docker_registry_username = optional(string)
+  }))
+  default = {}
+}
+
+variable "kubernetes_docker_registry_passwords" {
+  description = "Optional private Docker registry passwords keyed by kubernetes_clusters key."
+  type        = map(string)
+  default     = {}
+  sensitive   = true
+}
+
+check "kubernetes_registry_password_keys_exist" {
+  assert {
+    condition = alltrue([
+      for key, _ in nonsensitive(var.kubernetes_docker_registry_passwords) :
+      contains(keys(var.kubernetes_clusters), key)
+    ])
+    error_message = "Each kubernetes_docker_registry_passwords key must match a key in kubernetes_clusters."
+  }
+}
+
+check "kubernetes_registry_credentials_complete" {
+  assert {
+    condition = alltrue(concat(
+      [
+        for key, cluster in var.kubernetes_clusters :
+        (
+          cluster.docker_registry_url == null &&
+          cluster.docker_registry_username == null &&
+          !contains(keys(nonsensitive(var.kubernetes_docker_registry_passwords)), key)
+        ) ||
+        (
+          cluster.docker_registry_url != null &&
+          cluster.docker_registry_username != null &&
+          contains(keys(nonsensitive(var.kubernetes_docker_registry_passwords)), key)
+        )
+      ],
+      [
+        for key, _ in nonsensitive(var.kubernetes_docker_registry_passwords) :
+        contains(keys(var.kubernetes_clusters), key) &&
+        var.kubernetes_clusters[key].docker_registry_url != null &&
+        var.kubernetes_clusters[key].docker_registry_username != null
+      ]
+    ))
+    error_message = "Kubernetes Docker registry credentials must be complete and keyed by the matching kubernetes_clusters entry."
+  }
+}
