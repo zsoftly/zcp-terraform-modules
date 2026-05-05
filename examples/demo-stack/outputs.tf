@@ -95,3 +95,18 @@ output "kubernetes_post_create_automation" {
     for key, kubernetes in module.kubernetes : key => kubernetes.zcp_post_create_automation
   }
 }
+
+output "account_ids" {
+  description = "Account IDs keyed by account key."
+  value       = module.accounts_projects.account_ids
+}
+
+output "project_ids" {
+  description = "Project IDs keyed by project key."
+  value       = module.accounts_projects.project_ids
+}
+
+output "roles" {
+  description = "Role details keyed by role key."
+  value       = module.accounts_projects.roles
+}

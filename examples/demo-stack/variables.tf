@@ -240,6 +240,77 @@ variable "load_balancing_security" {
             }
           ]
         }
+    }
+  }
+}
+
+variable "accounts_projects" {
+  description = "Accounts, users, roles, and projects for the demo stack."
+  type = object({
+    roles = optional(map(object({
+      name        = string
+      description = optional(string)
+      role_type   = optional(string, "User")
+    })), {})
+    accounts = optional(map(object({
+      account      = optional(string)
+      account_type = optional(number, 0)
+      email        = string
+      first_name   = string
+      last_name    = string
+      username     = string
+      password     = string
+      domain_id    = optional(string)
+      role_key     = optional(string)
+      role_id      = optional(string)
+    })), {})
+    users = optional(map(object({
+      username    = string
+      email       = string
+      first_name  = string
+      last_name   = string
+      password    = string
+      account_key = string
+    })), {})
+    projects = optional(map(object({
+      name         = string
+      display_text = optional(string)
+      account_key  = optional(string)
+    })), {})
+  })
+  default = {
+    roles = {
+      demo = {
+        name      = "demo-role"
+        role_type = "User"
+      }
+    }
+    accounts = {
+      demo = {
+        account    = "demo-account"
+        email      = "demo@zcp.example"
+        first_name = "Demo"
+        last_name  = "Account"
+        username   = "demoadmin"
+        password   = "replace-with-account-password"
+        role_key   = "demo"
+      }
+    }
+    users = {
+      demo_dev = {
+        username    = "demo-dev"
+        email       = "demo-dev@zcp.example"
+        first_name  = "Demo"
+        last_name   = "Dev"
+        password    = "replace-with-user-password"
+        account_key = "demo"
+      }
+    }
+    projects = {
+      demo = {
+        name         = "demo-project"
+        display_text = "ZCP Demo Project"
+        account_key  = "demo"
       }
     }
   }

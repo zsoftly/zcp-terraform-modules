@@ -67,3 +67,12 @@ module "kubernetes" {
   docker_registry_username = each.value.docker_registry_username
   docker_registry_password = try(var.kubernetes_docker_registry_passwords[each.key], null)
 }
+
+module "accounts_projects" {
+  source = "../../modules/accounts-projects"
+
+  roles    = var.accounts_projects.roles
+  accounts = var.accounts_projects.accounts
+  users    = var.accounts_projects.users
+  projects = var.accounts_projects.projects
+}
