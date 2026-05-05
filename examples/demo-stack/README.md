@@ -44,16 +44,33 @@ post-create platform integration steps from the IaaS automation:
 - `546-cks-fix-ccm.yml` for the CCM API endpoint
 - `547-cks-storage.yml` for persistent storage
 
-For ZCP defaults, do not wire CKS to the demo VPC tier network. The current ZCP
-CKS model uses an isolated network with source NAT, and the platform lifecycle
-test creates its own isolated network. If `network_id` is supplied, it must
-refer to a supported CKS isolated network, not the example `VPC Tier` network.
+## Accounts & Projects
 
-Terraform creates the CKS resource only. A usable ZCP cluster still needs the
-post-create platform integration steps from the IaaS automation:
+Creates domains, accounts, users, roles, projects, and resource quotas from the
+`accounts_projects` object.
 
-- `546-cks-fix-ccm.yml` for the CCM API endpoint
-- `547-cks-storage.yml` for persistent storage
+The default creates one domain, one role, and one project. Accounts and users
+default to empty to avoid placeholder passwords reaching state. To provision
+accounts and users, supply them via a separate sensitive `.tfvars` file that
+is never committed:
+
+```hcl
+accounts_projects = {
+  accounts = {
+    dev = {
+      account    = "dev-account"
+      email      = "dev@example.com"
+      first_name = "Dev"
+      last_name  = "Team"
+      username   = "devadmin"
+      password   = "supplied-at-runtime"
+      role_key   = "demo"
+    }
+  }
+}
+```
+
+See `terraform.tfvars.example` for the full variable structure.
 
 ## Dry Run
 
