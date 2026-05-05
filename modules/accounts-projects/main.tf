@@ -1,3 +1,11 @@
+resource "cloudstack_domain" "this" {
+  for_each = var.domains
+
+  name             = each.value.name
+  parent_domain_id = try(each.value.parent_domain_id, null)
+  network_domain   = try(each.value.network_domain, null)
+}
+
 resource "cloudstack_role" "this" {
   for_each = var.roles
 
@@ -7,28 +15,28 @@ resource "cloudstack_role" "this" {
 }
 
 resource "cloudstack_account" "this" {
-  for_each = var.accounts
+  for_each = nonsensitive(toset(keys(var.accounts)))
 
-  account      = try(each.value.account, each.value.username)
-  account_type = each.value.account_type
-  email        = each.value.email
-  first_name   = each.value.first_name
-  last_name    = each.value.last_name
-  username     = each.value.username
-  password     = each.value.password
-  domain_id    = try(each.value.domain_id, null)
+  account      = try(var.accounts[each.key].account, var.accounts[each.key].username)
+  account_type = var.accounts[each.key].account_type
+  email        = var.accounts[each.key].email
+  first_name   = var.accounts[each.key].first_name
+  last_name    = var.accounts[each.key].last_name
+  username     = var.accounts[each.key].username
+  password     = var.accounts[each.key].password
+  domain_id    = local.account_domain_ids[each.key]
   role_id      = local.account_role_ids[each.key]
 }
 
 resource "cloudstack_user" "this" {
-  for_each = var.users
+  for_each = nonsensitive(toset(keys(var.users)))
 
-  username   = each.value.username
-  email      = each.value.email
-  first_name = each.value.first_name
-  last_name  = each.value.last_name
-  password   = each.value.password
-  account    = cloudstack_account.this[each.value.account_key].account
+  username   = var.users[each.key].username
+  email      = var.users[each.key].email
+  first_name = var.users[each.key].first_name
+  last_name  = var.users[each.key].last_name
+  password   = var.users[each.key].password
+  account    = cloudstack_account.this[nonsensitive(var.users[each.key].account_key)].account
 }
 
 resource "cloudstack_project" "this" {
@@ -37,4 +45,12 @@ resource "cloudstack_project" "this" {
   name        = each.value.name
   displaytext = try(each.value.display_text, each.value.name)
   account     = each.value.account_key != null ? cloudstack_account.this[each.value.account_key].account : null
+}
+
+resource "cloudstack_limits" "this" {
+  for_each = local.quota_limits
+
+  type    = each.value.type
+  max     = each.value.max
+  account = cloudstack_account.this[each.value.account_key].account
 }

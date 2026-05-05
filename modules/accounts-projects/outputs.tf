@@ -1,3 +1,21 @@
+output "domains" {
+  description = "Created domain details keyed by input key."
+  value = {
+    for key, domain in cloudstack_domain.this : key => {
+      id             = domain.id
+      name           = domain.name
+      network_domain = domain.network_domain
+    }
+  }
+}
+
+output "domain_ids" {
+  description = "Created domain IDs keyed by input key."
+  value = {
+    for key, domain in cloudstack_domain.this : key => domain.id
+  }
+}
+
 output "accounts" {
   description = "Created account details keyed by input key."
   sensitive   = true

@@ -1,24 +1,37 @@
 # CloudStack Accounts & Projects Module
 
-Creates reusable CloudStack account, user, role, and project resources using the Apache CloudStack Terraform provider.
+Creates CloudStack domain hierarchy, accounts, users, roles, projects, and resource quotas using the Apache CloudStack Terraform provider.
 
-One module call manages all accounts and projects for a given domain or environment.
+One module call manages all resources for a given environment.
 
 ## Resources
 
-| Resource            | Purpose                                        |
-| ------------------- | ---------------------------------------------- |
-| `cloudstack_role`   | Creates custom roles                           |
-| `cloudstack_account`| Creates accounts with role assignment          |
-| `cloudstack_user`   | Creates additional users inside accounts       |
-| `cloudstack_project`| Creates projects with an optional admin account|
+| Resource              | Purpose                                                        |
+| --------------------- | -------------------------------------------------------------- |
+| `cloudstack_domain`   | Creates domains for account and workload isolation             |
+| `cloudstack_role`     | Creates custom roles                                           |
+| `cloudstack_account`  | Creates accounts with domain placement and role assignment     |
+| `cloudstack_user`     | Creates additional users inside accounts                       |
+| `cloudstack_project`  | Creates projects with an optional admin account                |
+| `cloudstack_limits`   | Sets per-account resource quotas (CPU, RAM, storage, etc.)     |
 
-## Provider Limitations (v0.6.0)
+## Domain Isolation
 
-Two features from the acceptance criteria are not available as native Terraform resources in cloudstack/cloudstack v0.6.0:
+In CloudStack, domains are the primary isolation boundary. Accounts and their workloads are scoped to the domain they live in. This module creates domains and places accounts into them via `domain_key` (a created domain) or `domain_id` (a pre-existing domain ID).
 
-- **Role permissions** — `cloudstack_role_permission` does not exist. Custom roles can be created (name and type), but permission rules must be assigned in the CloudStack UI or via the CloudStack API after the role is created.
-- **Resource quotas** — `cloudstack_resource_limit` does not exist. CPU, RAM, and storage limits must be set in the CloudStack UI or via the `updateResourceLimit` API after accounts are created.
+The ZCP domain hierarchy follows this structure:
+
+```
+ROOT
+└── <site>                  (parent domain)
+    ├── <org>               (internal org domain)
+    │   ├── infra
+    │   ├── dev
+    │   └── prd
+    └── tenants             (external customer branch)
+```
+
+Projects provide a secondary isolation layer within an account. Adding accounts or users as project members is not supported in provider v0.6.0 — project membership must be managed via the CloudStack UI or API.
 
 ## Account Types
 
@@ -35,36 +48,81 @@ Every account must specify exactly one of:
 - `role_key` — key into `var.roles` to assign a role created by this module
 - `role_id` — direct CloudStack role ID for a pre-existing built-in or custom role
 
+## Resource Quota Types
+
+| Field              | CloudStack type ID | Unit  |
+| ------------------ | ------------------ | ----- |
+| `instances`        | 0                  | count |
+| `ips`              | 1                  | count |
+| `volumes`          | 2                  | count |
+| `snapshots`        | 3                  | count |
+| `templates`        | 4                  | count |
+| `networks`         | 6                  | count |
+| `vpcs`             | 7                  | count |
+| `cpu`              | 8                  | cores |
+| `memory`           | 9                  | MB    |
+| `primary_storage`  | 10                 | GB    |
+| `secondary_storage`| 11                 | GB    |
+
+Set any quota field to `-1` for unlimited. Omit a field to leave it unmanaged.
+
+## Provider Limitations (v0.6.0)
+
+- **Role permissions** — `cloudstack_role_permission` does not exist. Custom roles can be created, but API rule permissions must be assigned in the CloudStack UI after the role is created.
+- **Project membership** — No resource exists for adding accounts or users as project members. Project membership must be managed via the CloudStack UI or `addAccountToProject` API.
+- **Per-user role assignment** — `cloudstack_user` has no `role_id` argument. Users inherit the account-level role.
+
 ## Usage
 
 ```hcl
 module "accounts_projects" {
   source = "../../modules/accounts-projects"
 
+  domains = {
+    tenants = {
+      name = "tenants"
+    }
+    acme = {
+      name             = "acme"
+      parent_domain_id = module.accounts_projects.domain_ids["tenants"]
+    }
+  }
+
   roles = {
-    dev = {
-      name      = "dev-role"
+    tenant_user = {
+      name      = "tenant-user-role"
       role_type = "User"
     }
   }
 
   accounts = {
-    dev = {
-      account    = "dev-account"
-      email      = "dev@example.com"
-      first_name = "Dev"
-      last_name  = "Team"
-      username   = "devadmin"
-      password   = var.dev_account_password
-      role_key   = "dev"
+    acme = {
+      account    = "acme"
+      email      = "admin@acme.example"
+      first_name = "Acme"
+      last_name  = "Admin"
+      username   = "acme-admin"
+      password   = var.acme_password
+      domain_key = "acme"
+      role_key   = "tenant_user"
     }
   }
 
   projects = {
-    dev = {
-      name         = "dev-project"
-      display_text = "Development Project"
-      account_key  = "dev"
+    acme_web = {
+      name         = "acme-web"
+      display_text = "Acme Web Project"
+      account_key  = "acme"
+    }
+  }
+
+  quotas = {
+    acme = {
+      account_key     = "acme"
+      cpu             = 20
+      memory          = 40960
+      primary_storage = 500
+      instances       = 10
     }
   }
 }

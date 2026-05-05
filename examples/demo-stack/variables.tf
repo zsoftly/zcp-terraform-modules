@@ -245,8 +245,14 @@ variable "load_balancing_security" {
 }
 
 variable "accounts_projects" {
-  description = "Accounts, users, roles, and projects for the demo stack."
+  description = "Domains, accounts, users, roles, projects, and quotas for the demo stack."
+  sensitive   = true
   type = object({
+    domains = optional(map(object({
+      name             = string
+      parent_domain_id = optional(string)
+      network_domain   = optional(string)
+    })), {})
     roles = optional(map(object({
       name        = string
       description = optional(string)
@@ -261,6 +267,7 @@ variable "accounts_projects" {
       username     = string
       password     = string
       domain_id    = optional(string)
+      domain_key   = optional(string)
       role_key     = optional(string)
       role_id      = optional(string)
     })), {})
@@ -277,42 +284,43 @@ variable "accounts_projects" {
       display_text = optional(string)
       account_key  = optional(string)
     })), {})
+    quotas = optional(map(object({
+      account_key       = string
+      instances         = optional(number)
+      ips               = optional(number)
+      volumes           = optional(number)
+      snapshots         = optional(number)
+      templates         = optional(number)
+      networks          = optional(number)
+      vpcs              = optional(number)
+      cpu               = optional(number)
+      memory            = optional(number)
+      primary_storage   = optional(number)
+      secondary_storage = optional(number)
+    })), {})
   })
   default = {
+    domains = {
+      demo = {
+        name = "demo-domain"
+      }
+    }
     roles = {
       demo = {
         name      = "demo-role"
         role_type = "User"
       }
     }
-    accounts = {
-      demo = {
-        account    = "demo-account"
-        email      = "demo@zcp.example"
-        first_name = "Demo"
-        last_name  = "Account"
-        username   = "demoadmin"
-        password   = "replace-with-account-password"
-        role_key   = "demo"
-      }
-    }
-    users = {
-      demo_dev = {
-        username    = "demo-dev"
-        email       = "demo-dev@zcp.example"
-        first_name  = "Demo"
-        last_name   = "Dev"
-        password    = "replace-with-user-password"
-        account_key = "demo"
-      }
-    }
+    accounts = {}
+    users    = {}
     projects = {
       demo = {
         name         = "demo-project"
         display_text = "ZCP Demo Project"
-        account_key  = "demo"
+        account_key  = null
       }
     }
+    quotas = {}
   }
 }
 

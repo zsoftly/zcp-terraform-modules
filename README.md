@@ -31,7 +31,7 @@ examples/
 | `networking`                | Ready   | VPCs, VPC tiers/networks, IP ranges, ACLs    |
 | `compute`                   | Planned | Instances, templates, service offerings      |
 | `storage`                   | Planned | Volumes and snapshots                        |
-| `accounts-projects`         | Ready   | Accounts, projects, users, roles, quotas     |
+| `accounts-projects`         | Ready   | Domains, accounts, users, roles, projects, quotas |
 | `load-balancing-security`   | Ready   | Load balancing, firewall, NAT                |
 | `kubernetes`                | Ready   | Managed clusters and node pools              |
 | `vpn-connectivity`          | Planned | Site-to-site VPN and remote access           |

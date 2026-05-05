@@ -97,7 +97,7 @@ kubernetes_clusters = {
 #   }
 #   accounts = {
 #     dev = {
-#       name       = "dev-account"
+#       account    = "dev-account"
 #       email      = "dev@zcp.example"
 #       first_name = "Dev"
 #       last_name  = "Team"
@@ -112,14 +112,6 @@ kubernetes_clusters = {
 #       name         = "dev-project"
 #       display_text = "Development Project"
 #       account_key  = "dev"
-#     }
-#   }
-#   quotas = {
-#     dev = {
-#       account_key     = "dev"
-#       cpu             = 20
-#       memory          = 40960
-#       primary_storage = 500
 #     }
 #   }
 # }

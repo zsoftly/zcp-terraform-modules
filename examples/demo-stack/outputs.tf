@@ -110,3 +110,8 @@ output "roles" {
   description = "Role details keyed by role key."
   value       = module.accounts_projects.roles
 }
+
+output "domain_ids" {
+  description = "Domain IDs keyed by domain key."
+  value       = module.accounts_projects.domain_ids
+}

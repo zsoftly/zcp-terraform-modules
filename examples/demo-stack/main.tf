@@ -71,8 +71,10 @@ module "kubernetes" {
 module "accounts_projects" {
   source = "../../modules/accounts-projects"
 
-  roles    = var.accounts_projects.roles
+  domains  = nonsensitive(var.accounts_projects.domains)
+  roles    = nonsensitive(var.accounts_projects.roles)
   accounts = var.accounts_projects.accounts
   users    = var.accounts_projects.users
-  projects = var.accounts_projects.projects
+  projects = nonsensitive(var.accounts_projects.projects)
+  quotas   = nonsensitive(var.accounts_projects.quotas)
 }
