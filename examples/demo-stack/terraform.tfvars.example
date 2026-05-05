@@ -1,0 +1,30 @@
+cloudstack_api_url    = "https://cloud.zcp.example/client/api"
+cloudstack_api_key    = "replace-with-api-key"
+cloudstack_secret_key = "replace-with-secret-key"
+
+# Defaults in variables.tf already use the repo-backed non-prod ZCP offerings:
+# - Standard VPC offering - nonprd
+# - VPC Tier
+
+# Override networking_vpcs to create one or more VPCs from this root module.
+# Example:
+#
+# networking_vpcs = {
+#   dev = {
+#     name         = "dev-vpc-01"
+#     display_text = "Development VPC"
+#     cidr         = "10.20.0.0/16"
+#     vpc_offering = "Standard VPC offering - nonprd"
+#     network_acls = {}
+#     networks = {
+#       web = {
+#         name             = "web-tier"
+#         cidr             = "10.20.1.0/24"
+#         gateway          = "10.20.1.1"
+#         startip          = "10.20.1.10"
+#         endip            = "10.20.1.200"
+#         network_offering = "VPC Tier"
+#       }
+#     }
+#   }
+# }
