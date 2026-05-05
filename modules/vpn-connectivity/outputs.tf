@@ -49,3 +49,8 @@ output "connections" {
     }
   }
 }
+
+output "zcp_vpn_policies" {
+  description = "ZCP reference IKE/ESP policy strings for site-to-site VPN configuration."
+  value       = local.zcp_vpn_policies
+}
