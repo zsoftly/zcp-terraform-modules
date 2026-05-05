@@ -45,6 +45,11 @@ variable "accounts" {
     condition     = alltrue([for k, a in var.accounts : contains([0, 1, 2], a.account_type)])
     error_message = "account_type must be 0 (User), 1 (Admin), or 2 (Domain Admin)."
   }
+
+  validation {
+    condition     = alltrue([for k, v in var.accounts : v.role_key != null || v.role_id != null])
+    error_message = "Each account must specify either role_key (module-created role) or role_id (pre-existing role)."
+  }
 }
 
 variable "users" {
@@ -88,13 +93,6 @@ variable "quotas" {
     secondary_storage = optional(number)
   }))
   default = {}
-}
-
-check "account_role_required" {
-  assert {
-    condition     = alltrue([for k, a in var.accounts : a.role_key != null || a.role_id != null])
-    error_message = "Each account must specify either role_key (a key into var.roles) or role_id (an existing CloudStack role ID)."
-  }
 }
 
 check "user_account_key_exists" {

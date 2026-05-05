@@ -84,7 +84,7 @@ module "accounts_projects" {
     }
     acme = {
       name             = "acme"
-      parent_domain_id = module.accounts_projects.domain_ids["tenants"]
+      parent_domain_id = var.tenant_domain_id  # must come from a prior apply or a separate module call
     }
   }
 

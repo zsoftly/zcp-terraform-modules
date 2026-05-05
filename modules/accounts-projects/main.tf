@@ -2,15 +2,15 @@ resource "cloudstack_domain" "this" {
   for_each = var.domains
 
   name             = each.value.name
-  parent_domain_id = try(each.value.parent_domain_id, null)
-  network_domain   = try(each.value.network_domain, null)
+  parent_domain_id = each.value.parent_domain_id
+  network_domain   = each.value.network_domain
 }
 
 resource "cloudstack_role" "this" {
   for_each = var.roles
 
   name        = each.value.name
-  description = try(each.value.description, each.value.name)
+  description = coalesce(each.value.description, each.value.name)
   type        = each.value.role_type
 }
 
