@@ -2,7 +2,7 @@
 
 Combined Terraform example for ZCP customer/demo environments.
 
-This stack starts with the networking module. Add compute, storage, load
+This stack starts with the networking and compute modules. Add storage, load
 balancing, Kubernetes, VPN, and image/template modules here as they are built.
 
 ## Networking
@@ -18,6 +18,16 @@ repo-backed ZCP offerings:
 | ---------------- | -------------------------------- |
 | VPC offering     | `Standard VPC offering - nonprd` |
 | Network offering | `VPC Tier`                       |
+
+## Compute
+
+The demo stack also accepts a `compute_groups` map. Each entry calls the
+reusable compute module once and references a network created by the
+networking module via `vpc_key` and `network_key`.
+
+`compute_groups` defaults to an empty map so the base demo plan stays
+networking-only. Populate it (or override in `terraform.tfvars`) to plan
+instances. See `terraform.tfvars.example` for a sample group.
 
 ## Dry Run
 

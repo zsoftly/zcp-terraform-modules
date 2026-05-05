@@ -32,3 +32,31 @@ output "network_cidrs" {
     for key, networking in module.networking : key => networking.network_cidrs
   }
 }
+
+output "compute_instances" {
+  description = "Instance details keyed by compute group key."
+  value = {
+    for key, compute in module.compute : key => compute.instances
+  }
+}
+
+output "compute_instance_ids" {
+  description = "Instance IDs keyed by compute group key."
+  value = {
+    for key, compute in module.compute : key => compute.instance_ids
+  }
+}
+
+output "compute_instance_ips" {
+  description = "Instance primary IPs keyed by compute group key."
+  value = {
+    for key, compute in module.compute : key => compute.instance_ips
+  }
+}
+
+output "compute_ssh_keypairs" {
+  description = "SSH keypair details keyed by compute group key."
+  value = {
+    for key, compute in module.compute : key => compute.ssh_keypair
+  }
+}

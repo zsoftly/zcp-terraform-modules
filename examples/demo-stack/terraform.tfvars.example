@@ -28,3 +28,22 @@ cloudstack_secret_key = "replace-with-secret-key"
 #     }
 #   }
 # }
+
+# Compute groups are empty by default. Each entry calls the compute module once
+# and references a network created by the networking module.
+#
+# compute_groups = {
+#   web = {
+#     vpc_key                  = "demo"
+#     network_key              = "web"
+#     default_service_offering = "Basic"
+#     default_template         = "Ubuntu 22.04"
+#     create_ssh_keypair       = true
+#     ssh_keypair_name         = "demo-key"
+#     ssh_public_key           = "ssh-ed25519 AAAA... user@host"
+#     instances = {
+#       web1 = { name = "web-01" }
+#       web2 = { name = "web-02", service_offering = "Standard" }
+#     }
+#   }
+# }

@@ -16,7 +16,8 @@ This repo provides reusable, composable Terraform modules for ZCP enablement:
 
 ```text
 modules/
-└── networking/   # VPCs, networks, IP ranges, ACLs
+├── networking/   # VPCs, networks, IP ranges, ACLs
+└── compute/      # Instances, SSH keypairs, affinity groups, data disks
 
 examples/
 └── demo-stack/   # combined demo stack using the modules
@@ -27,7 +28,7 @@ examples/
 | Module                      | Status  | Purpose                                      |
 | --------------------------- | ------- | -------------------------------------------- |
 | `networking`                | Ready   | VPCs, VPC tiers/networks, IP ranges, ACLs    |
-| `compute`                   | Planned | Instances, templates, service offerings      |
+| `compute`                   | Ready   | Instances, templates, service offerings      |
 | `storage`                   | Planned | Volumes and snapshots                        |
 | `accounts-projects`         | Planned | Accounts, projects, users, roles, quotas     |
 | `load-balancing-security`   | Planned | Load balancing, firewall, NAT                |
