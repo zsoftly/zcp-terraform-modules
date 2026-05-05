@@ -83,3 +83,18 @@ kubernetes_clusters = {
     # network_id = "supported-cks-isolated-network-id"
   }
 }
+
+# vpn_customer_gateways defines remote peers for site-to-site VPN.
+# Pre-shared keys must never be committed — supply them via a separate sensitive .tfvars file.
+# Example:
+#
+# vpn_customer_gateways = {
+#   hq = {
+#     name       = "hq-peer"
+#     gateway    = "203.0.113.1"
+#     cidr       = "192.168.1.0/24"
+#     ipsec_psk  = "supplied-via-sensitive-tfvars"
+#     esp_policy = "aes256-sha256;modp2048"
+#     ike_policy = "aes256-sha256;modp2048"
+#   }
+# }

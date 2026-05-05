@@ -67,3 +67,11 @@ module "kubernetes" {
   docker_registry_username = each.value.docker_registry_username
   docker_registry_password = try(var.kubernetes_docker_registry_passwords[each.key], null)
 }
+
+module "vpn_connectivity" {
+  source = "../../modules/vpn-connectivity"
+
+  vpc_id            = module.networking["demo"].vpc.id
+  project           = var.project
+  customer_gateways = var.vpn_customer_gateways
+}

@@ -73,6 +73,35 @@ until provider support is added.
 
 See `terraform.tfvars.example` for the full variable structure.
 
+## VPN & Connectivity
+
+Creates a VPN gateway attached to the demo VPC and optional site-to-site connections
+from the `vpn_customer_gateways` map.
+
+The default value is an empty map — no customer gateways or connections are planned
+by default. Only the VPN gateway is created (one per VPC). To add site-to-site
+connections, supply customer gateways via a separate sensitive `.tfvars` file that
+is never committed:
+
+```hcl
+vpn_customer_gateways = {
+  hq = {
+    name       = "hq-peer"
+    gateway    = "203.0.113.1"
+    cidr       = "192.168.1.0/24"
+    ipsec_psk  = "supplied-at-runtime"
+    esp_policy = "aes256-sha256;modp2048"
+    ike_policy = "aes256-sha256;modp2048"
+  }
+}
+```
+
+Provider limitation: Remote access VPN is not supported in CloudStack provider v0.6.x.
+Configure it directly in the CloudStack UI or via the CloudStack API until provider support
+is added.
+
+See `terraform.tfvars.example` for the full variable structure.
+
 ## Dry Run
 
 ```bash
