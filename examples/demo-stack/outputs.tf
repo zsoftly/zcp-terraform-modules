@@ -32,3 +32,45 @@ output "network_cidrs" {
     for key, networking in module.networking : key => networking.network_cidrs
   }
 }
+
+output "public_ips" {
+  description = "Public IP details keyed by load balancing/security stack key."
+  value = {
+    for key, stack in module.load_balancing_security : key => stack.public_ips
+  }
+}
+
+output "firewall_rule_sets" {
+  description = "Ingress firewall resources keyed by load balancing/security stack key."
+  value = {
+    for key, stack in module.load_balancing_security : key => stack.firewall_rule_sets
+  }
+}
+
+output "egress_firewall_rule_sets" {
+  description = "Egress firewall resources keyed by load balancing/security stack key."
+  value = {
+    for key, stack in module.load_balancing_security : key => stack.egress_firewall_rule_sets
+  }
+}
+
+output "static_nats" {
+  description = "Static NAT resources keyed by load balancing/security stack key."
+  value = {
+    for key, stack in module.load_balancing_security : key => stack.static_nats
+  }
+}
+
+output "port_forwards" {
+  description = "Port forwarding resources keyed by load balancing/security stack key."
+  value = {
+    for key, stack in module.load_balancing_security : key => stack.port_forwards
+  }
+}
+
+output "load_balancer_rules" {
+  description = "Load balancer rules keyed by load balancing/security stack key."
+  value = {
+    for key, stack in module.load_balancing_security : key => stack.load_balancer_rules
+  }
+}

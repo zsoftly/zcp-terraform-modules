@@ -138,3 +138,109 @@ variable "networking_vpcs" {
     }
   }
 }
+
+variable "load_balancing_security" {
+  description = "Map of load balancing and security stacks to create."
+  type = map(object({
+    name                   = string
+    networking_vpc_key     = optional(string)
+    network_key            = optional(string)
+    network_id             = optional(string)
+    vpc_id                 = optional(string)
+    existing_public_ip_ids = optional(map(string), {})
+    public_ips = optional(map(object({
+      is_portable = optional(bool, false)
+      network_id  = optional(string)
+      vpc_id      = optional(string)
+      zone        = optional(string)
+    })), {})
+    firewalls = optional(map(object({
+      public_ip_key = optional(string)
+      ip_address_id = optional(string)
+      managed       = optional(bool, false)
+      parallelism   = optional(number, 2)
+      rules = list(object({
+        cidr_list = list(string)
+        protocol  = string
+        ports     = optional(list(string))
+        icmp_type = optional(number)
+        icmp_code = optional(number)
+      }))
+    })), {})
+    egress_firewalls = optional(map(object({
+      network_id  = optional(string)
+      managed     = optional(bool, false)
+      parallelism = optional(number, 2)
+      rules = list(object({
+        cidr_list = list(string)
+        protocol  = string
+        ports     = optional(list(string))
+        icmp_type = optional(number)
+        icmp_code = optional(number)
+      }))
+    })), {})
+    static_nats = optional(map(object({
+      public_ip_key      = optional(string)
+      ip_address_id      = optional(string)
+      virtual_machine_id = string
+      vm_guest_ip        = optional(string)
+    })), {})
+    port_forwards = optional(map(object({
+      public_ip_key = optional(string)
+      ip_address_id = optional(string)
+      managed       = optional(bool, false)
+      forwards = list(object({
+        protocol           = string
+        private_port       = number
+        public_port        = number
+        virtual_machine_id = string
+        vm_guest_ip        = optional(string)
+      }))
+    })), {})
+    load_balancer_rules = optional(map(object({
+      name          = string
+      description   = optional(string)
+      public_ip_key = optional(string)
+      ip_address_id = optional(string)
+      network_id    = optional(string)
+      algorithm     = string
+      private_port  = number
+      public_port   = number
+      protocol      = optional(string, "tcp")
+      member_ids    = list(string)
+    })), {})
+  }))
+  default = {
+    demo = {
+      name               = "demo-edge"
+      networking_vpc_key = "demo"
+      network_key        = "web"
+      public_ips = {
+        web = {}
+      }
+      firewalls = {
+        web = {
+          public_ip_key = "web"
+          rules = [
+            {
+              cidr_list = ["0.0.0.0/0"]
+              protocol  = "tcp"
+              ports     = ["80", "443"]
+            }
+          ]
+        }
+      }
+      egress_firewalls = {
+        web = {
+          rules = [
+            {
+              cidr_list = ["0.0.0.0/0"]
+              protocol  = "tcp"
+              ports     = ["80", "443"]
+            }
+          ]
+        }
+      }
+    }
+  }
+}
