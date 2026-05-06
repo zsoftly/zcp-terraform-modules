@@ -19,6 +19,52 @@ repo-backed ZCP offerings:
 | VPC offering     | `Standard VPC offering - nonprd` |
 | Network offering | `VPC Tier`                       |
 
+## Accounts & Projects
+
+Creates domains, accounts, users, roles, projects, and resource quotas from the
+`accounts_projects` object.
+
+The default creates one domain, one role, and one project. Accounts and users
+default to empty to avoid placeholder passwords reaching state. To provision
+accounts and users, supply them via a separate sensitive `.tfvars` file that
+is never committed:
+
+```hcl
+accounts_projects = {
+  accounts = {
+    dev = {
+      account    = "dev-account"
+      email      = "dev@example.com"
+      first_name = "Dev"
+      last_name  = "Team"
+      username   = "devadmin"
+      password   = "supplied-at-runtime"
+      role_key   = "demo"
+    }
+  }
+}
+```
+
+See `terraform.tfvars.example` for the full variable structure.
+
+## Dry Run
+
+```bash
+cd examples/demo-stack
+terraform init -backend=false
+terraform validate
+terraform plan -var-file=terraform.tfvars.example
+```
+
+For a real ZCP dry run, copy `terraform.tfvars.example` to `terraform.tfvars`
+and replace the CloudStack API values.
+
+```bash
+terraform plan
+```
+
+Do not run `terraform apply` unless the plan has been reviewed.
+
 ## Compute
 
 The demo stack also accepts a `compute_groups` map. Each entry calls the
