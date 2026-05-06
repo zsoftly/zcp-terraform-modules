@@ -18,17 +18,17 @@ locals {
   }
 
   quota_type_names = {
-    instances         = "0"
-    ips               = "1"
-    volumes           = "2"
-    snapshots         = "3"
-    templates         = "4"
-    networks          = "6"
-    vpcs              = "7"
-    cpu               = "8"
-    memory            = "9"
-    primary_storage   = "10"
-    secondary_storage = "11"
+    instances         = "instance"
+    ips               = "ip"
+    volumes           = "volume"
+    snapshots         = "snapshot"
+    templates         = "template"
+    networks          = "network"
+    vpcs              = "vpc"
+    cpu               = "cpu"
+    memory            = "memory"
+    primary_storage   = "primary_storage"
+    secondary_storage = "secondary_storage"
   }
 
   quota_field_values = {

@@ -79,7 +79,6 @@ variable "projects" {
 variable "quotas" {
   description = "Resource limits per account. Set a field to -1 for unlimited, or omit to leave unmanaged."
   type = map(object({
-    account_key       = string
     instances         = optional(number)
     ips               = optional(number)
     volumes           = optional(number)
@@ -111,7 +110,21 @@ check "project_account_key_exists" {
 
 check "quota_account_key_exists" {
   assert {
-    condition     = alltrue([for k, q in var.quotas : contains(keys(var.accounts), q.account_key)])
-    error_message = "All quotas[*].account_key values must correspond to a key in var.accounts."
+    condition     = alltrue([for k, q in var.quotas : contains(keys(var.accounts), k)])
+    error_message = "Each quotas map key must correspond to a key in var.accounts."
+  }
+}
+
+check "account_role_key_exists" {
+  assert {
+    condition     = alltrue([for k, a in var.accounts : a.role_key == null || contains(keys(var.roles), a.role_key)])
+    error_message = "accounts[*].role_key must be a key in var.roles."
+  }
+}
+
+check "account_domain_key_exists" {
+  assert {
+    condition     = alltrue([for k, a in var.accounts : a.domain_key == null || contains(keys(var.domains), a.domain_key)])
+    error_message = "accounts[*].domain_key must be a key in var.domains."
   }
 }

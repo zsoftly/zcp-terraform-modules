@@ -50,19 +50,19 @@ Every account must specify exactly one of:
 
 ## Resource Quota Types
 
-| Field              | CloudStack type ID | Unit  |
-| ------------------ | ------------------ | ----- |
-| `instances`        | 0                  | count |
-| `ips`              | 1                  | count |
-| `volumes`          | 2                  | count |
-| `snapshots`        | 3                  | count |
-| `templates`        | 4                  | count |
-| `networks`         | 6                  | count |
-| `vpcs`             | 7                  | count |
-| `cpu`              | 8                  | cores |
-| `memory`           | 9                  | MB    |
-| `primary_storage`  | 10                 | GB    |
-| `secondary_storage`| 11                 | GB    |
+| Field               | Provider type string | Unit  |
+| ------------------- | -------------------- | ----- |
+| `instances`         | `instance`           | count |
+| `ips`               | `ip`                 | count |
+| `volumes`           | `volume`             | count |
+| `snapshots`         | `snapshot`           | count |
+| `templates`         | `template`           | count |
+| `networks`          | `network`            | count |
+| `vpcs`              | `vpc`                | count |
+| `cpu`               | `cpu`                | cores |
+| `memory`            | `memory`             | MB    |
+| `primary_storage`   | `primary_storage`    | GB    |
+| `secondary_storage` | `secondary_storage`  | GB    |
 
 Set any quota field to `-1` for unlimited. Omit a field to leave it unmanaged.
 
@@ -118,7 +118,6 @@ module "accounts_projects" {
 
   quotas = {
     acme = {
-      account_key     = "acme"
       cpu             = 20
       memory          = 40960
       primary_storage = 500

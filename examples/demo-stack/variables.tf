@@ -285,7 +285,6 @@ variable "accounts_projects" {
       account_key  = optional(string)
     })), {})
     quotas = optional(map(object({
-      account_key       = string
       instances         = optional(number)
       ips               = optional(number)
       volumes           = optional(number)
