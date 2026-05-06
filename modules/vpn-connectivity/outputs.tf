@@ -3,7 +3,7 @@ output "vpn_gateway" {
   value = {
     id        = cloudstack_vpn_gateway.this.id
     public_ip = cloudstack_vpn_gateway.this.public_ip
-    vpc_id    = var.vpc_id
+    vpc_id    = cloudstack_vpn_gateway.this.vpc_id
   }
 }
 
