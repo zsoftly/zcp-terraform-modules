@@ -4,8 +4,8 @@ Creates a CloudStack Kubernetes Service (CKS) cluster for ZCP demo and customer
 enablement stacks.
 
 The module is scoped to one CKS cluster per module call. Root stacks can compose
-multiple clusters with `for_each`, and can pass network IDs from the networking
-module when a cluster should be placed on a specific network.
+multiple clusters with `for_each`, and can pass a supported CKS network ID when
+a cluster should be placed on a specific isolated network.
 
 ## Features
 
@@ -32,6 +32,27 @@ The current ZCP CKS defaults from the IaaS automation are:
 The CKS service, supported Kubernetes versions, and CKS ISOs must already be
 registered in CloudStack before this module can create clusters.
 
+For ZCP defaults, `network_id` must refer to a supported CKS isolated network.
+Do not use the demo VPC tier network as the CKS network. The current ZCP CKS
+lifecycle creates its own isolated network with source NAT.
+
+Terraform only creates the CKS resource. A usable ZCP cluster still needs the
+post-create platform integration steps from the IaaS automation:
+
+- `546-cks-fix-ccm.yml` for the CCM API endpoint
+- `547-cks-storage.yml` for persistent storage
+
+Expose the Terraform outputs from this module, then pass the cluster ID/API
+details to the follow-up automation.
+
+## Update Behavior
+
+Changing `worker_count` is the intended worker scaling path. Other cluster
+shape inputs can recreate the cluster depending on the CloudStack provider and
+API behavior, including `control_plane_count`, `etcd_count`, `network_id`,
+`keypair`, `hypervisor`, `node_templates`, and `node_offerings`. Review the
+Terraform plan before applying those changes.
+
 ## Usage
 
 ```hcl
@@ -47,7 +68,8 @@ module "kubernetes" {
   control_plane_count = 1
   node_root_disk_size = 25
 
-  network_id = module.networking["demo"].network_ids["web"]
+  # Optional: set only when this is a supported CKS isolated network.
+  network_id = "isolated-cks-network-id"
 }
 ```
 

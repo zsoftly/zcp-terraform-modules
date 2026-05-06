@@ -187,3 +187,17 @@ check "autoscaling_bounds_required" {
     error_message = "autoscaling_min_size and autoscaling_max_size are required when autoscaling_enabled is true, and min must be less than or equal to max."
   }
 }
+
+check "project_or_account_scope" {
+  assert {
+    condition     = var.project == null || (var.account == null && var.domain_id == null)
+    error_message = "Set either project or account/domain_id scope, not both."
+  }
+}
+
+check "account_requires_domain_id" {
+  assert {
+    condition     = var.account == null || var.domain_id != null
+    error_message = "domain_id is required when account is set."
+  }
+}

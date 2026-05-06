@@ -44,6 +44,17 @@ post-create platform integration steps from the IaaS automation:
 - `546-cks-fix-ccm.yml` for the CCM API endpoint
 - `547-cks-storage.yml` for persistent storage
 
+For ZCP defaults, do not wire CKS to the demo VPC tier network. The current ZCP
+CKS model uses an isolated network with source NAT, and the platform lifecycle
+test creates its own isolated network. If `network_id` is supplied, it must
+refer to a supported CKS isolated network, not the example `VPC Tier` network.
+
+Terraform creates the CKS resource only. A usable ZCP cluster still needs the
+post-create platform integration steps from the IaaS automation:
+
+- `546-cks-fix-ccm.yml` for the CCM API endpoint
+- `547-cks-storage.yml` for persistent storage
+
 ## Dry Run
 
 ```bash
