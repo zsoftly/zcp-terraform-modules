@@ -28,7 +28,7 @@ output "instance_ips" {
 }
 
 output "instance_passwords" {
-  description = "Generated passwords for password-enabled templates, keyed by input key."
+  description = "Generated passwords for password-enabled templates, keyed by input key. Null for SSH-key templates."
   value = {
     for key, instance in cloudstack_instance.this : key => instance.password
   }

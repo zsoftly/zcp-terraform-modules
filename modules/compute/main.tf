@@ -54,6 +54,13 @@ resource "cloudstack_instance" "this" {
       condition     = each.value.network_id != null || var.default_network_id != null
       error_message = "Instance '${each.key}' has no network_id. Set var.default_network_id or instances[\"${each.key}\"].network_id."
     }
+    precondition {
+      condition = alltrue([
+        for key in each.value.affinity_group_keys :
+        contains(keys(var.affinity_groups), key)
+      ])
+      error_message = "Instance '${each.key}' references affinity_group_keys not present in var.affinity_groups."
+    }
   }
 
   depends_on = [cloudstack_ssh_keypair.this]

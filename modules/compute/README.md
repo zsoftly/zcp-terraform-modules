@@ -24,6 +24,17 @@ strings and does not validate them, so new offerings work without a module
 release. Pass the canonical name in `default_service_offering` or per
 instance.
 
+## SSH Keypair
+
+When `create_ssh_keypair` is false and `ssh_keypair_name` is null, instances
+launch with no module-injected key. Use this only with templates that bake in
+their own credentials or provide access via `user_data`.
+
+## Data Disks
+
+Data disks declared inline are created and attached at instance create time.
+Standalone or shared volumes belong in the future `storage` module.
+
 ## Networking
 
 The module attaches each instance to a single network. Pass a network ID

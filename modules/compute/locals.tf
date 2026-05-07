@@ -7,7 +7,7 @@ locals {
       "${inst_key}-${disk_key}" => {
         instance_key  = inst_key
         disk_key      = disk_key
-        name          = "${inst.name}-${disk_key}"
+        name          = "${inst_key}-${disk_key}"
         disk_offering = disk.disk_offering
         size          = disk.size
         shrink_ok     = disk.shrink_ok
