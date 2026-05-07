@@ -11,7 +11,7 @@ resource "cloudstack_ipaddress" "this" {
 resource "cloudstack_firewall" "this" {
   for_each = var.firewalls
 
-  ip_address_id = coalesce(try(local.public_ip_ids[each.value.public_ip_key], null), try(each.value.ip_address_id, null))
+  ip_address_id = local.firewall_ip_address_ids[each.key]
   managed       = try(each.value.managed, false)
   parallelism   = try(each.value.parallelism, 2)
 
@@ -51,7 +51,7 @@ resource "cloudstack_egress_firewall" "this" {
 resource "cloudstack_static_nat" "this" {
   for_each = var.static_nats
 
-  ip_address_id      = coalesce(try(local.public_ip_ids[each.value.public_ip_key], null), try(each.value.ip_address_id, null))
+  ip_address_id      = local.static_nat_ip_address_ids[each.key]
   virtual_machine_id = each.value.virtual_machine_id
   vm_guest_ip        = try(each.value.vm_guest_ip, null)
   project            = var.project
@@ -60,7 +60,7 @@ resource "cloudstack_static_nat" "this" {
 resource "cloudstack_port_forward" "this" {
   for_each = var.port_forwards
 
-  ip_address_id = coalesce(try(local.public_ip_ids[each.value.public_ip_key], null), try(each.value.ip_address_id, null))
+  ip_address_id = local.port_forward_ip_address_ids[each.key]
   managed       = try(each.value.managed, false)
   project       = var.project
 
@@ -82,7 +82,7 @@ resource "cloudstack_loadbalancer_rule" "this" {
 
   name          = each.value.name
   description   = try(each.value.description, each.value.name)
-  ip_address_id = coalesce(try(local.public_ip_ids[each.value.public_ip_key], null), try(each.value.ip_address_id, null))
+  ip_address_id = local.load_balancer_ip_address_ids[each.key]
   network_id    = try(each.value.network_id, null) != null ? each.value.network_id : var.network_id
   algorithm     = each.value.algorithm
   private_port  = each.value.private_port

@@ -17,6 +17,24 @@ This module can manage:
 The module uses native Apache CloudStack resources. It does not configure
 OPNsense or other platform edge devices.
 
+## Scope and Safety
+
+Public IPs, networks, VPCs, and virtual machines must belong to the same
+CloudStack account/project scope. Cross-project or cross-VPC NAT and load
+balancing mappings will fail in CloudStack.
+
+Keep `managed = false` unless Terraform should own every rule on the target
+CloudStack firewall or port forwarding resource. When `managed = true`, the
+CloudStack provider can prune rules that were created outside Terraform,
+including rules created manually in the UI.
+
+For static NAT, `vm_guest_ip` is optional. When it is omitted, CloudStack uses
+the VM primary NIC IP. Set `vm_guest_ip` explicitly for multi-NIC instances or
+when NAT must target a specific guest address.
+
+Load balancer algorithms must be one of `roundrobin`, `leastconn`, or `source`.
+Port values must be in the `1` to `65535` range.
+
 ## Usage
 
 ```hcl
@@ -91,7 +109,7 @@ module "load_balancing_security" {
 | `vpc_id` | Optional default VPC ID for public IP allocation. |
 | `existing_public_ip_ids` | Existing public IP IDs that can be referenced by key. |
 | `public_ips` | Public IPs to acquire. |
-| `firewalls` | Ingress firewall rule sets. |
+| `firewalls` | Ingress firewall rule sets for public IP firewall rules supported by the CloudStack provider. Use VPC network ACLs for VPC tier security. |
 | `egress_firewalls` | Egress firewall rule sets. |
 | `static_nats` | Static NAT mappings. |
 | `port_forwards` | Port forwarding rule sets. |

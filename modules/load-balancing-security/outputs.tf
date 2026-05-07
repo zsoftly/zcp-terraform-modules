@@ -17,7 +17,9 @@ output "firewall_rule_sets" {
   description = "Ingress firewall resources keyed by input key."
   value = {
     for key, firewall in cloudstack_firewall.this : key => {
-      id = firewall.id
+      id            = firewall.id
+      ip_address_id = local.firewall_ip_address_ids[key]
+      rule_count    = length(var.firewalls[key].rules)
     }
   }
 }
@@ -26,7 +28,9 @@ output "egress_firewall_rule_sets" {
   description = "Egress firewall resources keyed by input key."
   value = {
     for key, firewall in cloudstack_egress_firewall.this : key => {
-      id = firewall.id
+      id         = firewall.id
+      network_id = try(var.egress_firewalls[key].network_id, null) != null ? var.egress_firewalls[key].network_id : var.network_id
+      rule_count = length(var.egress_firewalls[key].rules)
     }
   }
 }
