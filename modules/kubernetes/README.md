@@ -82,7 +82,7 @@ cluster ID and API endpoint/IP. Retrieve kubeconfig after creation with
 CloudMonkey:
 
 ```bash
-cmk -p localadmin get kubernetesClusterConfig id=<cluster-id> \
+cmk -p <profile> get kubernetesClusterConfig id=<cluster-id> \
   | jq -r '.clusterconfig.configdata' > kubeconfig
 ```
 
@@ -94,6 +94,7 @@ cluster ID.
 | Name | Description | Default |
 | ---- | ----------- | ------- |
 | `name` | CKS cluster name | n/a |
+| `description` | Optional cluster description | `null` |
 | `zone` | CloudStack zone name or ID | n/a |
 | `kubernetes_version` | Registered Kubernetes semantic version | `1.34.3` |
 | `service_offering` | Default node service offering | n/a |
@@ -101,10 +102,22 @@ cluster ID.
 | `control_plane_count` | Control plane node count | `1` |
 | `etcd_count` | Dedicated etcd node count | `0` |
 | `node_root_disk_size` | Node root disk size in GB | `25` |
-| `network_id` | Optional CloudStack network ID | `null` |
 | `node_offerings` | Optional service offerings by role | `{}` |
 | `node_templates` | Optional templates by role | `{}` |
 | `autoscaling_enabled` | Enable worker autoscaling | `false` |
+| `autoscaling_min_size` | Minimum worker count when autoscaling is enabled | `null` |
+| `autoscaling_max_size` | Maximum worker count when autoscaling is enabled | `null` |
+| `network_id` | Optional supported CKS isolated network ID | `null` |
+| `keypair` | Optional SSH keypair for nodes | `null` |
+| `hypervisor` | Hypervisor used for CKS nodes | `KVM` |
+| `cni_configuration_id` | Optional CloudStack CNI configuration ID | `null` |
+| `cni_config_details` | Optional CNI configuration parameter map | `null` |
+| `project` | Optional CloudStack project name or ID | `null` |
+| `domain_id` | Optional CloudStack domain ID | `null` |
+| `account` | Optional CloudStack account name | `null` |
+| `docker_registry_url` | Optional private Docker registry URL | `null` |
+| `docker_registry_username` | Optional private Docker registry username | `null` |
+| `docker_registry_password` | Optional private Docker registry password | `null` |
 
 ## Outputs
 

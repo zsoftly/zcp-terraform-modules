@@ -181,17 +181,19 @@ check "autoscaling_bounds_required" {
       (
         var.autoscaling_min_size != null &&
         var.autoscaling_max_size != null &&
-        var.autoscaling_min_size <= var.autoscaling_max_size
+        var.autoscaling_min_size <= var.autoscaling_max_size &&
+        var.worker_count >= var.autoscaling_min_size &&
+        var.worker_count <= var.autoscaling_max_size
       )
     )
-    error_message = "autoscaling_min_size and autoscaling_max_size are required when autoscaling_enabled is true, and min must be less than or equal to max."
+    error_message = "autoscaling_min_size and autoscaling_max_size are required when autoscaling_enabled is true, min must be less than or equal to max, and worker_count must be within the min/max range."
   }
 }
 
 check "project_or_account_scope" {
   assert {
-    condition     = var.project == null || (var.account == null && var.domain_id == null)
-    error_message = "Set either project or account/domain_id scope, not both."
+    condition     = !(var.project != null && var.account != null)
+    error_message = "Set either project or account scope, not both. domain_id may be used with either when required by CloudStack."
   }
 }
 

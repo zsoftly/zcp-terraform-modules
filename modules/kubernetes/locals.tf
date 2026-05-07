@@ -1,6 +1,6 @@
 locals {
   zcp_defaults = {
-    kubernetes_version = "1.34.3"
+    kubernetes_version = var.kubernetes_version
     network_offering   = "Isolated Network with Source NAT"
     service_offering   = "CKS Node - Intel nonprd"
     csi_disk_offering  = "Custom-Disk"

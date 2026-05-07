@@ -5,12 +5,12 @@ output "cluster" {
     name               = cloudstack_kubernetes_cluster.this.name
     state              = cloudstack_kubernetes_cluster.this.state
     ip_address         = cloudstack_kubernetes_cluster.this.ip_address
-    zone               = var.zone
-    kubernetes_version = var.kubernetes_version
-    service_offering   = var.service_offering
-    worker_count       = var.worker_count
-    control_nodes_size = var.control_plane_count
-    etcd_nodes_size    = var.etcd_count
+    zone               = cloudstack_kubernetes_cluster.this.zone
+    kubernetes_version = cloudstack_kubernetes_cluster.this.kubernetes_version
+    service_offering   = cloudstack_kubernetes_cluster.this.service_offering
+    worker_count       = cloudstack_kubernetes_cluster.this.size
+    control_nodes_size = cloudstack_kubernetes_cluster.this.control_nodes_size
+    etcd_nodes_size    = cloudstack_kubernetes_cluster.this.etcd_nodes_size
   }
 }
 

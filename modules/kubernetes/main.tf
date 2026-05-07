@@ -11,8 +11,8 @@ resource "cloudstack_kubernetes_cluster" "this" {
   hypervisor         = var.hypervisor
 
   noderootdisksize = var.node_root_disk_size
-  node_offerings   = length(local.node_offerings) > 0 ? local.node_offerings : null
-  node_templates   = length(local.node_templates) > 0 ? local.node_templates : null
+  node_offerings   = local.node_offerings == {} ? null : local.node_offerings
+  node_templates   = local.node_templates == {} ? null : local.node_templates
 
   autoscaling_enabled = var.autoscaling_enabled
   min_size            = var.autoscaling_min_size
