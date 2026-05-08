@@ -18,6 +18,7 @@ This repo provides reusable, composable Terraform modules for ZCP enablement:
 modules/
 ├── networking/                 # VPCs, networks, IP ranges, ACLs
 ├── load-balancing-security/    # public IPs, firewall, NAT, load balancing
+├── storage/                    # volumes, attachments, snapshot policies
 └── kubernetes/                 # CKS clusters and node sizing
 
 examples/
@@ -30,7 +31,7 @@ examples/
 | --------------------------- | ------- | -------------------------------------------- |
 | `networking`                | Ready   | VPCs, VPC tiers/networks, IP ranges, ACLs    |
 | `compute`                   | Planned | Instances, templates, service offerings      |
-| `storage`                   | Planned | Volumes and snapshots                        |
+| `storage`                   | Ready   | Volumes and snapshots                        |
 | `accounts-projects`         | Planned | Accounts, projects, users, roles, quotas     |
 | `load-balancing-security`   | Ready   | Load balancing, firewall, NAT                |
 | `kubernetes`                | Ready   | Managed clusters and node pools              |

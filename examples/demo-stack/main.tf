@@ -36,6 +36,22 @@ module "load_balancing_security" {
   load_balancer_rules    = try(each.value.load_balancer_rules, {})
 }
 
+module "storage" {
+  for_each = var.storage_stacks
+
+  source = "../../modules/storage"
+
+  zone                = var.zone
+  project             = var.project
+  tags                = merge(var.tags, try(each.value.tags, {}))
+  cloudmonkey_profile = try(each.value.cloudmonkey_profile, null)
+  snapshot_timezone   = try(each.value.snapshot_timezone, "UTC")
+
+  volumes           = try(each.value.volumes, {})
+  restored_volumes  = try(each.value.restored_volumes, {})
+  snapshot_policies = try(each.value.snapshot_policies, {})
+}
+
 module "kubernetes" {
   for_each = var.kubernetes_clusters
 

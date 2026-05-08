@@ -2,9 +2,9 @@
 
 Combined Terraform example for ZCP customer/demo environments.
 
-This stack composes the networking, load balancing/security, and Kubernetes
-modules. Add compute, storage, VPN, and image/template modules here as they are
-built.
+This stack composes the networking, load balancing/security, storage, and
+Kubernetes modules. Add compute, VPN, and image/template modules here as they
+are built.
 
 ## Networking
 
@@ -26,6 +26,29 @@ The demo stack creates one public IP for the web tier, then attaches ingress and
 egress firewall rules for HTTP and HTTPS. Static NAT, port forwarding, and load
 balancer rules are supported by the child module, but they require VM IDs from a
 compute module or existing instances.
+
+## Storage
+
+Storage is disabled by default. Set `storage_stacks` to create data volumes,
+optionally attach them to existing instance IDs, and add scheduled snapshot
+policies.
+
+The storage module is designed for the repo-backed ZCP disk offerings:
+
+| Disk offering     | Default size |
+| ----------------- | ------------ |
+| `Starter-NVMe`    | 50 GB        |
+| `Basic-NVMe`      | 90 GB        |
+| `Standard-NVMe`   | 180 GB       |
+| `Pro-NVMe`        | 360 GB       |
+| `Enterprise-NVMe` | 720 GB       |
+
+Use `restored_volumes` to request a new volume from an existing CloudStack
+snapshot ID through CloudMonkey.
+
+Immediate one-off snapshots should be created with CloudMonkey or the
+CloudStack API, then restored through this stack by passing the resulting
+snapshot ID to `restored_volumes`.
 
 ## Kubernetes
 

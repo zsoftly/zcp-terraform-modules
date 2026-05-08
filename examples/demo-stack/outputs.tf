@@ -75,6 +75,41 @@ output "load_balancer_rules" {
   }
 }
 
+output "storage_volumes" {
+  description = "Storage volume details keyed by storage stack key."
+  value = {
+    for key, storage in module.storage : key => storage.volumes
+  }
+}
+
+output "storage_volume_ids" {
+  description = "Storage volume IDs keyed by storage stack key."
+  value = {
+    for key, storage in module.storage : key => storage.volume_ids
+  }
+}
+
+output "storage_restored_volumes" {
+  description = "Restored storage volume details keyed by storage stack key."
+  value = {
+    for key, storage in module.storage : key => storage.restored_volumes
+  }
+}
+
+output "storage_snapshot_policies" {
+  description = "Storage snapshot policy details keyed by storage stack key."
+  value = {
+    for key, storage in module.storage : key => storage.snapshot_policies
+  }
+}
+
+output "storage_snapshot_ids" {
+  description = "Storage snapshot policy IDs keyed by storage stack key."
+  value = {
+    for key, storage in module.storage : key => storage.snapshot_ids
+  }
+}
+
 output "kubernetes_clusters" {
   description = "Kubernetes cluster details keyed by input cluster key."
   value = {

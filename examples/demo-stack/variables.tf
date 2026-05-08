@@ -278,6 +278,37 @@ check "load_balancing_security_network_key_exists" {
   }
 }
 
+variable "storage_stacks" {
+  description = "Map of storage stacks to create. Defaults to empty so demo plans do not create volumes unless requested."
+  type = map(object({
+    tags                = optional(map(string), {})
+    cloudmonkey_profile = optional(string)
+    snapshot_timezone   = optional(string, "UTC")
+    volumes = optional(map(object({
+      name          = string
+      disk_offering = string
+      size_gb       = optional(number)
+      attach        = optional(bool, true)
+      instance_id   = optional(string)
+    })), {})
+    restored_volumes = optional(map(object({
+      name             = string
+      snapshot_id      = string
+      disk_offering_id = string
+      zone_id          = string
+    })), {})
+    snapshot_policies = optional(map(object({
+      volume_key    = optional(string)
+      volume_id     = optional(string)
+      schedule      = string
+      interval_type = string
+      max_snaps     = number
+      timezone      = optional(string)
+    })), {})
+  }))
+  default = {}
+}
+
 variable "kubernetes_clusters" {
   description = "Map of CKS clusters to create. Defaults to empty so the networking dry run remains lightweight."
   type = map(object({
