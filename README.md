@@ -35,7 +35,7 @@ examples/
 | `load-balancing-security`   | Ready   | Load balancing, firewall, NAT                |
 | `kubernetes`                | Ready   | Managed clusters and node pools              |
 | `vpn-connectivity`          | Planned | Site-to-site VPN and remote access           |
-| `images-templates`          | Planned | Image/template upload, versioning, sharing   |
+| `images-templates`          | Ready   | Image/template upload, versioning, sharing   |
 
 Only modules with a directory under `modules/` are currently implemented.
 

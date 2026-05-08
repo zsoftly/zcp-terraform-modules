@@ -13,6 +13,9 @@ resource "cloudstack_template" "this" {
   is_featured      = each.value.is_featured
   is_extractable   = each.value.is_extractable
   password_enabled = each.value.password_enabled
+  for_cks          = each.value.for_cks
+
+  is_ready_timeout = each.value.is_ready_timeout
 
   project = each.value.project
 

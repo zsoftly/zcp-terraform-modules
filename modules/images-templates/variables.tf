@@ -23,6 +23,8 @@ variable "templates" {
     is_featured      = optional(bool, false)
     is_extractable   = optional(bool, false)
     password_enabled = optional(bool, false)
+    for_cks          = optional(bool, false)
+    is_ready_timeout = optional(number, 300)
     project          = optional(string)
     tags             = optional(map(string), {})
   }))
@@ -36,8 +38,8 @@ variable "templates" {
 
   validation {
     condition = alltrue([for k, t in var.templates : contains(["KVM", "VMware", "XenServer", "BareMetal",
-    "Simulator"], t.hypervisor)])
-    error_message = "template hypervisor must be one of: KVM, VMware, XenServer, BareMetal, Simulator."
+    "Simulator", "Hyperv", "LXC"], t.hypervisor)])
+    error_message = "template hypervisor must be one of: KVM, VMware, XenServer, BareMetal, Simulator, Hyperv, LXC."
   }
 
   validation {
