@@ -437,3 +437,23 @@ check "kubernetes_registry_credentials_complete" {
     error_message = "Kubernetes Docker registry credentials must be complete and keyed by the matching kubernetes_clusters entry."
   }
 }
+
+variable "templates" {
+  description = "Map of templates to register in the demo stack."
+  type = map(object({
+    name             = string
+    url              = string
+    os_type          = string
+    version          = optional(string)
+    display_text     = optional(string)
+    format           = optional(string, "QCOW2")
+    hypervisor       = optional(string, "KVM")
+    is_public        = optional(bool, false)
+    is_featured      = optional(bool, false)
+    is_extractable   = optional(bool, false)
+    password_enabled = optional(bool, false)
+    project          = optional(string)
+    tags             = optional(map(string), {})
+  }))
+  default = {}
+}

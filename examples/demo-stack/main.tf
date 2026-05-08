@@ -78,3 +78,11 @@ module "accounts_projects" {
   projects = nonsensitive(var.accounts_projects.projects)
   quotas   = nonsensitive(var.accounts_projects.quotas)
 }
+
+module "images_templates" {
+  source = "../../modules/images-templates"
+
+  zone      = var.zone
+  tags      = var.tags
+  templates = var.templates
+}

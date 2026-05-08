@@ -115,3 +115,19 @@ kubernetes_clusters = {
 #     }
 #   }
 # }
+
+# Register templates using the images-templates module.
+# The URL must be reachable from the CloudStack management server.
+# Omit or leave as {} to skip template registration in this demo run.
+#
+# templates = {
+#   ubuntu_2204_v1 = {
+#     name       = "ubuntu-22.04"
+#     version    = "1.0.0"
+#     url        = "https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64-disk-kvm.img"
+#     os_type    = "Ubuntu 22.04 LTS"
+#     format     = "QCOW2"
+#     hypervisor = "KVM"
+#     is_public  = false
+#   }
+# }
