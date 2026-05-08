@@ -74,3 +74,24 @@ output "load_balancer_rules" {
     for key, stack in module.load_balancing_security : key => stack.load_balancer_rules
   }
 }
+
+output "kubernetes_clusters" {
+  description = "Kubernetes cluster details keyed by input cluster key."
+  value = {
+    for key, kubernetes in module.kubernetes : key => kubernetes.cluster
+  }
+}
+
+output "kubernetes_api_endpoints" {
+  description = "Kubernetes API endpoint/IP values keyed by input cluster key."
+  value = {
+    for key, kubernetes in module.kubernetes : key => kubernetes.api_endpoint
+  }
+}
+
+output "kubernetes_post_create_automation" {
+  description = "ZCP post-create automation requirements keyed by input cluster key."
+  value = {
+    for key, kubernetes in module.kubernetes : key => kubernetes.zcp_post_create_automation
+  }
+}

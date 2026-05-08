@@ -68,3 +68,18 @@ cloudstack_secret_key = "replace-with-secret-key"
 #     }
 #   }
 # }
+
+# CKS service and Kubernetes versions must already be enabled/registered in
+# CloudStack before this can be applied. For ZCP defaults, do not point CKS at
+# the demo VPC tier network. If network_id is set, it must be a supported CKS
+# isolated network.
+kubernetes_clusters = {
+  demo = {
+    name               = "demo-cks-01"
+    description        = "Demo CKS cluster"
+    kubernetes_version = "1.34.3"
+    service_offering   = "CKS Node - Intel nonprd"
+    worker_count       = 2
+    # network_id = "supported-cks-isolated-network-id"
+  }
+}

@@ -2,8 +2,8 @@
 
 Combined Terraform example for ZCP customer/demo environments.
 
-This stack starts with the networking and load balancing/security modules. Add
-compute, storage, Kubernetes, VPN, and image/template modules here as they are
+This stack composes the networking, load balancing/security, and Kubernetes
+modules. Add compute, storage, VPN, and image/template modules here as they are
 built.
 
 ## Networking
@@ -27,6 +27,34 @@ egress firewall rules for HTTP and HTTPS. Static NAT, port forwarding, and load
 balancer rules are supported by the child module, but they require VM IDs from a
 compute module or existing instances.
 
+## Kubernetes
+
+`kubernetes_clusters` can create one or more CKS clusters. CKS service and
+supported Kubernetes versions must already be enabled and registered in
+CloudStack before a cluster can be applied.
+
+For ZCP defaults, do not wire CKS to the demo VPC tier network. The current ZCP
+CKS model uses an isolated network with source NAT, and the platform lifecycle
+test creates its own isolated network. If `network_id` is supplied, it must
+refer to a supported CKS isolated network, not the example `VPC Tier` network.
+
+Terraform creates the CKS resource only. A usable ZCP cluster still needs the
+post-create platform integration steps from the IaaS automation:
+
+- `546-cks-fix-ccm.yml` for the CCM API endpoint
+- `547-cks-storage.yml` for persistent storage
+
+For ZCP defaults, do not wire CKS to the demo VPC tier network. The current ZCP
+CKS model uses an isolated network with source NAT, and the platform lifecycle
+test creates its own isolated network. If `network_id` is supplied, it must
+refer to a supported CKS isolated network, not the example `VPC Tier` network.
+
+Terraform creates the CKS resource only. A usable ZCP cluster still needs the
+post-create platform integration steps from the IaaS automation:
+
+- `546-cks-fix-ccm.yml` for the CCM API endpoint
+- `547-cks-storage.yml` for persistent storage
+
 ## Dry Run
 
 ```bash
@@ -44,3 +72,14 @@ terraform plan
 ```
 
 Do not run `terraform apply` unless the plan has been reviewed.
+
+## Kubeconfig
+
+The CloudStack Terraform provider exposes cluster ID and endpoint details, but
+does not currently expose kubeconfig directly. After a CKS cluster is created,
+retrieve kubeconfig with CloudMonkey:
+
+```bash
+cmk -p <profile> get kubernetesClusterConfig id=<cluster-id> \
+  | jq -r '.clusterconfig.configdata' > kubeconfig
+```
