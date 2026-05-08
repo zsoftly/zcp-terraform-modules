@@ -81,7 +81,7 @@ variable "networking_vpcs" {
       name         = "demo-vpc-01"
       display_text = "ZCP Demo VPC"
       cidr         = "10.20.0.0/16"
-      vpc_offering = "Standard VPC offering - nonprd"
+      vpc_offering = "Default VPC offering"
       network_acls = {
         web = {
           name        = "demo-web-tier-acl"
@@ -131,7 +131,7 @@ variable "networking_vpcs" {
           gateway          = "10.20.1.1"
           startip          = "10.20.1.10"
           endip            = "10.20.1.200"
-          network_offering = "VPC Tier"
+          network_offering = "DefaultIsolatedNetworkOfferingForVpcNetworks"
           acl_key          = "web"
         }
       }

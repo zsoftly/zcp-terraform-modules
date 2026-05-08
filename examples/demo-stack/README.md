@@ -17,8 +17,8 @@ repo-backed ZCP offerings:
 
 | Input            | Default                          |
 | ---------------- | -------------------------------- |
-| VPC offering     | `Standard VPC offering - nonprd` |
-| Network offering | `VPC Tier`                       |
+| VPC offering     | `Default VPC offering`                          |
+| Network offering | `DefaultIsolatedNetworkOfferingForVpcNetworks`  |
 
 ## Load Balancing & Security
 
