@@ -29,6 +29,18 @@ output "api_endpoint" {
   value       = cloudstack_kubernetes_cluster.this.ip_address
 }
 
+output "zcp_post_create_automation" {
+  description = "ZCP follow-up automation required after Terraform creates the CKS resource."
+  value = {
+    cluster_ready_after_apply = false
+    required_steps = [
+      "546-cks-fix-ccm.yml",
+      "547-cks-storage.yml",
+    ]
+    note = "Terraform creates the CloudStack CKS resource. Run the ZCP post-create automation before treating the cluster as fully usable."
+  }
+}
+
 output "zcp_defaults" {
   description = "ZCP CKS defaults this module is designed around."
   value       = local.zcp_defaults

@@ -203,3 +203,21 @@ check "account_requires_domain_id" {
     error_message = "domain_id is required when account is set."
   }
 }
+
+check "docker_registry_credentials_complete" {
+  assert {
+    condition = (
+      (
+        var.docker_registry_url == null &&
+        var.docker_registry_username == null &&
+        nonsensitive(var.docker_registry_password) == null
+      ) ||
+      (
+        var.docker_registry_url != null &&
+        var.docker_registry_username != null &&
+        nonsensitive(var.docker_registry_password) != null
+      )
+    )
+    error_message = "Docker registry credentials must be provided as a complete set: docker_registry_url, docker_registry_username, and docker_registry_password."
+  }
+}

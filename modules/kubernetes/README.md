@@ -42,8 +42,10 @@ post-create platform integration steps from the IaaS automation:
 - `546-cks-fix-ccm.yml` for the CCM API endpoint
 - `547-cks-storage.yml` for persistent storage
 
-Expose the Terraform outputs from this module, then pass the cluster ID/API
-details to the follow-up automation.
+The module exposes `zcp_post_create_automation.cluster_ready_after_apply =
+false` to make this limitation explicit to downstream consumers. Pass the
+cluster ID/API details to the follow-up automation before treating the cluster
+as ready for workloads.
 
 ## Update Behavior
 
@@ -127,4 +129,5 @@ cluster ID.
 | `cluster_id` | Cluster ID |
 | `cluster_state` | Cluster state |
 | `api_endpoint` | API endpoint/IP exposed by CloudStack |
+| `zcp_post_create_automation` | Required ZCP follow-up automation and readiness note |
 | `zcp_defaults` | ZCP defaults used as module guidance |
