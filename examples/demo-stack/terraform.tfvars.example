@@ -5,6 +5,9 @@ cloudstack_secret_key = "replace-with-secret-key"
 # Defaults in variables.tf already use the repo-backed non-prod ZCP offerings:
 # - Standard VPC offering - nonprd
 # - VPC Tier
+#
+# The default load_balancing_security value allocates one public IP for the demo
+# web tier and creates ingress/egress firewall rules for HTTP and HTTPS.
 
 # Override networking_vpcs to create one or more VPCs from this root module.
 # Example:
@@ -24,6 +27,43 @@ cloudstack_secret_key = "replace-with-secret-key"
 #         startip          = "10.20.1.10"
 #         endip            = "10.20.1.200"
 #         network_offering = "VPC Tier"
+#       }
+#     }
+#   }
+# }
+
+# Static NAT, port forwarding, and load balancer rules need VM IDs. Add them
+# here after the compute module has created instances.
+#
+# load_balancing_security = {
+#   demo = {
+#     name               = "demo-edge"
+#     networking_vpc_key = "demo"
+#     network_key        = "web"
+#     public_ips = {
+#       web = {}
+#     }
+#     firewalls = {
+#       web = {
+#         public_ip_key = "web"
+#         rules = [
+#           {
+#             cidr_list = ["0.0.0.0/0"]
+#             protocol  = "tcp"
+#             ports     = ["80", "443"]
+#           }
+#         ]
+#       }
+#     }
+#     load_balancer_rules = {
+#       https = {
+#         name          = "demo-https"
+#         description   = "Demo HTTPS load balancer"
+#         public_ip_key = "web"
+#         algorithm     = "roundrobin"
+#         public_port   = 443
+#         private_port  = 443
+#         member_ids    = ["vm-id-1", "vm-id-2"]
 #       }
 #     }
 #   }

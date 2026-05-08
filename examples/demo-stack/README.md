@@ -2,8 +2,9 @@
 
 Combined Terraform example for ZCP customer/demo environments.
 
-This stack starts with the networking module. Add compute, storage, load
-balancing, Kubernetes, VPN, and image/template modules here as they are built.
+This stack starts with the networking and load balancing/security modules. Add
+compute, storage, Kubernetes, VPN, and image/template modules here as they are
+built.
 
 ## Networking
 
@@ -18,6 +19,13 @@ repo-backed ZCP offerings:
 | ---------------- | -------------------------------- |
 | VPC offering     | `Standard VPC offering - nonprd` |
 | Network offering | `VPC Tier`                       |
+
+## Load Balancing & Security
+
+The demo stack creates one public IP for the web tier, then attaches ingress and
+egress firewall rules for HTTP and HTTPS. Static NAT, port forwarding, and load
+balancer rules are supported by the child module, but they require VM IDs from a
+compute module or existing instances.
 
 ## Dry Run
 

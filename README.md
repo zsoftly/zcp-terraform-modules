@@ -16,7 +16,8 @@ This repo provides reusable, composable Terraform modules for ZCP enablement:
 
 ```text
 modules/
-└── networking/   # VPCs, networks, IP ranges, ACLs
+├── networking/                 # VPCs, networks, IP ranges, ACLs
+└── load-balancing-security/    # public IPs, firewall, NAT, load balancing
 
 examples/
 └── demo-stack/   # combined demo stack using the modules
@@ -30,7 +31,7 @@ examples/
 | `compute`                   | Planned | Instances, templates, service offerings      |
 | `storage`                   | Planned | Volumes and snapshots                        |
 | `accounts-projects`         | Planned | Accounts, projects, users, roles, quotas     |
-| `load-balancing-security`   | Planned | Load balancing, firewall, NAT                |
+| `load-balancing-security`   | Ready   | Load balancing, firewall, NAT                |
 | `kubernetes`                | Planned | Managed clusters and node pools              |
 | `vpn-connectivity`          | Planned | Site-to-site VPN and remote access           |
 | `images-templates`          | Planned | Image/template upload, versioning, sharing   |
@@ -54,6 +55,9 @@ The default demo stack currently plans:
 - 1 VPC tier/network
 - 1 network ACL
 - 4 ACL rules
+- 1 public IP
+- 1 ingress firewall rule set
+- 1 egress firewall rule set
 
 ## Provider Lock File
 
