@@ -119,6 +119,7 @@ module "load_balancing_security" {
 
 | Name | Description |
 | ---- | ----------- |
+| `name` | Logical name for this traffic and security configuration. |
 | `public_ips` | Allocated public IP IDs and addresses. |
 | `public_ip_ids` | Allocated and existing public IP IDs known to the module. |
 | `firewall_rule_sets` | Ingress firewall resource IDs. |

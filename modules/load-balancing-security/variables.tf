@@ -138,12 +138,38 @@ check "public_ip_reference_required" {
 check "public_ip_keys_exist" {
   assert {
     condition = alltrue(concat(
-      [for key, firewall in var.firewalls : try(firewall.public_ip_key, null) == null || contains(keys(local.public_ip_ids), firewall.public_ip_key)],
-      [for key, static_nat in var.static_nats : try(static_nat.public_ip_key, null) == null || contains(keys(local.public_ip_ids), static_nat.public_ip_key)],
-      [for key, port_forward in var.port_forwards : try(port_forward.public_ip_key, null) == null || contains(keys(local.public_ip_ids), port_forward.public_ip_key)],
-      [for key, load_balancer in var.load_balancer_rules : try(load_balancer.public_ip_key, null) == null || contains(keys(local.public_ip_ids), load_balancer.public_ip_key)]
+      [for _, firewall in var.firewalls : try(firewall.public_ip_key, null) == null || contains(keys(merge(var.existing_public_ip_ids, var.public_ips)), firewall.public_ip_key)],
+      [for _, static_nat in var.static_nats : try(static_nat.public_ip_key, null) == null || contains(keys(merge(var.existing_public_ip_ids, var.public_ips)), static_nat.public_ip_key)],
+      [for _, port_forward in var.port_forwards : try(port_forward.public_ip_key, null) == null || contains(keys(merge(var.existing_public_ip_ids, var.public_ips)), port_forward.public_ip_key)],
+      [for _, load_balancer in var.load_balancer_rules : try(load_balancer.public_ip_key, null) == null || contains(keys(merge(var.existing_public_ip_ids, var.public_ips)), load_balancer.public_ip_key)]
     ))
     error_message = "Each public_ip_key must reference a key in public_ips or existing_public_ip_ids."
+  }
+}
+
+check "public_ip_allocation_scope_valid" {
+  assert {
+    condition = alltrue([
+      for _, public_ip in var.public_ips :
+      (
+        (try(public_ip.network_id, null) != null ? public_ip.network_id : var.network_id) != null &&
+        (try(public_ip.vpc_id, null) != null ? public_ip.vpc_id : var.vpc_id) == null
+        ) || (
+        (try(public_ip.network_id, null) != null ? public_ip.network_id : var.network_id) == null &&
+        (try(public_ip.vpc_id, null) != null ? public_ip.vpc_id : var.vpc_id) != null
+      )
+    ])
+    error_message = "Each public IP must resolve to exactly one allocation scope: network_id or vpc_id."
+  }
+}
+
+check "egress_firewall_network_required" {
+  assert {
+    condition = alltrue([
+      for _, firewall in var.egress_firewalls :
+      (try(firewall.network_id, null) != null ? firewall.network_id : var.network_id) != null
+    ])
+    error_message = "Each egress firewall must set network_id or use module-level network_id."
   }
 }
 

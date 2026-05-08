@@ -1,3 +1,8 @@
+output "name" {
+  description = "Logical name for this traffic and security configuration."
+  value       = var.name
+}
+
 output "public_ips" {
   description = "Public IP details keyed by input public IP key."
   value = {

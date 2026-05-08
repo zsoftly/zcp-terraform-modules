@@ -244,3 +244,36 @@ variable "load_balancing_security" {
     }
   }
 }
+
+check "load_balancing_security_network_reference_required" {
+  assert {
+    condition = alltrue([
+      for _, stack in var.load_balancing_security :
+      try(stack.network_id, null) != null ||
+      (try(stack.networking_vpc_key, null) != null && try(stack.network_key, null) != null)
+    ])
+    error_message = "Each load_balancing_security stack must set network_id or both networking_vpc_key and network_key."
+  }
+}
+
+check "load_balancing_security_vpc_key_exists" {
+  assert {
+    condition = alltrue([
+      for _, stack in var.load_balancing_security :
+      try(stack.network_id, null) != null ||
+      contains(keys(var.networking_vpcs), try(stack.networking_vpc_key, ""))
+    ])
+    error_message = "Each load_balancing_security networking_vpc_key must reference an existing key in networking_vpcs."
+  }
+}
+
+check "load_balancing_security_network_key_exists" {
+  assert {
+    condition = alltrue([
+      for _, stack in var.load_balancing_security :
+      try(stack.network_id, null) != null ||
+      contains(keys(try(var.networking_vpcs[stack.networking_vpc_key].networks, {})), try(stack.network_key, ""))
+    ])
+    error_message = "Each load_balancing_security network_key must reference an existing network key inside its networking_vpc_key."
+  }
+}
