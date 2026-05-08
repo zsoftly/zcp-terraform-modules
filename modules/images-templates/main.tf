@@ -17,4 +17,8 @@ resource "cloudstack_template" "this" {
   project = each.value.project
 
   tags = local.template_tags[each.key]
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }

@@ -46,9 +46,13 @@ have migrated.
 
 ## File uploads
 
-The CloudStack provider registers templates from an accessible URL (HTTP, HTTPS). To upload
-a local file, stage it to an HTTP server or S3-compatible store first, then pass the resulting
-URL to the `url` argument.
+The CloudStack provider registers templates from an accessible URL (HTTP or HTTPS). To upload
+a local file, stage it to an HTTP server, S3-compatible store, or internal mirror first, then
+pass the resulting URL to the `url` argument.
+
+**Security note:** Use HTTPS URLs wherever possible. HTTP URLs allow a man-in-the-middle to
+substitute the disk image in transit. On private management networks with no external exposure,
+HTTP mirrors are acceptable, but the risk should be acknowledged explicitly.
 
 ## Deletion
 

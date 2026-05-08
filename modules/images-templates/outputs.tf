@@ -21,6 +21,8 @@ output "templates" {
       display_text = tmpl.display_text
       is_public    = tmpl.is_public
       is_ready     = tmpl.is_ready
+      zone         = var.zone
+      project      = var.templates[key].project
     }
   }
 }

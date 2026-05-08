@@ -13,8 +13,8 @@ locals {
     for k, t in var.templates :
     k => merge(
       var.tags,
-      t.version != null ? { version = t.version } : {},
-      t.tags
+      t.tags,
+      t.version != null ? { version = t.version } : {}
     )
   }
 }

@@ -30,13 +30,18 @@ variable "templates" {
 
   validation {
     condition = alltrue([for k, t in var.templates : contains(["QCOW2", "RAW", "VHD", "OVA", "ISO", "VHDX",
-    "BAREMETAL"], t.format)])
-    error_message = "template format must be one of: QCOW2, RAW, VHD, OVA, ISO, VHDX, BAREMETAL."
+    "BAREMETAL"], t.format) && length(t.name) > 0 && length(t.os_type) > 0])
+    error_message = "template format must be one of: QCOW2, RAW, VHD, OVA, ISO, VHDX, BAREMETAL; name and os_type must not be empty."
   }
 
   validation {
     condition = alltrue([for k, t in var.templates : contains(["KVM", "VMware", "XenServer", "BareMetal",
     "Simulator"], t.hypervisor)])
     error_message = "template hypervisor must be one of: KVM, VMware, XenServer, BareMetal, Simulator."
+  }
+
+  validation {
+    condition     = alltrue([for k, t in var.templates : t.version == null || can(regex("^[0-9]", t.version))])
+    error_message = "template version must start with a digit (e.g. \"1.0.0\") — do not include a leading \"v\"."
   }
 }
