@@ -115,3 +115,8 @@ output "domain_ids" {
   description = "Domain IDs keyed by domain key."
   value       = module.accounts_projects.domain_ids
 }
+
+output "template_ids" {
+  description = "Registered template IDs keyed by input key."
+  value       = module.images_templates.template_ids
+}
