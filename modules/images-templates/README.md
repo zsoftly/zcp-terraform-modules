@@ -77,11 +77,13 @@ template automatically.
 | `version` | Version string; appended as `-v<version>` suffix | `null` |
 | `display_text` | Human-readable name (defaults to computed name) | `null` |
 | `format` | Disk format: QCOW2, RAW, VHD, OVA, ISO, VHDX, BAREMETAL | `"QCOW2"` |
-| `hypervisor` | Target hypervisor: KVM, VMware, XenServer, BareMetal, Simulator | `"KVM"` |
+| `hypervisor` | Target hypervisor: KVM, VMware, XenServer, BareMetal, Simulator, Hyperv, LXC | `"KVM"` |
 | `is_public` | Available to all accounts in the zone | `false` |
 | `is_featured` | Mark as a featured template | `false` |
 | `is_extractable` | Allow extraction | `false` |
 | `password_enabled` | Enable password reset on first boot | `false` |
+| `for_cks` | Mark template as eligible for CloudStack Kubernetes Service | `false` |
+| `is_ready_timeout` | Seconds to wait for template to reach Ready state | `300` |
 | `project` | Restrict to a CloudStack project | `null` |
 | `tags` | Per-template tags (merged with module-level tags) | `{}` |
 
@@ -91,4 +93,4 @@ template automatically.
 |---|---|
 | `template_ids` | Map of key → template ID |
 | `template_names` | Map of key → computed name (with version suffix) |
-| `templates` | Map of key → `{ id, name, display_text, is_public, is_ready }` |
+| `templates` | Map of key → `{ id, name, display_text, is_public, is_ready, zone, project }` |

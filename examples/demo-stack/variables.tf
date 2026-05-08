@@ -452,6 +452,8 @@ variable "templates" {
     is_featured      = optional(bool, false)
     is_extractable   = optional(bool, false)
     password_enabled = optional(bool, false)
+    for_cks          = optional(bool, false)
+    is_ready_timeout = optional(number, 300)
     project          = optional(string)
     tags             = optional(map(string), {})
   }))
