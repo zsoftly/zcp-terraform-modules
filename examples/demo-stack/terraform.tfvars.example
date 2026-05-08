@@ -3,8 +3,8 @@ cloudstack_api_key    = "replace-with-api-key"
 cloudstack_secret_key = "replace-with-secret-key"
 
 # Defaults in variables.tf already use the repo-backed non-prod ZCP offerings:
-# - Standard VPC offering - nonprd
-# - VPC Tier
+# - Default VPC offering
+# - DefaultIsolatedNetworkOfferingForVpcNetworks
 #
 # The default load_balancing_security value allocates one public IP for the demo
 # web tier and creates ingress/egress firewall rules for HTTP and HTTPS.
@@ -17,7 +17,7 @@ cloudstack_secret_key = "replace-with-secret-key"
 #     name         = "dev-vpc-01"
 #     display_text = "Development VPC"
 #     cidr         = "10.20.0.0/16"
-#     vpc_offering = "Standard VPC offering - nonprd"
+#     vpc_offering = "Default VPC offering"
 #     network_acls = {}
 #     networks = {
 #       web = {
@@ -26,7 +26,7 @@ cloudstack_secret_key = "replace-with-secret-key"
 #         gateway          = "10.20.1.1"
 #         startip          = "10.20.1.10"
 #         endip            = "10.20.1.200"
-#         network_offering = "VPC Tier"
+#         network_offering = "DefaultIsolatedNetworkOfferingForVpcNetworks"
 #       }
 #     }
 #   }

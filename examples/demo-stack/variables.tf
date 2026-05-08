@@ -131,7 +131,7 @@ variable "networking_vpcs" {
           gateway          = "10.20.1.1"
           startip          = "10.20.1.10"
           endip            = "10.20.1.200"
-          network_offering = "VPC Tier"
+          network_offering = "DefaultIsolatedNetworkOfferingForVpcNetworks"
           acl_key          = "web"
         }
       }
@@ -240,6 +240,7 @@ variable "load_balancing_security" {
             }
           ]
         }
+      }
     }
   }
 }
