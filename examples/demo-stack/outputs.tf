@@ -95,3 +95,18 @@ output "kubernetes_post_create_automation" {
     for key, kubernetes in module.kubernetes : key => kubernetes.zcp_post_create_automation
   }
 }
+
+output "vpn_gateway" {
+  description = "VPN gateway details for the demo VPC."
+  value       = module.vpn_connectivity.vpn_gateway
+}
+
+output "vpn_customer_gateway_ids" {
+  description = "Customer gateway IDs keyed by input key."
+  value       = module.vpn_connectivity.customer_gateway_ids
+}
+
+output "vpn_connection_ids" {
+  description = "VPN connection IDs keyed by input key."
+  value       = module.vpn_connectivity.connection_ids
+}
