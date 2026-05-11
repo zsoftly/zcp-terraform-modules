@@ -115,3 +115,18 @@ output "domain_ids" {
   description = "Domain IDs keyed by domain key."
   value       = module.accounts_projects.domain_ids
 }
+
+output "vpn_gateway" {
+  description = "VPN gateway details for the demo VPC."
+  value       = module.vpn_connectivity.vpn_gateway
+}
+
+output "vpn_customer_gateway_ids" {
+  description = "Customer gateway IDs keyed by input key."
+  value       = module.vpn_connectivity.customer_gateway_ids
+}
+
+output "vpn_connection_ids" {
+  description = "VPN connection IDs keyed by input key."
+  value       = module.vpn_connectivity.connection_ids
+}

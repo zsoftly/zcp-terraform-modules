@@ -437,3 +437,20 @@ check "kubernetes_registry_credentials_complete" {
     error_message = "Kubernetes Docker registry credentials must be complete and keyed by the matching kubernetes_clusters entry."
   }
 }
+
+variable "vpn_customer_gateways" {
+  description = "Remote peers for site-to-site VPN connections. Sensitive because entries contain pre-shared keys."
+  sensitive   = true
+  type = map(object({
+    name         = string
+    gateway      = string
+    cidr         = string
+    ipsec_psk    = string
+    esp_policy   = string
+    ike_policy   = string
+    dpd          = optional(bool, false)
+    esp_lifetime = optional(number, 3600)
+    ike_lifetime = optional(number, 86400)
+  }))
+  default = {}
+}

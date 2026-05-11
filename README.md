@@ -18,7 +18,8 @@ This repo provides reusable, composable Terraform modules for ZCP enablement:
 modules/
 ├── networking/                 # VPCs, networks, IP ranges, ACLs
 ├── load-balancing-security/    # public IPs, firewall, NAT, load balancing
-└── kubernetes/                 # CKS clusters and node sizing
+├── kubernetes/                 # CKS clusters and node sizing
+└── vpn-connectivity/           # Site-to-site VPN gateway and connections
 
 examples/
 └── demo-stack/   # combined demo stack using the modules
@@ -34,7 +35,7 @@ examples/
 | `accounts-projects`         | Ready   | Domains, accounts, users, roles, projects, quotas |
 | `load-balancing-security`   | Ready   | Load balancing, firewall, NAT                |
 | `kubernetes`                | Ready   | Managed clusters and node pools              |
-| `vpn-connectivity`          | Planned | Site-to-site VPN and remote access           |
+| `vpn-connectivity`          | Ready   | Site-to-site VPN gateway and connections     |
 | `images-templates`          | Planned | Image/template upload, versioning, sharing   |
 
 Only modules with a directory under `modules/` are currently implemented.
@@ -52,7 +53,7 @@ terraform plan -var-file=terraform.tfvars.example
 
 The demo stack composes the implemented modules. With the provided example
 values, the plan includes networking, load balancing/security, a CKS cluster
-request, and accounts/projects provisioning.
+request, accounts/projects provisioning, and a VPN gateway.
 
 ## Provider Lock File
 
