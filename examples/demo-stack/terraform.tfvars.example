@@ -86,6 +86,38 @@ kubernetes_clusters = {
   }
 }
 
+# Override accounts_projects to manage accounts, users, roles, projects, and quotas.
+# Passwords must never be committed — supply them via a separate sensitive .tfvars file.
+# Example:
+#
+# accounts_projects = {
+#   roles = {
+#     dev = {
+#       name      = "dev-role"
+#       role_type = "User"
+#     }
+#   }
+#   accounts = {
+#     dev = {
+#       account    = "dev-account"
+#       email      = "dev@zcp.example"
+#       first_name = "Dev"
+#       last_name  = "Team"
+#       username   = "devadmin"
+#       password   = "supplied-via-sensitive-tfvars"
+#       role_key   = "dev"
+#     }
+#   }
+#   users = {}
+#   projects = {
+#     dev = {
+#       name         = "dev-project"
+#       display_text = "Development Project"
+#       account_key  = "dev"
+#     }
+#   }
+# }
+
 # vpn_customer_gateways defines remote peers for site-to-site VPN.
 # Pre-shared keys must never be committed — supply them via a separate sensitive .tfvars file.
 # Example:

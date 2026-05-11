@@ -2,9 +2,8 @@
 
 Combined Terraform example for ZCP customer/demo environments.
 
-This stack composes the networking, load balancing/security, and Kubernetes
-modules. Add compute, storage, VPN, and image/template modules here as they are
-built.
+This stack composes the networking, load balancing/security, Kubernetes,
+accounts/projects, and VPN connectivity modules.
 
 ## Networking
 
@@ -15,8 +14,8 @@ to one VPC while the root stack composes multiple VPCs when needed.
 The default `networking_vpcs` value creates one non-prod demo VPC using the
 repo-backed ZCP offerings:
 
-| Input            | Default                          |
-| ---------------- | -------------------------------- |
+| Input            | Default                                         |
+| ---------------- | ----------------------------------------------- |
 | VPC offering     | `Default VPC offering`                          |
 | Network offering | `DefaultIsolatedNetworkOfferingForVpcNetworks`  |
 
@@ -44,6 +43,32 @@ post-create platform integration steps from the IaaS automation:
 - `546-cks-fix-ccm.yml` for the CCM API endpoint
 - `547-cks-storage.yml` for persistent storage
 
+## Accounts & Projects
+
+Creates domains, accounts, users, roles, projects, and resource quotas from the
+`accounts_projects` object.
+
+The default creates one domain, one role, and one project. Accounts and users
+default to empty to avoid placeholder passwords reaching state. To provision
+accounts and users, supply them via a separate sensitive `.tfvars` file that
+is never committed:
+
+```hcl
+accounts_projects = {
+  accounts = {
+    dev = {
+      account    = "dev-account"
+      email      = "dev@example.com"
+      first_name = "Dev"
+      last_name  = "Team"
+      username   = "devadmin"
+      password   = "supplied-at-runtime"
+      role_key   = "demo"
+    }
+  }
+}
+```
+
 ## VPN & Connectivity
 
 Creates a VPN gateway attached to the demo VPC and optional site-to-site
@@ -70,35 +95,6 @@ vpn_customer_gateways = {
 Provider limitation: Remote access VPN is not supported in CloudStack provider
 v0.6.x. Configure it directly in the CloudStack UI or via the CloudStack API
 until provider support is added.
-
-See `terraform.tfvars.example` for the full variable structure.
-
-## VPN & Connectivity
-
-Creates a VPN gateway attached to the demo VPC and optional site-to-site connections
-from the `vpn_customer_gateways` map.
-
-The default value is an empty map — no customer gateways or connections are planned
-by default. Only the VPN gateway is created (one per VPC). To add site-to-site
-connections, supply customer gateways via a separate sensitive `.tfvars` file that
-is never committed:
-
-```hcl
-vpn_customer_gateways = {
-  hq = {
-    name       = "hq-peer"
-    gateway    = "203.0.113.1"
-    cidr       = "192.168.1.0/24"
-    ipsec_psk  = "supplied-at-runtime"
-    esp_policy = "aes256-sha256;modp2048"
-    ike_policy = "aes256-sha256;modp2048"
-  }
-}
-```
-
-Provider limitation: Remote access VPN is not supported in CloudStack provider v0.6.x.
-Configure it directly in the CloudStack UI or via the CloudStack API until provider support
-is added.
 
 See `terraform.tfvars.example` for the full variable structure.
 

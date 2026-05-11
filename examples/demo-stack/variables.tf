@@ -245,6 +245,85 @@ variable "load_balancing_security" {
   }
 }
 
+variable "accounts_projects" {
+  description = "Domains, accounts, users, roles, projects, and quotas for the demo stack."
+  sensitive   = true
+  type = object({
+    domains = optional(map(object({
+      name             = string
+      parent_domain_id = optional(string)
+      network_domain   = optional(string)
+    })), {})
+    roles = optional(map(object({
+      name        = string
+      description = optional(string)
+      role_type   = optional(string, "User")
+    })), {})
+    accounts = optional(map(object({
+      account      = optional(string)
+      account_type = optional(number, 0)
+      email        = string
+      first_name   = string
+      last_name    = string
+      username     = string
+      password     = string
+      domain_id    = optional(string)
+      domain_key   = optional(string)
+      role_key     = optional(string)
+      role_id      = optional(string)
+    })), {})
+    users = optional(map(object({
+      username    = string
+      email       = string
+      first_name  = string
+      last_name   = string
+      password    = string
+      account_key = string
+    })), {})
+    projects = optional(map(object({
+      name         = string
+      display_text = optional(string)
+      account_key  = optional(string)
+    })), {})
+    quotas = optional(map(object({
+      instances         = optional(number)
+      ips               = optional(number)
+      volumes           = optional(number)
+      snapshots         = optional(number)
+      templates         = optional(number)
+      networks          = optional(number)
+      vpcs              = optional(number)
+      cpu               = optional(number)
+      memory            = optional(number)
+      primary_storage   = optional(number)
+      secondary_storage = optional(number)
+    })), {})
+  })
+  default = {
+    domains = {
+      demo = {
+        name = "demo-domain"
+      }
+    }
+    roles = {
+      demo = {
+        name      = "demo-role"
+        role_type = "User"
+      }
+    }
+    accounts = {}
+    users    = {}
+    projects = {
+      demo = {
+        name         = "demo-project"
+        display_text = "ZCP Demo Project"
+        account_key  = null
+      }
+    }
+    quotas = {}
+  }
+}
+
 check "load_balancing_security_network_reference_required" {
   assert {
     condition = alltrue([

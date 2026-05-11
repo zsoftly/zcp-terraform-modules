@@ -32,7 +32,7 @@ examples/
 | `networking`                | Ready   | VPCs, VPC tiers/networks, IP ranges, ACLs    |
 | `compute`                   | Planned | Instances, templates, service offerings      |
 | `storage`                   | Planned | Volumes and snapshots                        |
-| `accounts-projects`         | Planned | Accounts, projects, users, roles, quotas     |
+| `accounts-projects`         | Ready   | Domains, accounts, users, roles, projects, quotas |
 | `load-balancing-security`   | Ready   | Load balancing, firewall, NAT                |
 | `kubernetes`                | Ready   | Managed clusters and node pools              |
 | `vpn-connectivity`          | Ready   | Site-to-site VPN gateway and connections     |
@@ -53,7 +53,7 @@ terraform plan -var-file=terraform.tfvars.example
 
 The demo stack composes the implemented modules. With the provided example
 values, the plan includes networking, load balancing/security, a CKS cluster
-request, and a VPN gateway.
+request, accounts/projects provisioning, and a VPN gateway.
 
 ## Provider Lock File
 

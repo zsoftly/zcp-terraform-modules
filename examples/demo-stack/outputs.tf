@@ -96,6 +96,26 @@ output "kubernetes_post_create_automation" {
   }
 }
 
+output "account_ids" {
+  description = "Account IDs keyed by account key."
+  value       = module.accounts_projects.account_ids
+}
+
+output "project_ids" {
+  description = "Project IDs keyed by project key."
+  value       = module.accounts_projects.project_ids
+}
+
+output "roles" {
+  description = "Role details keyed by role key."
+  value       = module.accounts_projects.roles
+}
+
+output "domain_ids" {
+  description = "Domain IDs keyed by domain key."
+  value       = module.accounts_projects.domain_ids
+}
+
 output "vpn_gateway" {
   description = "VPN gateway details for the demo VPC."
   value       = module.vpn_connectivity.vpn_gateway
