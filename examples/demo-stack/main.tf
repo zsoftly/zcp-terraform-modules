@@ -16,10 +16,27 @@ module "networking" {
   networks     = each.value.networks
 }
 
+resource "terraform_data" "validate_compute_groups" {
+  for_each = var.compute_groups
+
+  lifecycle {
+    precondition {
+      condition     = contains(keys(var.networking_vpcs), each.value.vpc_key)
+      error_message = "compute_groups[\"${each.key}\"].vpc_key = \"${each.value.vpc_key}\" not found in networking_vpcs. Valid keys: [${join(", ", keys(var.networking_vpcs))}]."
+    }
+    precondition {
+      condition     = !contains(keys(var.networking_vpcs), each.value.vpc_key) || contains(keys(var.networking_vpcs[each.value.vpc_key].networks), each.value.network_key)
+      error_message = "compute_groups[\"${each.key}\"].network_key = \"${each.value.network_key}\" not found under networking_vpcs[\"${each.value.vpc_key}\"].networks."
+    }
+  }
+}
+
 module "compute" {
   for_each = var.compute_groups
 
   source = "../../modules/compute"
+
+  depends_on = [terraform_data.validate_compute_groups]
 
   zone                     = var.zone
   project                  = var.project

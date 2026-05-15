@@ -60,3 +60,17 @@ output "compute_ssh_keypairs" {
     for key, compute in module.compute : key => compute.ssh_keypair
   }
 }
+
+output "compute_data_disks" {
+  description = "Data disk details keyed by compute group key."
+  value = {
+    for key, compute in module.compute : key => compute.data_disks
+  }
+}
+
+output "compute_affinity_groups" {
+  description = "Affinity group details keyed by compute group key."
+  value = {
+    for key, compute in module.compute : key => compute.affinity_groups
+  }
+}
