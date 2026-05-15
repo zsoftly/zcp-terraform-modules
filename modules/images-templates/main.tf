@@ -17,11 +17,14 @@ resource "cloudstack_template" "this" {
 
   is_ready_timeout = each.value.is_ready_timeout
 
-  project = each.value.project
+  project = each.value.project != null ? each.value.project : var.project
 
   tags = local.template_tags[each.key]
+}
 
-  lifecycle {
-    create_before_destroy = true
+check "template_names_unique" {
+  assert {
+    condition     = length(values(local.template_names)) == length(toset(values(local.template_names)))
+    error_message = "Two or more templates resolve to the same computed name. Use distinct name and version combinations."
   }
 }

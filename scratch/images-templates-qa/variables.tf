@@ -20,6 +20,12 @@ variable "zone" {
   type        = string
 }
 
+variable "project" {
+  description = "Optional CloudStack project to scope all templates."
+  type        = string
+  default     = null
+}
+
 variable "tags" {
   description = "Tags applied to all templates in this QA workspace."
   type        = map(string)

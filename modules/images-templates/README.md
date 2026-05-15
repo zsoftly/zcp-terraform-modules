@@ -36,6 +36,11 @@ and writes the version into the template tags. To publish a new version, add a n
 (e.g. `ubuntu_2204_v2`) without removing the old one. Remove the old key only once consumers
 have migrated.
 
+Any change to a replacement-driving field (`url`, `format`, `hypervisor`, `os_type`) will
+destroy and recreate the template. Treat these changes as a new version: add a new map key
+with a bumped version and migrate consumers before removing the old key. Do not rely on
+in-place replacement for managed templates.
+
 ## Sharing
 
 | Requirement | How |
@@ -65,6 +70,7 @@ template automatically.
 |---|---|---|---|---|
 | `zone` | CloudStack zone name or ID | `string` | — | yes |
 | `tags` | Tags applied to all templates | `map(string)` | `{}` | no |
+| `project` | Default CloudStack project to scope all templates | `string` | `null` | no |
 | `templates` | Map of templates to register | `map(object(...))` | `{}` | no |
 
 ### `templates` object attributes

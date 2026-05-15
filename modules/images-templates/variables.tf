@@ -9,6 +9,12 @@ variable "tags" {
   default     = {}
 }
 
+variable "project" {
+  description = "Default CloudStack project to scope all templates. A per-template project value overrides this."
+  type        = string
+  default     = null
+}
+
 variable "templates" {
   description = "Templates to register. Each entry maps a logical key to a CloudStack template definition."
   type = map(object({
