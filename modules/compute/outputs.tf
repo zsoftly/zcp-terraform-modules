@@ -27,14 +27,6 @@ output "instance_ips" {
   }
 }
 
-output "instance_passwords" {
-  description = "Generated passwords for password-enabled templates, keyed by input key. Null for SSH-key templates."
-  value = {
-    for key, instance in cloudstack_instance.this : key => instance.password
-  }
-  sensitive = true
-}
-
 output "ssh_keypair" {
   description = "SSH keypair details, or null when no keypair is managed by this module."
   value = var.create_ssh_keypair ? {

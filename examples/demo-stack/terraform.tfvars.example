@@ -36,14 +36,14 @@ cloudstack_secret_key = "replace-with-secret-key"
 #   web = {
 #     vpc_key                  = "demo"
 #     network_key              = "web"
-#     default_service_offering = "Basic"
-#     default_template         = "Ubuntu 22.04"
+#     default_service_offering = "CI1-1"
+#     default_template         = "Ubuntu-24.04-LTS"
 #     create_ssh_keypair       = true
 #     ssh_keypair_name         = "demo-key"
 #     ssh_public_key           = "ssh-ed25519 AAAA... user@host"
 #     instances = {
 #       web1 = { name = "web-01" }
-#       web2 = { name = "web-02", service_offering = "Standard" }
+#       web2 = { name = "web-02", service_offering = "CI1-2" }
 #     }
 #   }
 # }
