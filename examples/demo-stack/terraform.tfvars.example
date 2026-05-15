@@ -2,9 +2,14 @@ cloudstack_api_url    = "https://cloud.zcp.example/client/api"
 cloudstack_api_key    = "replace-with-api-key"
 cloudstack_secret_key = "replace-with-secret-key"
 
-# Defaults in variables.tf already use the repo-backed non-prod ZCP offerings:
-# - Standard VPC offering - nonprd
-# - VPC Tier
+# Defaults in variables.tf use the ZCP YOW-1 offering names confirmed in this environment:
+# - Default VPC offering
+# - DefaultIsolatedNetworkOfferingForVpcNetworks
+# Operators targeting a different zone or CloudStack deployment should verify
+# available offerings before applying.
+#
+# The default load_balancing_security value allocates one public IP for the demo
+# web tier and creates ingress/egress firewall rules for HTTP and HTTPS.
 
 # Override networking_vpcs to create one or more VPCs from this root module.
 # Example:
@@ -14,7 +19,7 @@ cloudstack_secret_key = "replace-with-secret-key"
 #     name         = "dev-vpc-01"
 #     display_text = "Development VPC"
 #     cidr         = "10.20.0.0/16"
-#     vpc_offering = "Standard VPC offering - nonprd"
+#     vpc_offering = "Default VPC offering"
 #     network_acls = {}
 #     networks = {
 #       web = {
@@ -23,7 +28,7 @@ cloudstack_secret_key = "replace-with-secret-key"
 #         gateway          = "10.20.1.1"
 #         startip          = "10.20.1.10"
 #         endip            = "10.20.1.200"
-#         network_offering = "VPC Tier"
+#         network_offering = "DefaultIsolatedNetworkOfferingForVpcNetworks"
 #       }
 #     }
 #   }
@@ -45,5 +50,104 @@ cloudstack_secret_key = "replace-with-secret-key"
 #       web1 = { name = "web-01" }
 #       web2 = { name = "web-02", service_offering = "CI1-2" }
 #     }
+#   }
+# }
+
+# Static NAT, port forwarding, and load balancer rules need VM IDs. Add them
+# here after the compute module has created instances.
+#
+# load_balancing_security = {
+#   demo = {
+#     name               = "demo-edge"
+#     networking_vpc_key = "demo"
+#     network_key        = "web"
+#     public_ips = {
+#       web = {}
+#     }
+#     firewalls = {
+#       web = {
+#         public_ip_key = "web"
+#         rules = [
+#           {
+#             cidr_list = ["0.0.0.0/0"]
+#             protocol  = "tcp"
+#             ports     = ["80", "443"]
+#           }
+#         ]
+#       }
+#     }
+#     load_balancer_rules = {
+#       https = {
+#         name          = "demo-https"
+#         description   = "Demo HTTPS load balancer"
+#         public_ip_key = "web"
+#         algorithm     = "roundrobin"
+#         public_port   = 443
+#         private_port  = 443
+#         member_ids    = ["vm-id-1", "vm-id-2"]
+#       }
+#     }
+#   }
+# }
+
+# CKS service and Kubernetes versions must already be enabled/registered in
+# CloudStack before this can be applied. For ZCP defaults, do not point CKS at
+# the demo VPC tier network. If network_id is set, it must be a supported CKS
+# isolated network.
+kubernetes_clusters = {
+  demo = {
+    name               = "demo-cks-01"
+    description        = "Demo CKS cluster"
+    kubernetes_version = "1.34.3"
+    service_offering   = "CKS Node - Intel nonprd"
+    worker_count       = 2
+    # network_id = "supported-cks-isolated-network-id"
+  }
+}
+
+# Override accounts_projects to manage accounts, users, roles, projects, and quotas.
+# Passwords must never be committed — supply them via a separate sensitive .tfvars file.
+# Example:
+#
+# accounts_projects = {
+#   roles = {
+#     dev = {
+#       name      = "dev-role"
+#       role_type = "User"
+#     }
+#   }
+#   accounts = {
+#     dev = {
+#       account    = "dev-account"
+#       email      = "dev@zcp.example"
+#       first_name = "Dev"
+#       last_name  = "Team"
+#       username   = "devadmin"
+#       password   = "supplied-via-sensitive-tfvars"
+#       role_key   = "dev"
+#     }
+#   }
+#   users = {}
+#   projects = {
+#     dev = {
+#       name         = "dev-project"
+#       display_text = "Development Project"
+#       account_key  = "dev"
+#     }
+#   }
+# }
+
+# vpn_customer_gateways defines remote peers for site-to-site VPN.
+# Pre-shared keys must never be committed — supply them via a separate sensitive .tfvars file.
+# Example:
+#
+# vpn_customer_gateways = {
+#   hq = {
+#     name       = "hq-peer"
+#     gateway    = "203.0.113.1"
+#     cidr       = "192.168.1.0/24"
+#     ipsec_psk  = "supplied-via-sensitive-tfvars"
+#     esp_policy = "aes256-sha256;modp2048"
+#     ike_policy = "aes256-sha256;modp2048"
 #   }
 # }

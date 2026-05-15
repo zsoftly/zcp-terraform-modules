@@ -25,6 +25,9 @@ override.tf.json
 .terraformrc
 terraform.rc
 
+# Local QA scratch environments
+scratch/
+
 # Local environment files
 .env
 .env.*

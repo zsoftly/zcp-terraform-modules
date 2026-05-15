@@ -78,4 +78,5 @@ resource "cloudstack_disk" "this" {
   virtual_machine_id = cloudstack_instance.this[each.value.instance_key].id
   zone               = var.zone
   project            = var.project
+  tags               = merge(var.tags, var.instances[each.value.instance_key].tags)
 }

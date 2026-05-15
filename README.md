@@ -16,8 +16,12 @@ This repo provides reusable, composable Terraform modules for ZCP enablement:
 
 ```text
 modules/
-├── networking/   # VPCs, networks, IP ranges, ACLs
-└── compute/      # Instances, SSH keypairs, affinity groups, data disks
+├── networking/                 # VPCs, networks, IP ranges, ACLs
+├── compute/                    # Instances, SSH keypairs, affinity groups, data disks
+├── load-balancing-security/    # public IPs, firewall, NAT, load balancing
+├── kubernetes/                 # CKS clusters and node sizing
+├── accounts-projects/          # Domains, accounts, users, roles, projects, quotas
+└── vpn-connectivity/           # Site-to-site VPN gateway and connections
 
 examples/
 └── demo-stack/   # combined demo stack using the modules
@@ -30,10 +34,10 @@ examples/
 | `networking`                | Ready   | VPCs, VPC tiers/networks, IP ranges, ACLs    |
 | `compute`                   | Ready   | Instances, templates, service offerings      |
 | `storage`                   | Planned | Volumes and snapshots                        |
-| `accounts-projects`         | Planned | Accounts, projects, users, roles, quotas     |
-| `load-balancing-security`   | Planned | Load balancing, firewall, NAT                |
-| `kubernetes`                | Planned | Managed clusters and node pools              |
-| `vpn-connectivity`          | Planned | Site-to-site VPN and remote access           |
+| `accounts-projects`         | Ready   | Domains, accounts, users, roles, projects, quotas |
+| `load-balancing-security`   | Ready   | Load balancing, firewall, NAT                |
+| `kubernetes`                | Ready   | Managed clusters and node pools              |
+| `vpn-connectivity`          | Ready   | Site-to-site VPN gateway and connections     |
 | `images-templates`          | Planned | Image/template upload, versioning, sharing   |
 
 Only modules with a directory under `modules/` are currently implemented.
@@ -49,12 +53,9 @@ terraform validate
 terraform plan -var-file=terraform.tfvars.example
 ```
 
-The default demo stack currently plans:
-
-- 1 VPC
-- 1 VPC tier/network
-- 1 network ACL
-- 4 ACL rules
+The demo stack composes the implemented modules. With the provided example
+values, the plan includes networking, load balancing/security, a CKS cluster
+request, accounts/projects provisioning, and a VPN gateway.
 
 ## Provider Lock File
 
