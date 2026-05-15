@@ -10,21 +10,13 @@ resource "cloudstack_disk" "this" {
   virtual_machine_id = try(each.value.instance_id, null)
 }
 
-resource "terraform_data" "snapshot_restore" {
-  for_each = var.restored_volumes
-
-  input = each.value
-
-  provisioner "local-exec" {
-    command = join(" ", compact([
-      "cmk",
-      var.cloudmonkey_profile != null ? "-p ${var.cloudmonkey_profile}" : "",
-      "create volume",
-      "name='${each.value.name}'",
-      "zoneid='${each.value.zone_id}'",
-      "diskofferingid='${each.value.disk_offering_id}'",
-      "snapshotid='${each.value.snapshot_id}'",
-    ]))
+check "snapshot_volume_keys_valid" {
+  assert {
+    condition = alltrue([
+      for key, policy in var.snapshot_policies :
+      try(policy.volume_key, null) == null || contains(keys(var.volumes), policy.volume_key)
+    ])
+    error_message = "snapshot_policies volume_key must reference a key that exists in var.volumes."
   }
 }
 

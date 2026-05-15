@@ -16,19 +16,6 @@ output "volume_ids" {
   value       = local.managed_volume_ids
 }
 
-output "restored_volumes" {
-  description = "Snapshot restore requests keyed by input key. Run output in CloudMonkey/CloudStack to get concrete restored volume IDs."
-  value = {
-    for key, request in terraform_data.snapshot_restore : key => {
-      id               = request.id
-      name             = request.input.name
-      snapshot_id      = request.input.snapshot_id
-      disk_offering_id = request.input.disk_offering_id
-      zone_id          = request.input.zone_id
-    }
-  }
-}
-
 output "snapshot_policies" {
   description = "Snapshot policy details keyed by input key."
   value = {

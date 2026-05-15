@@ -13,7 +13,6 @@ target VM ID.
 | ---------------------------- | -------------------------------------------------------------- |
 | `cloudstack_disk`            | Creates data volumes and can attach them to instances          |
 | `cloudstack_snapshot_policy` | Creates scheduled CloudStack volume snapshots                  |
-| `terraform_data`             | Runs CloudMonkey restore requests from existing snapshot IDs   |
 
 ## Snapshot Model
 
@@ -73,26 +72,18 @@ module "storage" {
 ## Restoring From A Snapshot
 
 The CloudStack Terraform provider does not expose a native snapshot restore
-resource. This module supports restore requests with CloudMonkey through
-`restored_volumes`, because snapshot restore is an operational CloudStack action
-that creates a new volume from an existing snapshot ID.
+resource, and a `local-exec` restore cannot return the created volume ID to
+Terraform state. Restores must be performed as a manual operational step:
 
-```hcl
-module "storage_restore" {
-  source = "../../modules/storage"
-
-  zone = "yow-1"
-
-  restored_volumes = {
-    app_data_restore = {
-      name             = "demo-app-data-restore-01"
-      snapshot_id      = "replace-with-snapshot-id"
-      disk_offering_id = "replace-with-disk-offering-id"
-      zone_id          = "replace-with-zone-id"
-    }
-  }
-}
+```bash
+cmk -p <profile> create volume \
+  name=<name> \
+  zoneid=<zone-id> \
+  diskofferingid=<disk-offering-id> \
+  snapshotid=<snapshot-id>
 ```
 
-See `infra/terraform/cloudstack/examples/demo-stack` for the combined demo
-stack example.
+Once restored, the resulting volume ID can be passed to `snapshot_policies` via
+`volume_id` for policy management.
+
+See `examples/demo-stack` for the combined demo stack example.

@@ -81,7 +81,7 @@ variable "networking_vpcs" {
       name         = "demo-vpc-01"
       display_text = "ZCP Demo VPC"
       cidr         = "10.20.0.0/16"
-      vpc_offering = "Standard VPC offering - nonprd"
+      vpc_offering = "Default VPC offering"
       network_acls = {
         web = {
           name        = "demo-web-tier-acl"
@@ -131,7 +131,7 @@ variable "networking_vpcs" {
           gateway          = "10.20.1.1"
           startip          = "10.20.1.10"
           endip            = "10.20.1.200"
-          network_offering = "VPC Tier"
+          network_offering = "DefaultIsolatedNetworkOfferingForVpcNetworks"
           acl_key          = "web"
         }
       }
@@ -242,6 +242,85 @@ variable "load_balancing_security" {
         }
       }
     }
+  }
+}
+
+variable "accounts_projects" {
+  description = "Domains, accounts, users, roles, projects, and quotas for the demo stack."
+  sensitive   = true
+  type = object({
+    domains = optional(map(object({
+      name             = string
+      parent_domain_id = optional(string)
+      network_domain   = optional(string)
+    })), {})
+    roles = optional(map(object({
+      name        = string
+      description = optional(string)
+      role_type   = optional(string, "User")
+    })), {})
+    accounts = optional(map(object({
+      account      = optional(string)
+      account_type = optional(number, 0)
+      email        = string
+      first_name   = string
+      last_name    = string
+      username     = string
+      password     = string
+      domain_id    = optional(string)
+      domain_key   = optional(string)
+      role_key     = optional(string)
+      role_id      = optional(string)
+    })), {})
+    users = optional(map(object({
+      username    = string
+      email       = string
+      first_name  = string
+      last_name   = string
+      password    = string
+      account_key = string
+    })), {})
+    projects = optional(map(object({
+      name         = string
+      display_text = optional(string)
+      account_key  = optional(string)
+    })), {})
+    quotas = optional(map(object({
+      instances         = optional(number)
+      ips               = optional(number)
+      volumes           = optional(number)
+      snapshots         = optional(number)
+      templates         = optional(number)
+      networks          = optional(number)
+      vpcs              = optional(number)
+      cpu               = optional(number)
+      memory            = optional(number)
+      primary_storage   = optional(number)
+      secondary_storage = optional(number)
+    })), {})
+  })
+  default = {
+    domains = {
+      demo = {
+        name = "demo-domain"
+      }
+    }
+    roles = {
+      demo = {
+        name      = "demo-role"
+        role_type = "User"
+      }
+    }
+    accounts = {}
+    users    = {}
+    projects = {
+      demo = {
+        name         = "demo-project"
+        display_text = "ZCP Demo Project"
+        account_key  = null
+      }
+    }
+    quotas = {}
   }
 }
 
@@ -388,4 +467,21 @@ check "kubernetes_registry_credentials_complete" {
     ))
     error_message = "Kubernetes Docker registry credentials must be complete and keyed by the matching kubernetes_clusters entry."
   }
+}
+
+variable "vpn_customer_gateways" {
+  description = "Remote peers for site-to-site VPN connections. Sensitive because entries contain pre-shared keys."
+  sensitive   = true
+  type = map(object({
+    name         = string
+    gateway      = string
+    cidr         = string
+    ipsec_psk    = string
+    esp_policy   = string
+    ike_policy   = string
+    dpd          = optional(bool, false)
+    esp_lifetime = optional(number, 3600)
+    ike_lifetime = optional(number, 86400)
+  }))
+  default = {}
 }

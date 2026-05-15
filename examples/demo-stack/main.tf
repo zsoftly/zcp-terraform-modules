@@ -41,14 +41,11 @@ module "storage" {
 
   source = "../../modules/storage"
 
-  zone                = var.zone
-  project             = var.project
-  tags                = merge(var.tags, try(each.value.tags, {}))
-  cloudmonkey_profile = try(each.value.cloudmonkey_profile, null)
-  snapshot_timezone   = try(each.value.snapshot_timezone, "UTC")
+  zone              = var.zone
+  project           = var.project
+  snapshot_timezone = try(each.value.snapshot_timezone, "UTC")
 
   volumes           = try(each.value.volumes, {})
-  restored_volumes  = try(each.value.restored_volumes, {})
   snapshot_policies = try(each.value.snapshot_policies, {})
 }
 
@@ -82,4 +79,24 @@ module "kubernetes" {
   docker_registry_url      = each.value.docker_registry_url
   docker_registry_username = each.value.docker_registry_username
   docker_registry_password = try(var.kubernetes_docker_registry_passwords[each.key], null)
+}
+
+module "accounts_projects" {
+  source = "../../modules/accounts-projects"
+
+  domains  = nonsensitive(var.accounts_projects.domains)
+  roles    = nonsensitive(var.accounts_projects.roles)
+  accounts = var.accounts_projects.accounts
+  users    = var.accounts_projects.users
+  projects = nonsensitive(var.accounts_projects.projects)
+  quotas   = nonsensitive(var.accounts_projects.quotas)
+}
+
+module "vpn_connectivity" {
+  source = "../../modules/vpn-connectivity"
+
+  # "demo" must match a key in var.networking_vpcs
+  vpc_id            = module.networking["demo"].vpc.id
+  project           = var.project
+  customer_gateways = var.vpn_customer_gateways
 }

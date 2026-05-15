@@ -21,23 +21,6 @@ variable "volumes" {
   default = {}
 }
 
-variable "restored_volumes" {
-  description = "Operational restore requests to create volumes from existing CloudStack snapshot IDs with CloudMonkey."
-  type = map(object({
-    name             = string
-    snapshot_id      = string
-    disk_offering_id = string
-    zone_id          = string
-  }))
-  default = {}
-}
-
-variable "cloudmonkey_profile" {
-  description = "Optional CloudMonkey profile used for snapshot restore requests."
-  type        = string
-  default     = null
-}
-
 variable "snapshot_timezone" {
   description = "Default timezone for snapshot policies."
   type        = string
