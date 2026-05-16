@@ -54,7 +54,7 @@ terraform plan -var-file=terraform.tfvars.example
 
 The demo stack composes the implemented modules. With the provided example
 values, the plan includes networking, load balancing/security, a CKS cluster
-request, and accounts/projects provisioning.
+request, accounts/projects provisioning, and a VPN gateway.
 
 ## Provider Lock File
 

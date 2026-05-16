@@ -2,9 +2,11 @@ cloudstack_api_url    = "https://cloud.zcp.example/client/api"
 cloudstack_api_key    = "replace-with-api-key"
 cloudstack_secret_key = "replace-with-secret-key"
 
-# Defaults in variables.tf already use the repo-backed non-prod ZCP offerings:
+# Defaults in variables.tf use the ZCP YOW-1 offering names confirmed in this environment:
 # - Default VPC offering
 # - DefaultIsolatedNetworkOfferingForVpcNetworks
+# Operators targeting a different zone or CloudStack deployment should verify
+# available offerings before applying.
 #
 # The default load_balancing_security value allocates one public IP for the demo
 # web tier and creates ingress/egress firewall rules for HTTP and HTTPS.
@@ -113,6 +115,21 @@ kubernetes_clusters = {
 #       display_text = "Development Project"
 #       account_key  = "dev"
 #     }
+#   }
+# }
+
+# vpn_customer_gateways defines remote peers for site-to-site VPN.
+# Pre-shared keys must never be committed — supply them via a separate sensitive .tfvars file.
+# Example:
+#
+# vpn_customer_gateways = {
+#   hq = {
+#     name       = "hq-peer"
+#     gateway    = "203.0.113.1"
+#     cidr       = "192.168.1.0/24"
+#     ipsec_psk  = "supplied-via-sensitive-tfvars"
+#     esp_policy = "aes256-sha256;modp2048"
+#     ike_policy = "aes256-sha256;modp2048"
 #   }
 # }
 

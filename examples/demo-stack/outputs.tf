@@ -116,6 +116,21 @@ output "domain_ids" {
   value       = module.accounts_projects.domain_ids
 }
 
+output "vpn_gateway" {
+  description = "VPN gateway details for the demo VPC."
+  value       = module.vpn_connectivity.vpn_gateway
+}
+
+output "vpn_customer_gateway_ids" {
+  description = "Customer gateway IDs keyed by input key."
+  value       = module.vpn_connectivity.customer_gateway_ids
+}
+
+output "vpn_connection_ids" {
+  description = "VPN connection IDs keyed by input key."
+  value       = module.vpn_connectivity.connection_ids
+}
+
 output "template_ids" {
   description = "Registered template IDs keyed by input key."
   value       = module.images_templates.template_ids

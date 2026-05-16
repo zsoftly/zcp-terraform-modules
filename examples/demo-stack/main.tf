@@ -79,6 +79,15 @@ module "accounts_projects" {
   quotas   = nonsensitive(var.accounts_projects.quotas)
 }
 
+module "vpn_connectivity" {
+  source = "../../modules/vpn-connectivity"
+
+  # "demo" must match a key in var.networking_vpcs
+  vpc_id            = module.networking["demo"].vpc.id
+  project           = var.project
+  customer_gateways = var.vpn_customer_gateways
+}
+
 module "images_templates" {
   source = "../../modules/images-templates"
 
