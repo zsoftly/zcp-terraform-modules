@@ -30,7 +30,7 @@ variable "templates" {
     is_extractable   = optional(bool, false)
     password_enabled = optional(bool, false)
     for_cks          = optional(bool, false)
-    is_ready_timeout = optional(number, 300)
+    is_ready_timeout = optional(string, "30m")
     project          = optional(string)
     tags             = optional(map(string), {})
   }))

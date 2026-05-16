@@ -89,7 +89,7 @@ template automatically.
 | `is_extractable` | Allow extraction | `false` |
 | `password_enabled` | Enable password reset on first boot | `false` |
 | `for_cks` | Mark template as eligible for CloudStack Kubernetes Service | `false` |
-| `is_ready_timeout` | Seconds to wait for template to reach Ready state | `300` |
+| `is_ready_timeout` | How long to wait for the template to become ready after registration | `"30m"` |
 | `project` | Restrict to a CloudStack project | `null` |
 | `tags` | Per-template tags (merged with module-level tags) | `{}` |
 
@@ -100,3 +100,9 @@ template automatically.
 | `template_ids` | Map of key → template ID |
 | `template_names` | Map of key → computed name (with version suffix) |
 | `templates` | Map of key → `{ id, name, display_text, is_public, is_ready, zone, project }` |
+
+## Notes
+
+The `template_names_unique` check produces a warning at plan time if two entries resolve to
+the same computed name. It does not block apply — the failure will surface at the CloudStack
+API level. Use distinct `name` and `version` combinations to avoid this.
