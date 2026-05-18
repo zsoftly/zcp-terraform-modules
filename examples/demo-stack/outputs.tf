@@ -172,3 +172,8 @@ output "vpn_connection_ids" {
   description = "VPN connection IDs keyed by input key."
   value       = module.vpn_connectivity.connection_ids
 }
+
+output "template_ids" {
+  description = "Registered template IDs keyed by input key."
+  value       = module.images_templates.template_ids
+}

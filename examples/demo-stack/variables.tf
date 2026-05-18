@@ -495,3 +495,25 @@ variable "vpn_customer_gateways" {
   }))
   default = {}
 }
+
+variable "templates" {
+  description = "Map of templates to register in the demo stack."
+  type = map(object({
+    name             = string
+    url              = string
+    os_type          = string
+    version          = optional(string)
+    display_text     = optional(string)
+    format           = optional(string, "QCOW2")
+    hypervisor       = optional(string, "KVM")
+    is_public        = optional(bool, false)
+    is_featured      = optional(bool, false)
+    is_extractable   = optional(bool, false)
+    password_enabled = optional(bool, false)
+    for_cks          = optional(bool, false)
+    is_ready_timeout = optional(string, "30m")
+    project          = optional(string)
+    tags             = optional(map(string), {})
+  }))
+  default = {}
+}

@@ -21,7 +21,8 @@ modules/
 ├── load-balancing-security/    # public IPs, firewall, NAT, load balancing
 ├── kubernetes/                 # CKS clusters and node sizing
 ├── accounts-projects/          # Domains, accounts, users, roles, projects, quotas
-└── vpn-connectivity/           # Site-to-site VPN gateway and connections
+├── vpn-connectivity/           # Site-to-site VPN gateway and connections
+└── images-templates/           # Template registration, versioning, and sharing
 
 examples/
 └── demo-stack/   # combined demo stack using the modules
@@ -38,7 +39,7 @@ examples/
 | `load-balancing-security`   | Ready   | Load balancing, firewall, NAT                |
 | `kubernetes`                | Ready   | Managed clusters and node pools              |
 | `vpn-connectivity`          | Ready   | Site-to-site VPN gateway and connections     |
-| `images-templates`          | Planned | Image/template upload, versioning, sharing   |
+| `images-templates`          | Ready   | Image/template upload, versioning, sharing   |
 
 Only modules with a directory under `modules/` are currently implemented.
 

@@ -32,6 +32,9 @@ scratch/
 .env
 .env.*
 
+# Scratch workspaces
+scratch/
+
 # Editor and OS files
 .DS_Store
 Thumbs.db
