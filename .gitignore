@@ -1,6 +1,9 @@
 # Terraform working directories
 **/.terraform/*
 
+# Lock files in child modules (lock files belong only in root modules)
+modules/*/.terraform.lock.hcl
+
 # Terraform state and plans
 *.tfstate
 *.tfstate.*

@@ -2,8 +2,8 @@
 
 Combined Terraform example for ZCP customer/demo environments.
 
-This stack composes the networking, load balancing/security, Kubernetes,
-accounts/projects, and VPN connectivity modules.
+This stack composes the networking, compute, load balancing/security,
+Kubernetes, accounts/projects, and VPN connectivity modules.
 
 ## Networking
 
@@ -97,6 +97,17 @@ v0.6.x. Configure it directly in the CloudStack UI or via the CloudStack API
 until provider support is added.
 
 See `terraform.tfvars.example` for the full variable structure.
+
+## Compute
+
+The demo stack also accepts a `compute_groups` map. Each entry calls the
+reusable compute module once and references a network created by the
+networking module via `vpc_key` and `network_key`. Both keys are validated at
+plan time — a typo fails with a clear message before any CloudStack call.
+
+`compute_groups` defaults to an empty map so the base demo plan stays
+networking-only. Populate it (or override in `terraform.tfvars`) to plan
+instances. See `terraform.tfvars.example` for a sample group.
 
 ## Dry Run
 
