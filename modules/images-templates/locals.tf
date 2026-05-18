@@ -1,17 +1,17 @@
 locals {
   template_map = {
-    cpanel     = "AlmaLinux 9 64-bit"
-    docker     = "Ubuntu 24.04 LTS 64-bit"
-    lamp       = "Ubuntu 24.04 LTS 64-bit"
-    drupal     = "Ubuntu 24.04 LTS 64-bit"
-    joomla     = "Ubuntu 24.04 LTS 64-bit"
-    wordpress  = "Ubuntu 24.04 LTS 64-bit"
-    wp-squared = "Ubuntu 24.04 LTS 64-bit"
-    gitlab     = "Ubuntu 24.04 LTS 64-bit"
-    jitsi      = "Ubuntu 24.04 LTS 64-bit"
-    magento    = "Ubuntu 24.04 LTS 64-bit"
-    minecraft  = "Ubuntu 24.04 LTS 64-bit"
-    pritunl    = "Ubuntu 24.04 LTS 64-bit"
+    cpanel     = "AlmaLinux-9"
+    docker     = "Ubuntu-24.04-LTS"
+    lamp       = "Ubuntu-24.04-LTS"
+    drupal     = "Ubuntu-24.04-LTS"
+    joomla     = "Ubuntu-24.04-LTS"
+    wordpress  = "Ubuntu-24.04-LTS"
+    wp-squared = "Ubuntu-24.04-LTS"
+    gitlab     = "Ubuntu-24.04-LTS"
+    jitsi      = "Ubuntu-24.04-LTS"
+    magento    = "Ubuntu-24.04-LTS"
+    minecraft  = "Ubuntu-24.04-LTS"
+    pritunl    = "Ubuntu-24.04-LTS"
   }
 
   min_sizing = {
@@ -29,7 +29,8 @@ locals {
     pritunl    = { cpu = 1, ram_mb = 1024, disk_gb = 20 }
   }
 
-  template_name = local.template_map[var.stack]
+  resolved_template_map = merge(local.template_map, var.template_name_overrides)
+  template_name         = local.resolved_template_map[var.stack]
   stack_sizing  = local.min_sizing[var.stack]
 
   rendered_userdata = templatefile(

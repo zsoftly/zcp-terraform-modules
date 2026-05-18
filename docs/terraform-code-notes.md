@@ -32,7 +32,7 @@ Calls `templatefile()` with the stack's `.tftpl` file. `merge()` combines `var.s
 
 ### `main.tf` — `data.cloudstack_template.this`
 
-Looks up the existing OS template from CloudStack by name and zone. This data source acts as a plan-time validation: if the template name in `locals.template_map` does not exist in the target zone, `terraform plan` fails with a clear error rather than allowing a silent failure at apply time.
+Looks up the existing OS template from CloudStack by name. `template_filter = "all"` is required by the provider schema — without it the plan fails with "missing required argument". Using `"all"` searches across featured, community, and self templates so any registered ZCP template is found regardless of visibility. The `filter` block matches on the template name resolved from `locals.template_map`. If the name does not exist in ZCP, `terraform plan` fails early with a clear error. The `project` argument is not supported by this data source — it is kept in `variables.tf` for use by future compute resources in this module.
 
 ---
 

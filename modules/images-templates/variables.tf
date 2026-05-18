@@ -34,3 +34,9 @@ variable "stack_vars" {
   sensitive   = true
   default     = {}
 }
+
+variable "template_name_overrides" {
+  description = "Override the default OS template name for one or more stack slugs. Keys are stack slugs, values are the exact template names as registered in your ZCP zone. Only the stacks you specify are overridden; others use the built-in defaults."
+  type        = map(string)
+  default     = {}
+}

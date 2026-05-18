@@ -1,0 +1,38 @@
+#cloud-config
+# ZCP Stack: ${stack}
+
+hostname: ${hostname}
+fqdn: ${hostname}
+manage_etc_hosts: true
+
+write_files:
+  - path: /etc/zcp/stack
+    content: |
+      STACK=${stack}
+      PROVISIONED=false
+    permissions: '0644'
+    owner: root:root
+
+runcmd:
+  - |
+    if [ -f /var/lib/zcp-provisioned ]; then
+      echo "[ZCP] Already provisioned, skipping." | tee -a /var/log/zcp-provision.log
+      exit 0
+    fi
+  - mkdir -p /etc/zcp
+  - echo "[ZCP] Starting ${stack} provision at $(date)" | tee -a /var/log/zcp-provision.log
+  - apt-get update -y
+  - apt-get install -y ca-certificates curl gnupg
+  - install -m 0755 -d /etc/apt/keyrings
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  - chmod a+r /etc/apt/keyrings/docker.gpg
+  - |
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" > /etc/apt/sources.list.d/docker.list
+  - apt-get update -y
+  - apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  - systemctl enable docker
+  - systemctl start docker
+  - usermod -aG docker ubuntu
+  - sed -i 's/PROVISIONED=false/PROVISIONED=true/' /etc/zcp/stack
+  - touch /var/lib/zcp-provisioned
+  - echo "[ZCP] Provisioning complete at $(date)" | tee -a /var/log/zcp-provision.log
