@@ -15,7 +15,6 @@ resource "cloudstack_role" "this" {
 }
 
 resource "cloudstack_account" "this" {
-  # nonsensitive: keys are account names, not passwords — safe to use as for_each identifiers
   for_each = nonsensitive(toset(keys(var.accounts)))
 
   account      = try(var.accounts[each.key].account, var.accounts[each.key].username)
@@ -30,7 +29,6 @@ resource "cloudstack_account" "this" {
 }
 
 resource "cloudstack_user" "this" {
-  # nonsensitive: keys are user identifiers, not passwords
   for_each = nonsensitive(toset(keys(var.users)))
 
   username   = var.users[each.key].username
