@@ -62,18 +62,19 @@ resource "cloudstack_instance" "test" {
 module "security" {
   source = "../../modules/load-balancing-security"
 
-  name       = "test-stacks-security"
-  zone       = var.zone
-  network_id = module.networking.network_ids["stacks"]
-  vpc_id     = module.networking.vpc.id
+  name   = "test-stacks-security"
+  zone   = var.zone
+  vpc_id = module.networking.vpc.id
 
-  existing_public_ip_ids = {
-    source_nat = module.networking.networks["stacks"].source_nat_ip_id
+  public_ips = {
+    ssh_access = {
+      vpc_id = module.networking.vpc.id
+    }
   }
 
   port_forwards = {
     ssh = {
-      public_ip_key = "source_nat"
+      public_ip_key = "ssh_access"
       forwards = [
         {
           protocol           = "tcp"
