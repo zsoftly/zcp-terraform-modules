@@ -57,7 +57,7 @@ variable "snapshot_policies" {
 }
 
 variable "tags" {
-  description = "Reserved for future CloudStack storage tag support; kept for root module consistency."
+  description = "Not consumed by this module — cloudstack_disk does not accept tags in provider v0.6. Accepted for root module consistency but silently dropped."
   type        = map(string)
   default     = {}
 }

@@ -3,11 +3,11 @@ resource "cloudstack_disk" "this" {
 
   name               = each.value.name
   disk_offering      = each.value.disk_offering
-  size               = try(each.value.size_gb, null)
+  size               = each.value.size_gb
   zone               = var.zone
   project            = var.project
-  attach             = try(each.value.attach, true) && try(each.value.instance_id, null) != null
-  virtual_machine_id = try(each.value.instance_id, null)
+  attach             = each.value.attach && each.value.instance_id != null
+  virtual_machine_id = each.value.instance_id
 }
 
 check "snapshot_volume_keys_valid" {

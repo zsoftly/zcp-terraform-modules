@@ -1,15 +1,18 @@
 variable "cloudstack_api_url" {
-  type = string
+  description = "CloudStack API endpoint URL."
+  type        = string
 }
 
 variable "cloudstack_api_key" {
-  type      = string
-  sensitive = true
+  description = "CloudStack API key for authentication."
+  type        = string
+  sensitive   = true
 }
 
 variable "cloudstack_secret_key" {
-  type      = string
-  sensitive = true
+  description = "CloudStack secret key for authentication."
+  type        = string
+  sensitive   = true
 }
 
 variable "zone" {

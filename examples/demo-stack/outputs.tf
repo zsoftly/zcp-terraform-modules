@@ -131,12 +131,6 @@ output "storage_volume_ids" {
   }
 }
 
-output "storage_restored_volumes" {
-  description = "Restored storage volume details keyed by storage stack key."
-  value = {
-    for key, storage in module.storage : key => storage.restored_volumes
-  }
-}
 
 output "storage_snapshot_policies" {
   description = "Storage snapshot policy details keyed by storage stack key."
