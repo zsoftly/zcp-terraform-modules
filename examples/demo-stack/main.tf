@@ -36,6 +36,19 @@ module "load_balancing_security" {
   load_balancer_rules    = try(each.value.load_balancer_rules, {})
 }
 
+module "storage" {
+  for_each = var.storage_stacks
+
+  source = "../../modules/storage"
+
+  zone              = var.zone
+  project           = var.project
+  snapshot_timezone = try(each.value.snapshot_timezone, "UTC")
+
+  volumes           = try(each.value.volumes, {})
+  snapshot_policies = try(each.value.snapshot_policies, {})
+}
+
 module "kubernetes" {
   for_each = var.kubernetes_clusters
 
@@ -82,7 +95,6 @@ module "accounts_projects" {
 module "vpn_connectivity" {
   source = "../../modules/vpn-connectivity"
 
-  # "demo" must match a key in var.networking_vpcs
   vpc_id            = module.networking["demo"].vpc.id
   project           = var.project
   customer_gateways = var.vpn_customer_gateways

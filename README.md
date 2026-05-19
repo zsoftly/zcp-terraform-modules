@@ -19,10 +19,12 @@ modules/
 ├── networking/                 # VPCs, networks, IP ranges, ACLs
 ├── compute/                    # Instances, SSH keypairs, affinity groups, data disks
 ├── load-balancing-security/    # public IPs, firewall, NAT, load balancing
+├── storage/                    # volumes, attachments, snapshot policies
 ├── kubernetes/                 # CKS clusters and node sizing
 ├── accounts-projects/          # Domains, accounts, users, roles, projects, quotas
 ├── vpn-connectivity/           # Site-to-site VPN gateway and connections
-└── images-templates/           # Template registration, versioning, and sharing
+├── images-templates/           # Template registration, versioning, and sharing
+└── stacks/                     # Pre-configured app stack selection and cloud-init rendering
 
 examples/
 └── demo-stack/   # combined demo stack using the modules
@@ -33,13 +35,14 @@ examples/
 | Module                      | Status  | Purpose                                      |
 | --------------------------- | ------- | -------------------------------------------- |
 | `networking`                | Ready   | VPCs, VPC tiers/networks, IP ranges, ACLs    |
-| `compute`                   | Ready   | Instances, templates, service offerings      |
-| `storage`                   | Planned | Volumes and snapshots                        |
-| `accounts-projects`         | Ready   | Domains, accounts, users, roles, projects, quotas |
-| `load-balancing-security`   | Ready   | Load balancing, firewall, NAT                |
-| `kubernetes`                | Ready   | Managed clusters and node pools              |
-| `vpn-connectivity`          | Ready   | Site-to-site VPN gateway and connections     |
-| `images-templates`          | Ready   | Image/template upload, versioning, sharing   |
+| `compute`                   | Ready       | Instances, templates, service offerings      |
+| `storage`                   | Ready       | Volumes and snapshots                        |
+| `accounts-projects`         | Ready       | Domains, accounts, users, roles, projects, quotas |
+| `load-balancing-security`   | Ready       | Load balancing, firewall, NAT                |
+| `kubernetes`                | Ready       | Managed clusters and node pools              |
+| `vpn-connectivity`          | Ready       | Site-to-site VPN gateway and connections     |
+| `images-templates`          | Ready       | Image/template upload, versioning, sharing   |
+| `stacks`                    | In Progress | Pre-configured app stack selection and cloud-init userdata rendering |
 
 Only modules with a directory under `modules/` are currently implemented.
 

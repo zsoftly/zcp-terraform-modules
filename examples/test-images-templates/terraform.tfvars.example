@@ -1,0 +1,17 @@
+cloudstack_api_url    = "https://your-zcp-endpoint/client/api"
+cloudstack_api_key    = "your-api-key"
+cloudstack_secret_key = "your-secret-key"
+zone                  = "your-zone-name"
+vpc_offering          = "Default VPC offering"
+network_offering      = "DefaultIsolatedNetworkOfferingForVpcNetworks"
+stack                 = "docker"
+hostname              = "test-vm.example.com"
+service_offering      = "CI1-1"
+keypair               = "your-keypair-name"
+stack_vars            = {}
+
+# Optional: override template names if your ZCP zone uses different naming
+# template_name_overrides = {
+#   docker = "Ubuntu-24.04-LTS"
+#   cpanel = "AlmaLinux-9"
+# }

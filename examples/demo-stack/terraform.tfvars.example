@@ -1,4 +1,4 @@
-cloudstack_api_url    = "https://cloud.zcp.example/client/api"
+cloudstack_api_url    = "https://console.zcp.example/client/api"
 cloudstack_api_key    = "replace-with-api-key"
 cloudstack_secret_key = "replace-with-secret-key"
 
@@ -87,6 +87,27 @@ cloudstack_secret_key = "replace-with-secret-key"
 #         member_ids    = ["vm-id-1", "vm-id-2"]
 #       }
 #     }
+#   }
+# }
+
+# Storage is empty by default. Enable this block only when you want to create
+# volumes. Leave attach=false for volume-only tests before the compute module is
+# available. Keep snapshot_policies={} until the volume is attached or you have
+# an existing Ready volume_id.
+#
+# storage_stacks = {
+#   demo = {
+#     volumes = {
+#       app_data = {
+#         name          = "demo-app-data-01"
+#         disk_offering = "Starter-NVMe"
+#         attach        = false
+#       }
+#     }
+#
+#     snapshot_policies = {}
+#
+#     restored_volumes = {}
 #   }
 # }
 
