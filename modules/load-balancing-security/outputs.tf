@@ -54,8 +54,7 @@ output "port_forwards" {
   description = "Port forwarding resources keyed by input key."
   value = {
     for key, port_forward in cloudstack_port_forward.this : key => {
-      id          = port_forward.id
-      vm_guest_ip = port_forward.vm_guest_ip
+      id = port_forward.id
     }
   }
 }

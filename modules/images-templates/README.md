@@ -60,6 +60,18 @@ resource "cloudstack_instance" "app" {
 
 > `rendered_userdata` is marked `sensitive = true` and will not appear in `terraform plan` or `terraform apply` output.
 
+## Networking Requirements
+
+VMs provisioned with this module sit inside a private VPC tier and have no public IP. To access them after provisioning:
+
+| Requirement | Why |
+|-------------|-----|
+| VPC ACL ingress rule — port 22 | Allows SSH traffic into the tier |
+| VPC ACL egress rule — all | Allows the VM to install packages on first boot |
+| Port forward — public 2222 → VM 22 | Exposes SSH via the VPC source NAT IP |
+
+Use the `networking` module to create the VPC and ACL rules, and the `load-balancing-security` module to create the port forward. See `examples/test-images-templates` for a complete working reference including all three modules wired together.
+
 ## Adding a new stack
 
 1. Add an entry to `template_map` in `locals.tf` with the exact CloudStack template name

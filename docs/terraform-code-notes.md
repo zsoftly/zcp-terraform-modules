@@ -32,7 +32,7 @@ Calls `templatefile()` with the stack's `.tftpl` file. `merge()` combines `var.s
 
 ### `main.tf` — `data.cloudstack_template.this`
 
-Looks up the existing OS template from CloudStack by name. `template_filter = "all"` is required by the provider schema — without it the plan fails with "missing required argument". Using `"all"` searches across featured, community, and self templates so any registered ZCP template is found regardless of visibility. The `filter` block matches on the template name resolved from `locals.template_map`. If the name does not exist in ZCP, `terraform plan` fails early with a clear error. The `project` argument is not supported by this data source — it is kept in `variables.tf` for use by future compute resources in this module.
+Looks up the existing OS template from CloudStack by name. `template_filter = "executable"` is required — `"featured"` finds the template at plan time but CloudStack rejects it at apply time with "template not available for use" because featured templates are not necessarily deployable. `"executable"` returns only templates that can actually be used to create VMs. The `filter` block matches on the template name resolved from `locals.template_map`. If the name does not exist in ZCP, `terraform plan` fails early with a clear error. The `project` argument is not supported by this data source — it is kept in `variables.tf` for use by future compute resources in this module.
 
 ---
 

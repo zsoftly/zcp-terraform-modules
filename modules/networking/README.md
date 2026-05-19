@@ -68,3 +68,32 @@ module "networking" {
 ```
 
 See `examples/demo-stack` for the combined demo stack example.
+
+## Stack Access — Required ACL Rules
+
+When deploying application stacks into a VPC tier, the network ACL must explicitly allow inbound SSH and all outbound traffic. By default VPC tiers deny all traffic.
+
+```hcl
+network_acls = {
+  stacks = {
+    name = "stacks-acl"
+    rules = [
+      {
+        rule_number  = 100
+        protocol     = "tcp"
+        port         = "22"
+        cidr_list    = ["0.0.0.0/0"]
+        traffic_type = "ingress"
+      },
+      {
+        rule_number  = 200
+        protocol     = "all"
+        cidr_list    = ["0.0.0.0/0"]
+        traffic_type = "egress"
+      }
+    ]
+  }
+}
+```
+
+Add additional ingress rules per stack as needed — for example port 80/443 for web stacks, port 25565 for Minecraft, port 443 for Pritunl. See `examples/test-images-templates` for a complete working reference.
