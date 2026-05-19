@@ -139,6 +139,47 @@ variable "networking_vpcs" {
   }
 }
 
+variable "compute_groups" {
+  description = "Map of compute groups. Each group calls the compute module once and references a network created by the networking module via vpc_key + network_key."
+  type = map(object({
+    vpc_key                  = string
+    network_key              = string
+    default_service_offering = string
+    default_template         = string
+    create_ssh_keypair       = optional(bool, false)
+    ssh_keypair_name         = optional(string)
+    ssh_public_key           = optional(string)
+    tags                     = optional(map(string), {})
+    affinity_groups = optional(map(object({
+      name        = string
+      type        = string
+      description = optional(string)
+    })), {})
+    instances = map(object({
+      name                = string
+      display_name        = optional(string)
+      service_offering    = optional(string)
+      template            = optional(string)
+      network_id          = optional(string)
+      ip_address          = optional(string)
+      keypair             = optional(string)
+      user_data           = optional(string)
+      root_disk_size      = optional(number)
+      group               = optional(string)
+      start_vm            = optional(bool, true)
+      affinity_group_keys = optional(list(string), [])
+      tags                = optional(map(string), {})
+      data_disks = optional(map(object({
+        disk_offering = string
+        size          = optional(number)
+        shrink_ok     = optional(bool, false)
+        device_id     = optional(number)
+      })), {})
+    }))
+  }))
+  default = {}
+}
+
 variable "load_balancing_security" {
   description = "Map of load balancing and security stacks to create."
   type = map(object({
@@ -482,6 +523,28 @@ variable "vpn_customer_gateways" {
     dpd          = optional(bool, false)
     esp_lifetime = optional(number, 3600)
     ike_lifetime = optional(number, 86400)
+  }))
+  default = {}
+}
+
+variable "templates" {
+  description = "Map of templates to register in the demo stack."
+  type = map(object({
+    name             = string
+    url              = string
+    os_type          = string
+    version          = optional(string)
+    display_text     = optional(string)
+    format           = optional(string, "QCOW2")
+    hypervisor       = optional(string, "KVM")
+    is_public        = optional(bool, false)
+    is_featured      = optional(bool, false)
+    is_extractable   = optional(bool, false)
+    password_enabled = optional(bool, false)
+    for_cks          = optional(bool, false)
+    is_ready_timeout = optional(string, "30m")
+    project          = optional(string)
+    tags             = optional(map(string), {})
   }))
   default = {}
 }

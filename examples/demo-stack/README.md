@@ -2,9 +2,8 @@
 
 Combined Terraform example for ZCP customer/demo environments.
 
-This stack composes the networking, load balancing/security, storage, Kubernetes,
-accounts/projects, and VPN connectivity modules. Add compute and image/template
-modules here as they are built.
+This stack composes the networking, compute, load balancing/security,
+Kubernetes, accounts/projects, and VPN connectivity modules.
 
 ## Networking
 
@@ -26,26 +25,6 @@ The demo stack creates one public IP for the web tier, then attaches ingress and
 egress firewall rules for HTTP and HTTPS. Static NAT, port forwarding, and load
 balancer rules are supported by the child module, but they require VM IDs from a
 compute module or existing instances.
-
-## Storage
-
-Storage is disabled by default. Set `storage_stacks` to create data volumes,
-optionally attach them to existing instance IDs, and add scheduled snapshot
-policies.
-
-The storage module is designed for the repo-backed ZCP disk offerings:
-
-| Disk offering     | Default size |
-| ----------------- | ------------ |
-| `Starter-NVMe`    | 50 GB        |
-| `Basic-NVMe`      | 90 GB        |
-| `Standard-NVMe`   | 180 GB       |
-| `Pro-NVMe`        | 360 GB       |
-| `Enterprise-NVMe` | 720 GB       |
-
-Snapshot restores are a manual operational step — use CloudMonkey or the
-CloudStack API directly. The resulting volume ID can then be referenced in
-`snapshot_policies` via `volume_id`.
 
 ## Kubernetes
 
@@ -118,6 +97,17 @@ v0.6.x. Configure it directly in the CloudStack UI or via the CloudStack API
 until provider support is added.
 
 See `terraform.tfvars.example` for the full variable structure.
+
+## Compute
+
+The demo stack also accepts a `compute_groups` map. Each entry calls the
+reusable compute module once and references a network created by the
+networking module via `vpc_key` and `network_key`. Both keys are validated at
+plan time — a typo fails with a clear message before any CloudStack call.
+
+`compute_groups` defaults to an empty map so the base demo plan stays
+networking-only. Populate it (or override in `terraform.tfvars`) to plan
+instances. See `terraform.tfvars.example` for a sample group.
 
 ## Dry Run
 

@@ -39,7 +39,7 @@ module "networking" {
 }
 
 module "images_templates" {
-  source = "../../modules/images-templates"
+  source = "../../modules/stacks"
 
   stack                   = var.stack
   hostname                = var.hostname

@@ -34,6 +34,25 @@ cloudstack_secret_key = "replace-with-secret-key"
 #   }
 # }
 
+# Compute groups are empty by default. Each entry calls the compute module once
+# and references a network created by the networking module.
+#
+# compute_groups = {
+#   web = {
+#     vpc_key                  = "demo"
+#     network_key              = "web"
+#     default_service_offering = "CI1-1"
+#     default_template         = "Ubuntu-24.04-LTS"
+#     create_ssh_keypair       = true
+#     ssh_keypair_name         = "demo-key"
+#     ssh_public_key           = "ssh-ed25519 AAAA... user@host"
+#     instances = {
+#       web1 = { name = "web-01" }
+#       web2 = { name = "web-02", service_offering = "CI1-2" }
+#     }
+#   }
+# }
+
 # Static NAT, port forwarding, and load balancer rules need VM IDs. Add them
 # here after the compute module has created instances.
 #
@@ -151,5 +170,21 @@ kubernetes_clusters = {
 #     ipsec_psk  = "supplied-via-sensitive-tfvars"
 #     esp_policy = "aes256-sha256;modp2048"
 #     ike_policy = "aes256-sha256;modp2048"
+#   }
+# }
+
+# Register templates using the images-templates module.
+# The URL must be reachable from the CloudStack management server.
+# Omit or leave as {} to skip template registration in this demo run.
+#
+# templates = {
+#   ubuntu_2204_v1 = {
+#     name       = "ubuntu-22.04"
+#     version    = "1.0.0"
+#     url        = "https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64-disk-kvm.img"
+#     os_type    = "Ubuntu 22.04 LTS"
+#     format     = "QCOW2"
+#     hypervisor = "KVM"
+#     is_public  = false
 #   }
 # }

@@ -1,80 +1,108 @@
 # images-templates
 
-Resolves the correct CloudStack OS template and renders cloud-init userdata for a selected application stack. Does **not** create VMs — outputs are consumed by a compute resource or the `demo-stack` example.
-
-## Supported stacks
-
-| Slug | Base OS | Min CPU | Min RAM | Min Disk |
-|------|---------|---------|---------|----------|
-| `cpanel` | AlmaLinux 9 | 2 | 2 GB | 40 GB |
-| `docker` | Ubuntu 24.04 | 1 | 1 GB | 20 GB |
-| `lamp` | Ubuntu 24.04 | 1 | 1 GB | 20 GB |
-| `drupal` | Ubuntu 24.04 | 2 | 2 GB | 20 GB |
-| `joomla` | Ubuntu 24.04 | 2 | 2 GB | 20 GB |
-| `wordpress` | Ubuntu 24.04 | 1 | 1 GB | 20 GB |
-| `wp-squared` | Ubuntu 24.04 | 2 | 2 GB | 30 GB |
-| `gitlab` | Ubuntu 24.04 | 4 | 8 GB | 50 GB |
-| `jitsi` | Ubuntu 24.04 | 2 | 4 GB | 20 GB |
-| `magento` | Ubuntu 24.04 | 4 | 4 GB | 50 GB |
-| `minecraft` | Ubuntu 24.04 | 2 | 2 GB | 20 GB |
-| `pritunl` | Ubuntu 24.04 | 1 | 1 GB | 20 GB |
+Manages the lifecycle of CloudStack templates: registration, versioning, sharing, and deletion.
 
 ## Usage
 
 ```hcl
 module "images_templates" {
-  source   = "../../modules/images-templates"
+  source = "../../modules/images-templates"
 
-  stack    = "wordpress"
-  hostname = "wp01.prod.example.com"
-  zone     = var.zone
-  project  = var.project
+  zone = "yow-1"
 
-  stack_vars = {
-    mysql_root_password = var.mysql_root_password
-    wp_admin_password   = var.wp_admin_password
-    wp_admin_user       = var.wp_admin_user
-    wp_admin_email      = var.wp_admin_email
-    wp_site_title       = var.wp_site_title
+  tags = {
+    service = "zcp"
+    managed = "terraform"
   }
-}
 
-resource "cloudstack_instance" "app" {
-  name      = "wp01"
-  zone      = var.zone
-  template  = module.images_templates.template_id
-  user_data = module.images_templates.rendered_userdata
-  # service_offering should satisfy module.images_templates.min_sizing
+  templates = {
+    ubuntu_2204_v1 = {
+      name       = "ubuntu-22.04"
+      version    = "1.0.0"
+      url        = "https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64-disk-kvm.img"
+      os_type    = "Ubuntu 22.04 LTS"
+      format     = "QCOW2"
+      hypervisor = "KVM"
+      is_public  = false
+    }
+  }
 }
 ```
 
+## Versioning strategy
+
+Set `version` on each template entry. The module appends `-v<version>` to the resource name
+and writes the version into the template tags. To publish a new version, add a new map key
+(e.g. `ubuntu_2204_v2`) without removing the old one. Remove the old key only once consumers
+have migrated.
+
+Any change to a replacement-driving field (`url`, `format`, `hypervisor`, `os_type`) will
+destroy and recreate the template. Treat these changes as a new version: add a new map key
+with a bumped version and migrate consumers before removing the old key. Do not rely on
+in-place replacement for managed templates.
+
+## Sharing
+
+| Requirement | How |
+|---|---|
+| Available to all accounts in the zone | `is_public = true` |
+| Restricted to a single project | `project = "project-name"` |
+| Per-account sharing | Not supported by provider v0.6 — use CloudStack UI or API (`updateTemplatePermissions`) |
+
+## File uploads
+
+The CloudStack provider registers templates from an accessible URL (HTTP or HTTPS). To upload
+a local file, stage it to an HTTP server, S3-compatible store, or internal mirror first, then
+pass the resulting URL to the `url` argument.
+
+**Security note:** Use HTTPS URLs wherever possible. HTTP URLs allow a man-in-the-middle to
+substitute the disk image in transit. On private management networks with no external exposure,
+HTTP mirrors are acceptable, but the risk should be acknowledged explicitly.
+
+## Deletion
+
+Remove the key from the `templates` map and run `terraform apply`. Terraform destroys the
+template automatically.
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|---|---|---|---|---|
+| `zone` | CloudStack zone name or ID | `string` | — | yes |
+| `tags` | Tags applied to all templates | `map(string)` | `{}` | no |
+| `project` | Default CloudStack project to scope all templates | `string` | `null` | no |
+| `templates` | Map of templates to register | `map(object(...))` | `{}` | no |
+
+### `templates` object attributes
+
+| Attribute | Description | Default |
+|---|---|---|
+| `name` | Base template name | required |
+| `url` | Source URL for registration | required |
+| `os_type` | CloudStack OS type name | required |
+| `version` | Version string; appended as `-v<version>` suffix | `null` |
+| `display_text` | Human-readable name (defaults to computed name) | `null` |
+| `format` | Disk format: QCOW2, RAW, VHD, OVA, ISO, VHDX, BAREMETAL | `"QCOW2"` |
+| `hypervisor` | Target hypervisor: KVM, VMware, XenServer, BareMetal, Simulator, Hyperv, LXC | `"KVM"` |
+| `is_public` | Available to all accounts in the zone | `false` |
+| `is_featured` | Mark as a featured template | `false` |
+| `is_extractable` | Allow extraction | `false` |
+| `password_enabled` | Enable password reset on first boot | `false` |
+| `for_cks` | Mark template as eligible for CloudStack Kubernetes Service | `false` |
+| `is_ready_timeout` | How long to wait for the template to become ready after registration | `"30m"` |
+| `project` | Restrict to a CloudStack project | `null` |
+| `tags` | Per-template tags (merged with module-level tags) | `{}` |
+
 ## Outputs
 
-| Output | Description |
-|--------|-------------|
-| `template_name` | CloudStack template name for the selected stack |
-| `template_id` | CloudStack template ID for the selected stack |
-| `stack` | The stack slug passed in |
-| `rendered_userdata` | Base64-encoded cloud-init userdata **(sensitive)** |
-| `min_sizing` | `{ cpu, ram_mb, disk_gb }` minimum requirements |
+| Name | Description |
+|---|---|
+| `template_ids` | Map of key → template ID |
+| `template_names` | Map of key → computed name (with version suffix) |
+| `templates` | Map of key → `{ id, name, display_text, is_public, is_ready, zone, project }` |
 
-> `rendered_userdata` is marked `sensitive = true` and will not appear in `terraform plan` or `terraform apply` output.
+## Notes
 
-## Networking Requirements
-
-VMs provisioned with this module sit inside a private VPC tier and have no public IP. To access them after provisioning:
-
-| Requirement | Why |
-|-------------|-----|
-| VPC ACL ingress rule — port 22 | Allows SSH traffic into the tier |
-| VPC ACL egress rule — all | Allows the VM to install packages on first boot |
-| Port forward — public 2222 → VM 22 | Exposes SSH via the VPC source NAT IP |
-
-Use the `networking` module to create the VPC and ACL rules, and the `load-balancing-security` module to create the port forward. See `examples/test-images-templates` for a complete working reference including all three modules wired together.
-
-## Adding a new stack
-
-1. Add an entry to `template_map` in `locals.tf` with the exact CloudStack template name
-2. Add an entry to `min_sizing` in `locals.tf`
-3. Add the slug to the `validation` block in `variables.tf`
-4. Create `zpcp/stacks/cloud-init/<slug>.tftpl` — copy `base.tftpl` as the starting point
+The `template_names_unique` check produces a warning at plan time if two entries resolve to
+the same computed name. It does not block apply — the failure will surface at the CloudStack
+API level. Use distinct `name` and `version` combinations to avoid this.
