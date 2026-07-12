@@ -15,20 +15,18 @@ write_files:
     owner: root:root
 
 runcmd:
-  # Idempotency guard — copy this block verbatim to every stack script
   - |
     if [ -f /var/lib/acs-provisioned ]; then
       echo "[ACS] Already provisioned, skipping." | tee -a /var/log/acs-provision.log
       exit 0
     fi
-  - mkdir -p /etc/acs
-  - echo "[ACS] Starting ${stack} provision at $(date)" | tee -a /var/log/acs-provision.log
+    mkdir -p /etc/acs
+    echo "[ACS] Starting ${stack} provision at $(date)" | tee -a /var/log/acs-provision.log
 
-  #
-  # ---- ADD STACK-SPECIFIC COMMANDS HERE ----
-  #
+    #
+    # ---- ADD STACK-SPECIFIC COMMANDS HERE ----
+    #
 
-  # Mark provisioning complete — copy this block verbatim, always last
-  - sed -i 's/PROVISIONED=false/PROVISIONED=true/' /etc/acs/stack
-  - touch /var/lib/acs-provisioned
-  - echo "[ACS] Provisioning complete at $(date)" | tee -a /var/log/acs-provision.log
+    sed -i 's/PROVISIONED=false/PROVISIONED=true/' /etc/acs/stack
+    touch /var/lib/acs-provisioned
+    echo "[ACS] Provisioning complete at $(date)" | tee -a /var/log/acs-provision.log

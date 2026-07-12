@@ -1,4 +1,4 @@
-# ZPCP — Terraform Modules for Apache CloudStack
+# ZPCP: Terraform Modules for Apache CloudStack
 
 Terraform modules and examples for provisioning infrastructure on
 [Apache CloudStack](https://cloudstack.apache.org) (ACS) by ZSoftly.
@@ -60,7 +60,7 @@ example. No CloudStack credentials required.
 
 ## Plan Against a Live Zone
 
-`terraform plan` requires a live CloudStack API — the provider resolves offering
+`terraform plan` requires a live CloudStack API. The provider resolves offering
 names, zone IDs, and other attributes at plan time. Copy the example vars file,
 fill in real credentials, and run:
 

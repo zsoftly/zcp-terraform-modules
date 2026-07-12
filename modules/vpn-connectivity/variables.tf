@@ -3,7 +3,7 @@ variable "vpc_id" {
   type        = string
 
   validation {
-    condition     = length(trimspace(var.vpc_id)) > 0
+    condition     = var.vpc_id != null && length(trimspace(var.vpc_id)) > 0
     error_message = "vpc_id must not be empty."
   }
 }

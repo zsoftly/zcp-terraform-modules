@@ -99,6 +99,6 @@ network_acls = {
 }
 ```
 
-Add additional ingress rules per stack as needed — for example port 80/443 for
+Add additional ingress rules per stack as needed. For example, port 80/443 for
 web stacks, port 25565 for Minecraft, port 443 for Pritunl. See
 `examples/test-images-templates` for a complete working reference.

@@ -5,7 +5,7 @@ demo and production environments.
 
 ## Resources
 
-This module can manage:
+This module manages:
 
 - public IP allocation
 - ingress firewall rules
@@ -107,7 +107,7 @@ module "load_balancing_security" {
 | `project`                | Optional CloudStack project name or ID.                                                                                                   |
 | `network_id`             | Default network ID for public IPs, egress rules, and VPC LB rules.                                                                        |
 | `vpc_id`                 | Optional default VPC ID for public IP allocation.                                                                                         |
-| `existing_public_ip_ids` | Existing public IP IDs that can be referenced by key.                                                                                     |
+| `existing_public_ip_ids` | Existing public IP IDs referenced by key.                                                                                                 |
 | `public_ips`             | Public IPs to acquire.                                                                                                                    |
 | `firewalls`              | Ingress firewall rule sets for public IP firewall rules supported by the CloudStack provider. Use VPC network ACLs for VPC tier security. |
 | `egress_firewalls`       | Egress firewall rule sets.                                                                                                                |

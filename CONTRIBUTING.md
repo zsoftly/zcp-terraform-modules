@@ -68,6 +68,6 @@ reference.
   `outputs.tf`, and a `README.md`.
 - All variables must have a `description`.
 - All outputs must have a `description`.
-- Use `sensitive = true` on any variable that may contain secrets.
+- Use `sensitive = true` on any variable that holds a secret.
 - Add input validation blocks where the domain of valid values is constrained.
 - Run `terraform fmt -recursive .` before opening a PR.

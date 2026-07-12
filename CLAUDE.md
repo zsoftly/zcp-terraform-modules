@@ -1,4 +1,4 @@
-# CLAUDE.md — zpcp
+# CLAUDE.md: zpcp AI Instructions
 
 AI assistant instructions for this repository (Apache CloudStack Terraform
 modules and examples by ZSoftly).
@@ -7,16 +7,16 @@ modules and examples by ZSoftly).
 
 ## Project Documentation
 
-- **[README.md](./README.md)** — overview, module roadmap, structure, dry-run
+- **[README.md](./README.md)**: overview, module roadmap, structure, dry-run
   instructions
-- **[CONTRIBUTING.md](./CONTRIBUTING.md)** — workflow, formatting, validation,
+- **[CONTRIBUTING.md](./CONTRIBUTING.md)**: workflow, formatting, validation,
   module guidelines
-- **[modules/](./modules/)** — reusable Terraform modules (each has its own
+- **[modules/](./modules/)**: reusable Terraform modules (each has its own
   README)
-- **[examples/](./examples/)** — runnable root module examples
-- **[stacks/cloud-init/](./stacks/cloud-init/)** — cloud-init templates for the
+- **[examples/](./examples/)**: runnable root module examples
+- **[stacks/cloud-init/](./stacks/cloud-init/)**: cloud-init templates for the
   stacks module
-- **[docs/](./docs/)** — implementation notes and tickets
+- **[docs/](./docs/)**: implementation notes and tickets
 
 ---
 
@@ -55,8 +55,8 @@ Invoke it via the Agent tool with `subagent_type: content-review-agent`.
 - Every module must have `versions.tf`, `variables.tf`, `main.tf`, `outputs.tf`,
   and `README.md`.
 - All variables and outputs must have a `description`.
-- Use `sensitive = true` on variables that may contain secrets (passwords,
-  pre-shared keys, API credentials).
+- Use `sensitive = true` on variables holding secrets (passwords, pre-shared
+  keys, API credentials).
 - Add `validation` blocks where the valid input domain is constrained.
 - Never hardcode zone names, offering names, or environment-specific identifiers
   as defaults. Use generic placeholders (e.g., `"your-zone-name"`) or `null`.

@@ -3,7 +3,7 @@ variable "zone" {
   type        = string
 
   validation {
-    condition     = length(trimspace(var.zone)) > 0
+    condition     = var.zone != null && length(trimspace(var.zone)) > 0
     error_message = "zone must not be empty."
   }
 }
@@ -59,8 +59,8 @@ variable "templates" {
   }
 
   validation {
-    condition     = alltrue([for k, t in var.templates : can(regex("^https?://", t.url))])
-    error_message = "Each template url must start with http:// or https://."
+    condition     = alltrue([for k, t in var.templates : can(regex("^https://", t.url))])
+    error_message = "Each template url must start with https://."
   }
 
   validation {

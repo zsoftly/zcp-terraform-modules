@@ -30,7 +30,7 @@ terraform apply
 
 ## Actual Behavior
 
-<!-- What actually happened, including any error output -->
+<!-- Describe what happened, including any error output -->
 
 ## Environment
 

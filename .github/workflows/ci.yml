@@ -62,6 +62,7 @@ jobs:
     needs: [changes, lint]
     if: needs.changes.outputs.terraform == 'true' || github.event_name == 'workflow_dispatch'
     strategy:
+      fail-fast: false
       matrix:
         example:
           - demo-stack

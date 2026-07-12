@@ -45,7 +45,7 @@ to downstream consumers.
 ## Update Behavior
 
 Changing `worker_count` is the intended worker scaling path. Other cluster shape
-inputs can recreate the cluster depending on the CloudStack provider and API
+inputs recreate the cluster depending on the CloudStack provider and API
 behavior, including `control_plane_count`, `etcd_count`, `network_id`,
 `keypair`, `hypervisor`, `node_templates`, and `node_offerings`. Review the
 Terraform plan before applying those changes.

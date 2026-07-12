@@ -9,10 +9,10 @@ target VM ID.
 
 ## Resources
 
-| Resource                     | Purpose                                               |
-| ---------------------------- | ----------------------------------------------------- |
-| `cloudstack_disk`            | Creates data volumes and can attach them to instances |
-| `cloudstack_snapshot_policy` | Creates scheduled CloudStack volume snapshots         |
+| Resource                     | Purpose                                             |
+| ---------------------------- | --------------------------------------------------- |
+| `cloudstack_disk`            | Creates data volumes and attaches them to instances |
+| `cloudstack_snapshot_policy` | Creates scheduled CloudStack volume snapshots       |
 
 ## Snapshot Model
 

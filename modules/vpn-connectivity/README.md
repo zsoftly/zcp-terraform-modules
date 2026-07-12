@@ -7,16 +7,16 @@ Terraform provider.
 
 | Resource                          | Purpose                                                      |
 | --------------------------------- | ------------------------------------------------------------ |
-| `cloudstack_vpn_gateway`          | VPN endpoint attached to a VPC — one per module call         |
+| `cloudstack_vpn_gateway`          | VPN endpoint attached to a VPC. One per module call.         |
 | `cloudstack_vpn_customer_gateway` | Remote peer definition (IP, CIDR, PSK, IKE/ESP policy)       |
 | `cloudstack_vpn_connection`       | Links a customer gateway to the VPN gateway to form a tunnel |
 
 ## Provider Limitation
 
 Remote access VPN (`cloudstack_remote_access_vpn`, `cloudstack_vpn_user`) is not
-available in provider v0.6.x. Remote access VPN must be configured directly in
-the CloudStack UI or via the CloudStack API outside Terraform until provider
-support is added.
+available in provider v0.6.x. Configure remote access VPN directly in the
+CloudStack UI or via the CloudStack API outside Terraform until the provider
+adds support.
 
 ## ACS Policy Reference
 

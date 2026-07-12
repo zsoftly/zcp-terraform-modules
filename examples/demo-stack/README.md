@@ -73,7 +73,7 @@ accounts_projects = {
 Creates a VPN gateway attached to the demo VPC and optional site-to-site
 connections from the `vpn_customer_gateways` map.
 
-The default value is an empty map — no customer gateways or connections are
+The default value is an empty map. No customer gateways or connections are
 planned by default. Only the VPN gateway is created (one per VPC). To add
 site-to-site connections, supply customer gateways via a separate sensitive
 `.tfvars` file that is never committed:
@@ -101,7 +101,7 @@ See `terraform.tfvars.example` for the full variable structure.
 
 The demo stack also accepts a `compute_groups` map. Each entry calls the
 reusable compute module once and references a network created by the networking
-module via `vpc_key` and `network_key`. Both keys are validated at plan time — a
+module via `vpc_key` and `network_key`. Both keys are validated at plan time. A
 typo fails with a clear message before any CloudStack call.
 
 `compute_groups` defaults to an empty map so the base demo plan stays

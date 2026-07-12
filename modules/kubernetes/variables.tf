@@ -3,7 +3,7 @@ variable "name" {
   type        = string
 
   validation {
-    condition     = length(trimspace(var.name)) > 0
+    condition     = var.name != null && length(trimspace(var.name)) > 0
     error_message = "name must not be empty."
   }
 }

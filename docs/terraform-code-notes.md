@@ -10,7 +10,7 @@ by module/example.
 ### `main.tf` — `cloudstack_account.this`
 
 `for_each` requires a non-sensitive set. `var.accounts` is marked sensitive
-because it contains passwords, which makes the entire map sensitive — including
+because it contains passwords, which makes the entire map sensitive, including
 the keys. `nonsensitive(toset(keys(...)))` unwraps only the keys (account names)
 for use as `for_each` identifiers. The account names themselves are not secret,
 so this is safe. The actual password values remain sensitive throughout.
@@ -34,8 +34,8 @@ if templates are renamed or new OS versions are registered.
 ### `locals.tf` — `min_sizing`
 
 Defines the minimum CPU, RAM (MB), and disk (GB) for each stack. Exposed via the
-`min_sizing` output so the calling compute resource can validate or enforce
-sizing before provisioning.
+`min_sizing` output so the calling compute resource validates or enforces sizing
+before provisioning.
 
 ### `locals.tf` — `rendered_userdata`
 
@@ -47,15 +47,14 @@ the template.
 ### `main.tf` — `data.cloudstack_template.this`
 
 Looks up the existing OS template from CloudStack by name.
-`template_filter = "executable"` is required — `"featured"` finds the template
-at plan time but CloudStack rejects it at apply time with "template not
-available for use" because featured templates are not necessarily deployable.
-`"executable"` returns only templates that can actually be used to create VMs.
-The `filter` block matches on the template name resolved from
-`locals.template_map`. If the name does not exist in ZCP, `terraform plan` fails
-early with a clear error. The `project` argument is not supported by this data
-source — it is kept in `variables.tf` for use by future compute resources in
-this module.
+`template_filter = "executable"` is required. `"featured"` finds the template at
+plan time but CloudStack rejects it at apply time with "template not available
+for use" because featured templates are not necessarily deployable.
+`"executable"` returns only templates deployable as VMs. The `filter` block
+matches on the template name resolved from `locals.template_map`. If the name
+does not exist in ZCP, `terraform plan` fails early with a clear error. The
+`project` argument is not supported by this data source. It is kept in
+`variables.tf` for use by future compute resources in this module.
 
 ---
 

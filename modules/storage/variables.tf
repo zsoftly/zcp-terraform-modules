@@ -3,7 +3,7 @@ variable "zone" {
   type        = string
 
   validation {
-    condition     = length(trimspace(var.zone)) > 0
+    condition     = var.zone != null && length(trimspace(var.zone)) > 0
     error_message = "zone must not be empty."
   }
 }

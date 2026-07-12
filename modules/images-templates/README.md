@@ -44,11 +44,11 @@ removing the old key. Do not rely on in-place replacement for managed templates.
 
 ## Sharing
 
-| Requirement                           | How                                                                                     |
-| ------------------------------------- | --------------------------------------------------------------------------------------- |
-| Available to all accounts in the zone | `is_public = true`                                                                      |
-| Restricted to a single project        | `project = "project-name"`                                                              |
-| Per-account sharing                   | Not supported by provider v0.6 — use CloudStack UI or API (`updateTemplatePermissions`) |
+| Requirement                           | How                                                                                    |
+| ------------------------------------- | -------------------------------------------------------------------------------------- |
+| Available to all accounts in the zone | `is_public = true`                                                                     |
+| Restricted to a single project        | `project = "project-name"`                                                             |
+| Per-account sharing                   | Not supported by provider v0.6. Use CloudStack UI or API (`updateTemplatePermissions`) |
 
 ## File uploads
 
@@ -58,8 +58,8 @@ or internal mirror first, then pass the resulting URL to the `url` argument.
 
 **Security note:** Use HTTPS URLs wherever possible. HTTP URLs allow a
 man-in-the-middle to substitute the disk image in transit. On private management
-networks with no external exposure, HTTP mirrors are acceptable, but the risk
-should be acknowledged explicitly.
+networks with no external exposure, HTTP mirrors are acceptable, but acknowledge
+this risk explicitly.
 
 ## Deletion
 
@@ -68,12 +68,12 @@ destroys the template automatically.
 
 ## Inputs
 
-| Name        | Description                                       | Type               | Default | Required |
-| ----------- | ------------------------------------------------- | ------------------ | ------- | -------- |
-| `zone`      | CloudStack zone name or ID                        | `string`           | —       | yes      |
-| `tags`      | Tags applied to all templates                     | `map(string)`      | `{}`    | no       |
-| `project`   | Default CloudStack project to scope all templates | `string`           | `null`  | no       |
-| `templates` | Map of templates to register                      | `map(object(...))` | `{}`    | no       |
+| Name        | Description                                       | Type               | Default    | Required |
+| ----------- | ------------------------------------------------- | ------------------ | ---------- | -------- |
+| `zone`      | CloudStack zone name or ID                        | `string`           | (required) | yes      |
+| `tags`      | Tags applied to all templates                     | `map(string)`      | `{}`       | no       |
+| `project`   | Default CloudStack project to scope all templates | `string`           | `null`     | no       |
+| `templates` | Map of templates to register                      | `map(object(...))` | `{}`       | no       |
 
 ### `templates` object attributes
 
@@ -106,6 +106,6 @@ destroys the template automatically.
 ## Notes
 
 The `template_names_unique` check produces a warning at plan time if two entries
-resolve to the same computed name. It does not block apply — the failure will
+resolve to the same computed name. It does not block apply. The failure will
 surface at the CloudStack API level. Use distinct `name` and `version`
 combinations to avoid this.

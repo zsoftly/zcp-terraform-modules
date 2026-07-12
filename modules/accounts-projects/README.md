@@ -35,9 +35,9 @@ ROOT
     └── tenants             (external customer branch)
 ```
 
-Projects provide a secondary isolation layer within an account. Adding accounts
-or users as project members is not supported in provider v0.6.0 — project
-membership must be managed via the CloudStack UI or API.
+Projects provide a secondary isolation layer within an account. Provider v0.6.0
+does not support adding accounts or users as project members. Manage project
+membership through the CloudStack UI or the `addAccountToProject` API.
 
 ## Account Types
 
@@ -52,7 +52,7 @@ membership must be managed via the CloudStack UI or API.
 Every account must specify exactly one of:
 
 - `role_key` — key into `var.roles` to assign a role created by this module
-- `role_id` — direct CloudStack role ID for a pre-existing built-in or custom
+- `role_id`: direct CloudStack role ID for a pre-existing built-in or custom
   role
 
 ## Resource Quota Types
@@ -75,13 +75,13 @@ Set any quota field to `-1` for unlimited. Omit a field to leave it unmanaged.
 
 ## Provider Limitations (v0.6.0)
 
-- **Role permissions** — `cloudstack_role_permission` does not exist. Custom
-  roles can be created, but API rule permissions must be assigned in the
-  CloudStack UI after the role is created.
-- **Project membership** — No resource exists for adding accounts or users as
-  project members. Project membership must be managed via the CloudStack UI or
+- **Role permissions**: `cloudstack_role_permission` does not exist. Custom
+  roles are available, but assign API rule permissions in the CloudStack UI
+  after the role is created.
+- **Project membership**: No resource exists for adding accounts or users as
+  project members. Manage project membership through the CloudStack UI or
   `addAccountToProject` API.
-- **Per-user role assignment** — `cloudstack_user` has no `role_id` argument.
+- **Per-user role assignment**: `cloudstack_user` has no `role_id` argument.
   Users inherit the account-level role.
 
 ## Usage
@@ -143,5 +143,5 @@ See `examples/demo-stack` for the combined demo stack example.
 
 ## Security Note
 
-Account and user passwords should be provided via a sensitive `.tfvars` file or
-environment variables. Never commit passwords to source control.
+Account and user passwords must be provided through a sensitive `.tfvars` file
+or environment variables. Never commit passwords to source control.

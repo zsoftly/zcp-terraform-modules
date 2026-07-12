@@ -21,8 +21,8 @@ provisioning surface:
 
 Two runnable examples:
 
-- `examples/demo-stack` — composable demo stack using all implemented modules
-- `examples/test-images-templates` — end-to-end test for the stacks module
+- `examples/demo-stack`: composable demo stack using all implemented modules
+- `examples/test-images-templates`: end-to-end test for the stacks module
 
 Provider: `cloudstack/cloudstack ~> 0.6`. Requires Terraform >= 1.5.
 
@@ -60,4 +60,4 @@ plans.
   manager and persistent storage. The `kubernetes` module output
   `acs_post_create_notes` documents this explicitly.
 - Remote access VPN is not supported in CloudStack provider v0.6.x. Use the
-  CloudStack UI or API directly until provider support is added.
+  CloudStack UI or API directly until the provider adds support.
