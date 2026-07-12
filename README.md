@@ -1,15 +1,16 @@
-# ZPCP Terraform Modules
+# ZPCP — Terraform Modules for Apache CloudStack
 
-Terraform modules and examples for provisioning customer and demo environments
-on ZSoftly Private Cloud Platform using Apache CloudStack.
+Terraform modules and examples for provisioning infrastructure on
+[Apache CloudStack](https://cloudstack.apache.org) (ACS) by ZSoftly.
 
 ## Purpose
 
-This repo provides reusable, composable Terraform modules for ZCP enablement:
+This repo provides reusable, composable Terraform modules for Apache CloudStack
+infrastructure automation:
 
 - spin up demo environments quickly
 - standardize customer onboarding infrastructure
-- keep Terraform usage aligned with ZCP service offerings
+- keep Terraform usage aligned with ZSoftly ACS service offerings
 - provide a growing end-to-end demo stack as modules are added
 
 ## Structure
@@ -32,34 +33,46 @@ examples/
 
 ## Module Roadmap
 
-| Module                      | Status  | Purpose                                      |
-| --------------------------- | ------- | -------------------------------------------- |
-| `networking`                | Ready   | VPCs, VPC tiers/networks, IP ranges, ACLs    |
-| `compute`                   | Ready       | Instances, templates, service offerings      |
-| `storage`                   | Ready       | Volumes and snapshots                        |
-| `accounts-projects`         | Ready       | Domains, accounts, users, roles, projects, quotas |
-| `load-balancing-security`   | Ready       | Load balancing, firewall, NAT                |
-| `kubernetes`                | Ready       | Managed clusters and node pools              |
-| `vpn-connectivity`          | Ready       | Site-to-site VPN gateway and connections     |
-| `images-templates`          | Ready       | Image/template upload, versioning, sharing   |
-| `stacks`                    | In Progress | Pre-configured app stack selection and cloud-init userdata rendering |
+| Module                    | Status      | Purpose                                                              |
+| ------------------------- | ----------- | -------------------------------------------------------------------- |
+| `networking`              | Ready       | VPCs, VPC tiers/networks, IP ranges, ACLs                            |
+| `compute`                 | Ready       | Instances, templates, service offerings                              |
+| `storage`                 | Ready       | Volumes and snapshots                                                |
+| `accounts-projects`       | Ready       | Domains, accounts, users, roles, projects, quotas                    |
+| `load-balancing-security` | Ready       | Load balancing, firewall, NAT                                        |
+| `kubernetes`              | Ready       | Managed clusters and node pools                                      |
+| `vpn-connectivity`        | Ready       | Site-to-site VPN gateway and connections                             |
+| `images-templates`        | Ready       | Image/template upload, versioning, sharing                           |
+| `stacks`                  | In Progress | Pre-configured app stack selection and cloud-init userdata rendering |
 
 Only modules with a directory under `modules/` are currently implemented.
 
-## Dry Run
+## Validation
 
-Run validation from the example root:
+Run schema validation without credentials:
+
+```bash
+make validate
+```
+
+This runs `terraform init -backend=false` and `terraform validate` against every
+example. No CloudStack credentials required.
+
+## Plan Against a Live Zone
+
+`terraform plan` requires a live CloudStack API — the provider resolves offering
+names, zone IDs, and other attributes at plan time. Copy the example vars file,
+fill in real credentials, and run:
 
 ```bash
 cd examples/demo-stack
-terraform init -backend=false
-terraform validate
-terraform plan -var-file=terraform.tfvars.example
+cp terraform.tfvars.example terraform.tfvars
+# edit terraform.tfvars with real api_url, api_key, secret_key
+terraform init
+terraform plan
 ```
 
-The demo stack composes the implemented modules. With the provided example
-values, the plan includes networking, load balancing/security, a CKS cluster
-request, accounts/projects provisioning, and a VPN gateway.
+Do not run `terraform apply` unless the plan has been reviewed.
 
 ## Provider Lock File
 

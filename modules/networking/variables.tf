@@ -1,6 +1,11 @@
 variable "name" {
   description = "Name of the CloudStack VPC to create."
   type        = string
+
+  validation {
+    condition     = length(trimspace(var.name)) > 0
+    error_message = "name must not be empty."
+  }
 }
 
 variable "display_text" {
@@ -12,11 +17,21 @@ variable "display_text" {
 variable "cidr" {
   description = "CIDR block for the CloudStack VPC."
   type        = string
+
+  validation {
+    condition     = can(cidrhost(var.cidr, 0))
+    error_message = "cidr must be a valid CIDR block (e.g. 10.0.0.0/16)."
+  }
 }
 
 variable "zone" {
   description = "CloudStack zone name or ID."
   type        = string
+
+  validation {
+    condition     = length(trimspace(var.zone)) > 0
+    error_message = "zone must not be empty."
+  }
 }
 
 variable "vpc_offering" {
@@ -66,6 +81,36 @@ variable "network_acls" {
     })), [])
   }))
   default = {}
+
+  validation {
+    condition = alltrue(flatten([
+      for k, acl in var.network_acls : [
+        for rule in acl.rules :
+        contains(["allow", "deny"], lower(rule.action))
+      ]
+    ]))
+    error_message = "ACL rule action must be 'allow' or 'deny'."
+  }
+
+  validation {
+    condition = alltrue(flatten([
+      for k, acl in var.network_acls : [
+        for rule in acl.rules :
+        contains(["tcp", "udp", "icmp", "all"], lower(rule.protocol))
+      ]
+    ]))
+    error_message = "ACL rule protocol must be one of: tcp, udp, icmp, all."
+  }
+
+  validation {
+    condition = alltrue(flatten([
+      for k, acl in var.network_acls : [
+        for rule in acl.rules :
+        contains(["ingress", "egress"], lower(rule.traffic_type))
+      ]
+    ]))
+    error_message = "ACL rule traffic_type must be 'ingress' or 'egress'."
+  }
 }
 
 variable "networks" {
@@ -89,6 +134,16 @@ variable "networks" {
   validation {
     condition     = length(var.networks) > 0
     error_message = "At least one network must be defined."
+  }
+
+  validation {
+    condition     = alltrue([for k, n in var.networks : can(cidrhost(n.cidr, 0))])
+    error_message = "Each network cidr must be a valid CIDR block (e.g. 10.0.1.0/24)."
+  }
+
+  validation {
+    condition     = alltrue([for k, n in var.networks : n.vlan == null || (n.vlan >= 1 && n.vlan <= 4094)])
+    error_message = "Each network vlan must be between 1 and 4094."
   }
 }
 

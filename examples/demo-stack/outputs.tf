@@ -160,10 +160,10 @@ output "kubernetes_api_endpoints" {
   }
 }
 
-output "kubernetes_post_create_automation" {
-  description = "ZCP post-create automation requirements keyed by input cluster key."
+output "kubernetes_post_create_notes" {
+  description = "Post-create steps required for each CKS cluster, keyed by cluster key."
   value = {
-    for key, kubernetes in module.kubernetes : key => kubernetes.zcp_post_create_automation
+    for key, kubernetes in module.kubernetes : key => kubernetes.acs_post_create_notes
   }
 }
 

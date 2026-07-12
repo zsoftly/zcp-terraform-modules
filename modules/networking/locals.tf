@@ -1,7 +1,7 @@
 locals {
   vpc_id = var.create_vpc ? cloudstack_vpc.this[0].id : var.existing_vpc_id
 
-  zcp_offerings = {
+  acs_offerings = {
     vpc = {
       prd    = "Standard VPC offering"
       nonprd = "Standard VPC offering - nonprd"

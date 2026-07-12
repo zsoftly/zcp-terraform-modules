@@ -1,6 +1,11 @@
 variable "zone" {
   description = "CloudStack zone name or ID where volumes are created."
   type        = string
+
+  validation {
+    condition     = length(trimspace(var.zone)) > 0
+    error_message = "zone must not be empty."
+  }
 }
 
 variable "project" {
@@ -19,6 +24,11 @@ variable "volumes" {
     instance_id   = optional(string)
   }))
   default = {}
+
+  validation {
+    condition     = alltrue([for k, v in var.volumes : v.size_gb == null || v.size_gb >= 1])
+    error_message = "Volume size_gb must be at least 1 GB when specified."
+  }
 }
 
 variable "snapshot_timezone" {
@@ -53,6 +63,11 @@ variable "snapshot_policies" {
       contains(["HOURLY", "DAILY", "WEEKLY", "MONTHLY"], upper(policy.interval_type))
     ])
     error_message = "Snapshot policy interval_type must be one of HOURLY, DAILY, WEEKLY, or MONTHLY."
+  }
+
+  validation {
+    condition     = alltrue([for k, p in var.snapshot_policies : p.max_snaps >= 1])
+    error_message = "Snapshot policy max_snaps must be at least 1."
   }
 }
 

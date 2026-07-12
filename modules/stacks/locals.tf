@@ -15,18 +15,18 @@ locals {
   }
 
   min_sizing = {
-    cpanel     = { cpu = 2, ram_mb = 2048, disk_gb = 40,  service_offering = "CI1-4"  }
-    docker     = { cpu = 1, ram_mb = 1024, disk_gb = 20,  service_offering = "CI1-1"  }
-    lamp       = { cpu = 1, ram_mb = 1024, disk_gb = 20,  service_offering = "CI1-1"  }
-    drupal     = { cpu = 2, ram_mb = 2048, disk_gb = 20,  service_offering = "CI1-4"  }
-    joomla     = { cpu = 2, ram_mb = 2048, disk_gb = 20,  service_offering = "CI1-4"  }
-    wordpress  = { cpu = 1, ram_mb = 1024, disk_gb = 20,  service_offering = "CI1-1"  }
-    wp-squared = { cpu = 2, ram_mb = 2048, disk_gb = 30,  service_offering = "CI1-4"  }
-    gitlab     = { cpu = 4, ram_mb = 8192, disk_gb = 50,  service_offering = "CI1-16" }
-    jitsi      = { cpu = 2, ram_mb = 4096, disk_gb = 20,  service_offering = "CI1-8"  }
-    magento    = { cpu = 4, ram_mb = 4096, disk_gb = 50,  service_offering = "CI1-8"  }
-    minecraft  = { cpu = 2, ram_mb = 2048, disk_gb = 20,  service_offering = "CI1-4"  }
-    pritunl    = { cpu = 1, ram_mb = 1024, disk_gb = 20,  service_offering = "CI1-1"  }
+    cpanel     = { cpu = 2, ram_mb = 2048, disk_gb = 40, service_offering = "CI1-4" }
+    docker     = { cpu = 1, ram_mb = 1024, disk_gb = 20, service_offering = "CI1-1" }
+    lamp       = { cpu = 1, ram_mb = 1024, disk_gb = 20, service_offering = "CI1-1" }
+    drupal     = { cpu = 2, ram_mb = 2048, disk_gb = 20, service_offering = "CI1-4" }
+    joomla     = { cpu = 2, ram_mb = 2048, disk_gb = 20, service_offering = "CI1-4" }
+    wordpress  = { cpu = 1, ram_mb = 1024, disk_gb = 20, service_offering = "CI1-1" }
+    wp-squared = { cpu = 2, ram_mb = 2048, disk_gb = 30, service_offering = "CI1-4" }
+    gitlab     = { cpu = 4, ram_mb = 8192, disk_gb = 50, service_offering = "CI1-16" }
+    jitsi      = { cpu = 2, ram_mb = 4096, disk_gb = 20, service_offering = "CI1-8" }
+    magento    = { cpu = 4, ram_mb = 4096, disk_gb = 50, service_offering = "CI1-8" }
+    minecraft  = { cpu = 2, ram_mb = 2048, disk_gb = 20, service_offering = "CI1-4" }
+    pritunl    = { cpu = 1, ram_mb = 1024, disk_gb = 20, service_offering = "CI1-1" }
   }
 
   resolved_template_map = merge(local.template_map, var.template_name_overrides)

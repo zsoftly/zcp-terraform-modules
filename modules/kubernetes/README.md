@@ -1,7 +1,7 @@
 # Kubernetes Module
 
-Creates a CloudStack Kubernetes Service (CKS) cluster for ZCP demo and customer
-enablement stacks.
+Creates a CloudStack Kubernetes Service (CKS) cluster for Apache CloudStack demo
+and production stacks.
 
 The module is scoped to one CKS cluster per module call. Root stacks can compose
 multiple clusters with `for_each`, and can pass a supported CKS network ID when
@@ -18,9 +18,9 @@ a cluster should be placed on a specific isolated network.
 - optional network, project, account, keypair, and CNI configuration
 - outputs for cluster ID, state, and API endpoint/IP
 
-## ZCP Defaults
+## ACS Defaults
 
-The current ZCP CKS defaults from the IaaS automation are:
+The default CKS configuration this module is designed around:
 
 - Kubernetes version: `1.34.3`
 - CKS network offering: `Isolated Network with Source NAT`
@@ -32,26 +32,21 @@ The current ZCP CKS defaults from the IaaS automation are:
 The CKS service, supported Kubernetes versions, and CKS ISOs must already be
 registered in CloudStack before this module can create clusters.
 
-For ZCP defaults, `network_id` must refer to a supported CKS isolated network.
-Do not use the demo VPC tier network as the CKS network. The current ZCP CKS
-lifecycle creates its own isolated network with source NAT.
+For the defaults above, `network_id` must refer to a supported CKS isolated
+network. Do not use the demo VPC tier network as the CKS network. The CloudStack
+CKS lifecycle creates its own isolated network with source NAT.
 
-Terraform only creates the CKS resource. A usable ZCP cluster still needs the
-post-create platform integration steps from the IaaS automation:
-
-- `546-cks-fix-ccm.yml` for the CCM API endpoint
-- `547-cks-storage.yml` for persistent storage
-
-The module exposes `zcp_post_create_automation.cluster_ready_after_apply =
-false` to make this limitation explicit to downstream consumers. Pass the
-cluster ID/API details to the follow-up automation before treating the cluster
-as ready for workloads.
+Terraform creates the CKS resource only. A usable cluster still needs
+post-create platform integration steps for the cloud controller manager and
+persistent storage. The module exposes
+`acs_post_create_notes.cluster_ready_after_apply = false` to make this explicit
+to downstream consumers.
 
 ## Update Behavior
 
-Changing `worker_count` is the intended worker scaling path. Other cluster
-shape inputs can recreate the cluster depending on the CloudStack provider and
-API behavior, including `control_plane_count`, `etcd_count`, `network_id`,
+Changing `worker_count` is the intended worker scaling path. Other cluster shape
+inputs can recreate the cluster depending on the CloudStack provider and API
+behavior, including `control_plane_count`, `etcd_count`, `network_id`,
 `keypair`, `hypervisor`, `node_templates`, and `node_offerings`. Review the
 Terraform plan before applying those changes.
 
@@ -62,7 +57,7 @@ module "kubernetes" {
   source = "../../modules/kubernetes"
 
   name               = "demo-cks-01"
-  zone               = "yow-1"
+  zone               = "your-zone-name"
   kubernetes_version = "1.34.3"
   service_offering   = "CKS Node - Intel nonprd"
 
@@ -93,41 +88,41 @@ cluster ID.
 
 ## Inputs
 
-| Name | Description | Default |
-| ---- | ----------- | ------- |
-| `name` | CKS cluster name | n/a |
-| `description` | Optional cluster description | `null` |
-| `zone` | CloudStack zone name or ID | n/a |
-| `kubernetes_version` | Registered Kubernetes semantic version | `1.34.3` |
-| `service_offering` | Default node service offering | n/a |
-| `worker_count` | Worker node count | `1` |
-| `control_plane_count` | Control plane node count | `1` |
-| `etcd_count` | Dedicated etcd node count | `0` |
-| `node_root_disk_size` | Node root disk size in GB | `25` |
-| `node_offerings` | Optional service offerings by role | `{}` |
-| `node_templates` | Optional templates by role | `{}` |
-| `autoscaling_enabled` | Enable worker autoscaling | `false` |
-| `autoscaling_min_size` | Minimum worker count when autoscaling is enabled | `null` |
-| `autoscaling_max_size` | Maximum worker count when autoscaling is enabled | `null` |
-| `network_id` | Optional supported CKS isolated network ID | `null` |
-| `keypair` | Optional SSH keypair for nodes | `null` |
-| `hypervisor` | Hypervisor used for CKS nodes | `KVM` |
-| `cni_configuration_id` | Optional CloudStack CNI configuration ID | `null` |
-| `cni_config_details` | Optional CNI configuration parameter map | `null` |
-| `project` | Optional CloudStack project name or ID | `null` |
-| `domain_id` | Optional CloudStack domain ID | `null` |
-| `account` | Optional CloudStack account name | `null` |
-| `docker_registry_url` | Optional private Docker registry URL | `null` |
-| `docker_registry_username` | Optional private Docker registry username | `null` |
-| `docker_registry_password` | Optional private Docker registry password | `null` |
+| Name                       | Description                                      | Default  |
+| -------------------------- | ------------------------------------------------ | -------- |
+| `name`                     | CKS cluster name                                 | n/a      |
+| `description`              | Optional cluster description                     | `null`   |
+| `zone`                     | CloudStack zone name or ID                       | n/a      |
+| `kubernetes_version`       | Registered Kubernetes semantic version           | `1.34.3` |
+| `service_offering`         | Default node service offering                    | n/a      |
+| `worker_count`             | Worker node count                                | `1`      |
+| `control_plane_count`      | Control plane node count                         | `1`      |
+| `etcd_count`               | Dedicated etcd node count                        | `0`      |
+| `node_root_disk_size`      | Node root disk size in GB                        | `25`     |
+| `node_offerings`           | Optional service offerings by role               | `{}`     |
+| `node_templates`           | Optional templates by role                       | `{}`     |
+| `autoscaling_enabled`      | Enable worker autoscaling                        | `false`  |
+| `autoscaling_min_size`     | Minimum worker count when autoscaling is enabled | `null`   |
+| `autoscaling_max_size`     | Maximum worker count when autoscaling is enabled | `null`   |
+| `network_id`               | Optional supported CKS isolated network ID       | `null`   |
+| `keypair`                  | Optional SSH keypair for nodes                   | `null`   |
+| `hypervisor`               | Hypervisor used for CKS nodes                    | `KVM`    |
+| `cni_configuration_id`     | Optional CloudStack CNI configuration ID         | `null`   |
+| `cni_config_details`       | Optional CNI configuration parameter map         | `null`   |
+| `project`                  | Optional CloudStack project name or ID           | `null`   |
+| `domain_id`                | Optional CloudStack domain ID                    | `null`   |
+| `account`                  | Optional CloudStack account name                 | `null`   |
+| `docker_registry_url`      | Optional private Docker registry URL             | `null`   |
+| `docker_registry_username` | Optional private Docker registry username        | `null`   |
+| `docker_registry_password` | Optional private Docker registry password        | `null`   |
 
 ## Outputs
 
-| Name | Description |
-| ---- | ----------- |
-| `cluster` | Cluster details |
-| `cluster_id` | Cluster ID |
-| `cluster_state` | Cluster state |
-| `api_endpoint` | API endpoint/IP exposed by CloudStack |
-| `zcp_post_create_automation` | Required ZCP follow-up automation and readiness note |
-| `zcp_defaults` | ZCP defaults used as module guidance |
+| Name                    | Description                                   |
+| ----------------------- | --------------------------------------------- |
+| `cluster`               | Cluster details                               |
+| `cluster_id`            | Cluster ID                                    |
+| `cluster_state`         | Cluster state                                 |
+| `api_endpoint`          | API endpoint/IP exposed by CloudStack         |
+| `acs_post_create_notes` | Post-create steps required and readiness note |
+| `acs_defaults`          | ACS defaults used as module guidance          |

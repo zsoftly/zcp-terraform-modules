@@ -1,7 +1,7 @@
 # Load Balancing & Security Module
 
-Creates CloudStack traffic routing and security resources for ZCP customer and
-demo environments.
+Creates CloudStack traffic routing and security resources for Apache CloudStack
+demo and production environments.
 
 ## Resources
 
@@ -100,30 +100,30 @@ module "load_balancing_security" {
 
 ## Inputs
 
-| Name | Description |
-| ---- | ----------- |
-| `name` | Logical name for this traffic and security configuration. |
-| `zone` | CloudStack zone name or ID. |
-| `project` | Optional CloudStack project name or ID. |
-| `network_id` | Default network ID for public IPs, egress rules, and VPC LB rules. |
-| `vpc_id` | Optional default VPC ID for public IP allocation. |
-| `existing_public_ip_ids` | Existing public IP IDs that can be referenced by key. |
-| `public_ips` | Public IPs to acquire. |
-| `firewalls` | Ingress firewall rule sets for public IP firewall rules supported by the CloudStack provider. Use VPC network ACLs for VPC tier security. |
-| `egress_firewalls` | Egress firewall rule sets. |
-| `static_nats` | Static NAT mappings. |
-| `port_forwards` | Port forwarding rule sets. |
-| `load_balancer_rules` | Load balancer rules and VM members. |
+| Name                     | Description                                                                                                                               |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`                   | Logical name for this traffic and security configuration.                                                                                 |
+| `zone`                   | CloudStack zone name or ID.                                                                                                               |
+| `project`                | Optional CloudStack project name or ID.                                                                                                   |
+| `network_id`             | Default network ID for public IPs, egress rules, and VPC LB rules.                                                                        |
+| `vpc_id`                 | Optional default VPC ID for public IP allocation.                                                                                         |
+| `existing_public_ip_ids` | Existing public IP IDs that can be referenced by key.                                                                                     |
+| `public_ips`             | Public IPs to acquire.                                                                                                                    |
+| `firewalls`              | Ingress firewall rule sets for public IP firewall rules supported by the CloudStack provider. Use VPC network ACLs for VPC tier security. |
+| `egress_firewalls`       | Egress firewall rule sets.                                                                                                                |
+| `static_nats`            | Static NAT mappings.                                                                                                                      |
+| `port_forwards`          | Port forwarding rule sets.                                                                                                                |
+| `load_balancer_rules`    | Load balancer rules and VM members.                                                                                                       |
 
 ## Outputs
 
-| Name | Description |
-| ---- | ----------- |
-| `name` | Logical name for this traffic and security configuration. |
-| `public_ips` | Allocated public IP IDs and addresses. |
-| `public_ip_ids` | Allocated and existing public IP IDs known to the module. |
-| `firewall_rule_sets` | Ingress firewall resource IDs. |
-| `egress_firewall_rule_sets` | Egress firewall resource IDs. |
-| `static_nats` | Static NAT resource IDs. |
-| `port_forwards` | Port forwarding resource IDs. |
-| `load_balancer_rules` | Load balancer rule IDs. |
+| Name                        | Description                                               |
+| --------------------------- | --------------------------------------------------------- |
+| `name`                      | Logical name for this traffic and security configuration. |
+| `public_ips`                | Allocated public IP IDs and addresses.                    |
+| `public_ip_ids`             | Allocated and existing public IP IDs known to the module. |
+| `firewall_rule_sets`        | Ingress firewall resource IDs.                            |
+| `egress_firewall_rule_sets` | Egress firewall resource IDs.                             |
+| `static_nats`               | Static NAT resource IDs.                                  |
+| `port_forwards`             | Port forwarding resource IDs.                             |
+| `load_balancer_rules`       | Load balancer rule IDs.                                   |

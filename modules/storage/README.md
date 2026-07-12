@@ -1,6 +1,6 @@
 # CloudStack Storage Module
 
-Creates reusable ZCP block storage resources with the Apache CloudStack
+Creates reusable Apache CloudStack block storage resources with the CloudStack
 Terraform provider.
 
 The module is scoped to data volumes and scheduled snapshot policy management.
@@ -9,10 +9,10 @@ target VM ID.
 
 ## Resources
 
-| Resource                     | Purpose                                                        |
-| ---------------------------- | -------------------------------------------------------------- |
-| `cloudstack_disk`            | Creates data volumes and can attach them to instances          |
-| `cloudstack_snapshot_policy` | Creates scheduled CloudStack volume snapshots                  |
+| Resource                     | Purpose                                               |
+| ---------------------------- | ----------------------------------------------------- |
+| `cloudstack_disk`            | Creates data volumes and can attach them to instances |
+| `cloudstack_snapshot_policy` | Creates scheduled CloudStack volume snapshots         |
 
 ## Snapshot Model
 
@@ -24,7 +24,7 @@ Immediate one-off snapshots are operational actions. Create those with
 CloudMonkey or the CloudStack API, then pass the resulting snapshot ID to
 `restored_volumes` when Terraform should restore it.
 
-## ZCP Offering Alignment
+## ACS Offering Alignment
 
 This module keeps disk offering names as inputs so it can be reused across prd,
 nonprd, demo, and customer stacks.

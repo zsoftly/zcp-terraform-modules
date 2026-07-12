@@ -49,7 +49,7 @@ module "images_templates" {
 }
 
 resource "cloudstack_instance" "test" {
-  name             = "zcp-stack-test-${var.stack}"
+  name             = "acs-stack-test-${var.stack}"
   zone             = var.zone
   template         = module.images_templates.template_name
   service_offering = var.service_offering

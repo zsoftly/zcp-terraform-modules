@@ -1,4 +1,6 @@
-# Terraform working directories
+# ──────────────────────────────────────────────
+# Terraform / OpenTofu
+# ──────────────────────────────────────────────
 **/.terraform/*
 
 # Lock files in child modules (lock files belong only in root modules)
@@ -25,16 +27,45 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-# Scratch workspaces
-scratch/
+# ──────────────────────────────────────────────
+# Sensitive / credentials
+# ──────────────────────────────────────────────
+**/.env
+**/.env.*
+*.pem
+*.key
 
-# Local environment files
-.env
-.env.*
-
-# Editor and OS files
+# ──────────────────────────────────────────────
+# OS / editor
+# ──────────────────────────────────────────────
 .DS_Store
+.AppleDouble
+.LSOverride
 Thumbs.db
+ehthumbs.db
+Desktop.ini
+*~
+.directory
 *.swp
 *.swo
-*~
+*.bak
+.~lock.*
+
+# IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.project
+.settings/
+
+# ──────────────────────────────────────────────
+# Misc
+# ──────────────────────────────────────────────
+*.log
+node_modules/
+scratch/
+tmp/
+!tmp/.gitkeep
+.claude/settings.local.json
+IMPLEMENTATION_SUMMARY_*.md

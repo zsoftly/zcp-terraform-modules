@@ -1,6 +1,11 @@
 variable "vpc_id" {
   description = "ID of the CloudStack VPC to attach the VPN gateway to."
   type        = string
+
+  validation {
+    condition     = length(trimspace(var.vpc_id)) > 0
+    error_message = "vpc_id must not be empty."
+  }
 }
 
 variable "project" {

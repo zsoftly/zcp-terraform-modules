@@ -18,7 +18,7 @@ variable "cloudstack_secret_key" {
 variable "zone" {
   description = "CloudStack zone name or ID."
   type        = string
-  default     = "yow-1"
+  default     = null
 }
 
 variable "project" {
@@ -31,7 +31,7 @@ variable "tags" {
   description = "Tags applied to demo stack resources."
   type        = map(string)
   default = {
-    service = "zcp"
+    service = "acs"
     stack   = "demo"
   }
 }
@@ -79,7 +79,7 @@ variable "networking_vpcs" {
   default = {
     demo = {
       name         = "demo-vpc-01"
-      display_text = "ZCP Demo VPC"
+      display_text = "ACS Demo VPC"
       cidr         = "10.20.0.0/16"
       vpc_offering = "Default VPC offering"
       network_acls = {
@@ -357,7 +357,7 @@ variable "accounts_projects" {
     projects = {
       demo = {
         name         = "demo-project"
-        display_text = "ZCP Demo Project"
+        display_text = "ACS Demo Project"
         account_key  = null
       }
     }

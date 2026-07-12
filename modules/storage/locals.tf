@@ -8,7 +8,7 @@ locals {
     key => try(policy.volume_id, null) != null ? policy.volume_id : local.managed_volume_ids[policy.volume_key]
   }
 
-  zcp_offerings = {
+  acs_offerings = {
     disk = {
       starter_nvme    = "Starter-NVMe"
       basic_nvme      = "Basic-NVMe"

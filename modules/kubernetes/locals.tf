@@ -1,5 +1,5 @@
 locals {
-  zcp_defaults = {
+  acs_defaults = {
     kubernetes_version = var.kubernetes_version
     network_offering   = "Isolated Network with Source NAT"
     service_offering   = "CKS Node - Intel nonprd"

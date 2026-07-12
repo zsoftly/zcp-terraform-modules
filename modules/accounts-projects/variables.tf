@@ -50,6 +50,16 @@ variable "accounts" {
     condition     = alltrue([for k, v in var.accounts : v.role_key != null || v.role_id != null])
     error_message = "Each account must specify either role_key (module-created role) or role_id (pre-existing role)."
   }
+
+  validation {
+    condition     = alltrue([for k, a in var.accounts : can(regex("^[^@]+@[^@]+\\.[^@]+$", a.email))])
+    error_message = "Each account email must be a valid email address."
+  }
+
+  validation {
+    condition     = alltrue([for k, a in var.accounts : length(trimspace(a.username)) > 0])
+    error_message = "Each account username must not be empty."
+  }
 }
 
 variable "users" {
@@ -64,6 +74,16 @@ variable "users" {
     account_key = string
   }))
   default = {}
+
+  validation {
+    condition     = alltrue([for k, u in var.users : can(regex("^[^@]+@[^@]+\\.[^@]+$", u.email))])
+    error_message = "Each user email must be a valid email address."
+  }
+
+  validation {
+    condition     = alltrue([for k, u in var.users : length(trimspace(u.username)) > 0])
+    error_message = "Each user username must not be empty."
+  }
 }
 
 variable "projects" {
@@ -92,6 +112,25 @@ variable "quotas" {
     secondary_storage = optional(number)
   }))
   default = {}
+
+  validation {
+    condition = alltrue(flatten([
+      for k, q in var.quotas : [
+        q.instances == null || q.instances >= -1,
+        q.ips == null || q.ips >= -1,
+        q.volumes == null || q.volumes >= -1,
+        q.snapshots == null || q.snapshots >= -1,
+        q.templates == null || q.templates >= -1,
+        q.networks == null || q.networks >= -1,
+        q.vpcs == null || q.vpcs >= -1,
+        q.cpu == null || q.cpu >= -1,
+        q.memory == null || q.memory >= -1,
+        q.primary_storage == null || q.primary_storage >= -1,
+        q.secondary_storage == null || q.secondary_storage >= -1,
+      ]
+    ]))
+    error_message = "Quota values must be -1 (unlimited) or a non-negative integer."
+  }
 }
 
 check "user_account_key_exists" {

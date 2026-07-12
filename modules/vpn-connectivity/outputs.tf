@@ -50,7 +50,7 @@ output "connections" {
   }
 }
 
-output "zcp_vpn_policies" {
-  description = "ZCP reference IKE/ESP policy strings for site-to-site VPN configuration."
-  value       = local.zcp_vpn_policies
+output "acs_vpn_policies" {
+  description = "ACS reference IKE/ESP policy strings for site-to-site VPN configuration."
+  value       = local.acs_vpn_policies
 }

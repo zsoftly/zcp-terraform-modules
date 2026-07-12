@@ -1,29 +1,31 @@
 # CloudStack VPN Connectivity Module
 
-Creates a site-to-site VPN gateway and connections using the Apache CloudStack Terraform provider.
+Creates a site-to-site VPN gateway and connections using the Apache CloudStack
+Terraform provider.
 
 ## Resources
 
-| Resource | Purpose |
-|---|---|
-| `cloudstack_vpn_gateway` | VPN endpoint attached to a VPC — one per module call |
-| `cloudstack_vpn_customer_gateway` | Remote peer definition (IP, CIDR, PSK, IKE/ESP policy) |
-| `cloudstack_vpn_connection` | Links a customer gateway to the VPN gateway to form a tunnel |
+| Resource                          | Purpose                                                      |
+| --------------------------------- | ------------------------------------------------------------ |
+| `cloudstack_vpn_gateway`          | VPN endpoint attached to a VPC — one per module call         |
+| `cloudstack_vpn_customer_gateway` | Remote peer definition (IP, CIDR, PSK, IKE/ESP policy)       |
+| `cloudstack_vpn_connection`       | Links a customer gateway to the VPN gateway to form a tunnel |
 
 ## Provider Limitation
 
-Remote access VPN (`cloudstack_remote_access_vpn`, `cloudstack_vpn_user`) is not available in provider
-v0.6.x. Remote access VPN must be configured directly in the CloudStack UI or via the CloudStack API
-outside Terraform until provider support is added.
+Remote access VPN (`cloudstack_remote_access_vpn`, `cloudstack_vpn_user`) is not
+available in provider v0.6.x. Remote access VPN must be configured directly in
+the CloudStack UI or via the CloudStack API outside Terraform until provider
+support is added.
 
-## ZCP Policy Reference
+## ACS Policy Reference
 
 Common IKE/ESP policy strings are available in `locals.tf`.
 
-| Key | Policy string |
-|---|---|
+| Key                      | Policy string            |
+| ------------------------ | ------------------------ |
 | `aes256_sha256_modp2048` | `aes256-sha256;modp2048` |
-| `aes128_sha1_modp1536` | `aes128-sha1;modp1536` |
+| `aes128_sha1_modp1536`   | `aes128-sha1;modp1536`   |
 
 ## Usage
 

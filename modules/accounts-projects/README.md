@@ -1,25 +1,29 @@
 # CloudStack Accounts & Projects Module
 
-Creates CloudStack domain hierarchy, accounts, users, roles, projects, and resource quotas using the Apache CloudStack Terraform provider.
+Creates CloudStack domain hierarchy, accounts, users, roles, projects, and
+resource quotas using the Apache CloudStack Terraform provider.
 
 One module call manages all resources for a given environment.
 
 ## Resources
 
-| Resource              | Purpose                                                        |
-| --------------------- | -------------------------------------------------------------- |
-| `cloudstack_domain`   | Creates domains for account and workload isolation             |
-| `cloudstack_role`     | Creates custom roles                                           |
-| `cloudstack_account`  | Creates accounts with domain placement and role assignment     |
-| `cloudstack_user`     | Creates additional users inside accounts                       |
-| `cloudstack_project`  | Creates projects with an optional admin account                |
-| `cloudstack_limits`   | Sets per-account resource quotas (CPU, RAM, storage, etc.)     |
+| Resource             | Purpose                                                    |
+| -------------------- | ---------------------------------------------------------- |
+| `cloudstack_domain`  | Creates domains for account and workload isolation         |
+| `cloudstack_role`    | Creates custom roles                                       |
+| `cloudstack_account` | Creates accounts with domain placement and role assignment |
+| `cloudstack_user`    | Creates additional users inside accounts                   |
+| `cloudstack_project` | Creates projects with an optional admin account            |
+| `cloudstack_limits`  | Sets per-account resource quotas (CPU, RAM, storage, etc.) |
 
 ## Domain Isolation
 
-In CloudStack, domains are the primary isolation boundary. Accounts and their workloads are scoped to the domain they live in. This module creates domains and places accounts into them via `domain_key` (a created domain) or `domain_id` (a pre-existing domain ID).
+In CloudStack, domains are the primary isolation boundary. Accounts and their
+workloads are scoped to the domain they live in. This module creates domains and
+places accounts into them via `domain_key` (a created domain) or `domain_id` (a
+pre-existing domain ID).
 
-The ZCP domain hierarchy follows this structure:
+The CloudStack domain hierarchy typically follows this structure:
 
 ```
 ROOT
@@ -31,7 +35,9 @@ ROOT
     └── tenants             (external customer branch)
 ```
 
-Projects provide a secondary isolation layer within an account. Adding accounts or users as project members is not supported in provider v0.6.0 — project membership must be managed via the CloudStack UI or API.
+Projects provide a secondary isolation layer within an account. Adding accounts
+or users as project members is not supported in provider v0.6.0 — project
+membership must be managed via the CloudStack UI or API.
 
 ## Account Types
 
@@ -46,7 +52,8 @@ Projects provide a secondary isolation layer within an account. Adding accounts 
 Every account must specify exactly one of:
 
 - `role_key` — key into `var.roles` to assign a role created by this module
-- `role_id` — direct CloudStack role ID for a pre-existing built-in or custom role
+- `role_id` — direct CloudStack role ID for a pre-existing built-in or custom
+  role
 
 ## Resource Quota Types
 
@@ -68,9 +75,14 @@ Set any quota field to `-1` for unlimited. Omit a field to leave it unmanaged.
 
 ## Provider Limitations (v0.6.0)
 
-- **Role permissions** — `cloudstack_role_permission` does not exist. Custom roles can be created, but API rule permissions must be assigned in the CloudStack UI after the role is created.
-- **Project membership** — No resource exists for adding accounts or users as project members. Project membership must be managed via the CloudStack UI or `addAccountToProject` API.
-- **Per-user role assignment** — `cloudstack_user` has no `role_id` argument. Users inherit the account-level role.
+- **Role permissions** — `cloudstack_role_permission` does not exist. Custom
+  roles can be created, but API rule permissions must be assigned in the
+  CloudStack UI after the role is created.
+- **Project membership** — No resource exists for adding accounts or users as
+  project members. Project membership must be managed via the CloudStack UI or
+  `addAccountToProject` API.
+- **Per-user role assignment** — `cloudstack_user` has no `role_id` argument.
+  Users inherit the account-level role.
 
 ## Usage
 
@@ -131,4 +143,5 @@ See `examples/demo-stack` for the combined demo stack example.
 
 ## Security Note
 
-Account and user passwords should be provided via a sensitive `.tfvars` file or environment variables. Never commit passwords to source control.
+Account and user passwords should be provided via a sensitive `.tfvars` file or
+environment variables. Never commit passwords to source control.

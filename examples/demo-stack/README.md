@@ -1,6 +1,6 @@
 # CloudStack Demo Stack
 
-Combined Terraform example for ZCP customer/demo environments.
+Combined Terraform example for Apache CloudStack demo environments by ZSoftly.
 
 This stack composes the networking, compute, load balancing/security,
 Kubernetes, accounts/projects, and VPN connectivity modules.
@@ -12,12 +12,12 @@ entry calls the reusable networking module once, keeping the child module scoped
 to one VPC while the root stack composes multiple VPCs when needed.
 
 The default `networking_vpcs` value creates one non-prod demo VPC using the
-repo-backed ZCP offerings:
+default CloudStack offerings:
 
-| Input            | Default                                         |
-| ---------------- | ----------------------------------------------- |
-| VPC offering     | `Default VPC offering`                          |
-| Network offering | `DefaultIsolatedNetworkOfferingForVpcNetworks`  |
+| Input            | Default                                        |
+| ---------------- | ---------------------------------------------- |
+| VPC offering     | `Default VPC offering`                         |
+| Network offering | `DefaultIsolatedNetworkOfferingForVpcNetworks` |
 
 ## Load Balancing & Security
 
@@ -32,16 +32,15 @@ compute module or existing instances.
 supported Kubernetes versions must already be enabled and registered in
 CloudStack before a cluster can be applied.
 
-For ZCP defaults, do not wire CKS to the demo VPC tier network. The current ZCP
-CKS model uses an isolated network with source NAT, and the platform lifecycle
-test creates its own isolated network. If `network_id` is supplied, it must
-refer to a supported CKS isolated network, not the example `VPC Tier` network.
+Do not wire CKS to the demo VPC tier network. The CloudStack CKS model uses an
+isolated network with source NAT, and the platform lifecycle creates its own
+isolated network. If `network_id` is supplied, it must refer to a supported CKS
+isolated network, not the example `VPC Tier` network.
 
-Terraform creates the CKS resource only. A usable ZCP cluster still needs the
-post-create platform integration steps from the IaaS automation:
-
-- `546-cks-fix-ccm.yml` for the CCM API endpoint
-- `547-cks-storage.yml` for persistent storage
+Terraform creates the CKS resource only. A usable cluster still needs
+post-create platform integration steps for the cloud controller manager and
+persistent storage. Consult your CloudStack platform documentation or runbooks
+for those steps.
 
 ## Accounts & Projects
 
@@ -50,8 +49,8 @@ Creates domains, accounts, users, roles, projects, and resource quotas from the
 
 The default creates one domain, one role, and one project. Accounts and users
 default to empty to avoid placeholder passwords reaching state. To provision
-accounts and users, supply them via a separate sensitive `.tfvars` file that
-is never committed:
+accounts and users, supply them via a separate sensitive `.tfvars` file that is
+never committed:
 
 ```hcl
 accounts_projects = {
@@ -101,9 +100,9 @@ See `terraform.tfvars.example` for the full variable structure.
 ## Compute
 
 The demo stack also accepts a `compute_groups` map. Each entry calls the
-reusable compute module once and references a network created by the
-networking module via `vpc_key` and `network_key`. Both keys are validated at
-plan time — a typo fails with a clear message before any CloudStack call.
+reusable compute module once and references a network created by the networking
+module via `vpc_key` and `network_key`. Both keys are validated at plan time — a
+typo fails with a clear message before any CloudStack call.
 
 `compute_groups` defaults to an empty map so the base demo plan stays
 networking-only. Populate it (or override in `terraform.tfvars`) to plan
@@ -118,8 +117,8 @@ terraform validate
 terraform plan -var-file=terraform.tfvars.example
 ```
 
-For a real ZCP dry run, copy `terraform.tfvars.example` to `terraform.tfvars`
-and replace the CloudStack API values.
+For a real CloudStack dry run, copy `terraform.tfvars.example` to
+`terraform.tfvars` and replace the CloudStack API values.
 
 ```bash
 terraform plan

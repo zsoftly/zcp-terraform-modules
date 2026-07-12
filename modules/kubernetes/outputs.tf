@@ -29,19 +29,19 @@ output "api_endpoint" {
   value       = cloudstack_kubernetes_cluster.this.ip_address
 }
 
-output "zcp_post_create_automation" {
-  description = "ZCP follow-up automation required after Terraform creates the CKS resource."
+output "acs_post_create_notes" {
+  description = "Post-create steps required after Terraform provisions the CKS resource."
   value = {
     cluster_ready_after_apply = false
     required_steps = [
-      "546-cks-fix-ccm.yml",
-      "547-cks-storage.yml",
+      "Configure the cloud controller manager API endpoint",
+      "Configure persistent storage (CSI driver)",
     ]
-    note = "Terraform creates the CloudStack CKS resource. Run the ZCP post-create automation before treating the cluster as fully usable."
+    note = "Terraform creates the CloudStack CKS resource. Complete the post-create platform integration steps before treating the cluster as fully usable. Consult your CloudStack platform runbooks for details."
   }
 }
 
-output "zcp_defaults" {
-  description = "ZCP CKS defaults this module is designed around."
-  value       = local.zcp_defaults
+output "acs_defaults" {
+  description = "ACS CKS defaults this module is designed around."
+  value       = local.acs_defaults
 }

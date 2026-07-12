@@ -1,6 +1,7 @@
 # CloudStack Networking Module
 
-Creates reusable ZCP networking resources with the Apache CloudStack Terraform provider.
+Creates reusable Apache CloudStack networking resources with the CloudStack
+Terraform provider.
 
 The module is scoped to one VPC per module call. Root stacks can compose one or
 more VPCs by calling this module with `for_each`.
@@ -14,12 +15,12 @@ more VPCs by calling this module with `for_each`.
 | `cloudstack_network_acl`      | Creates optional ACL lists for VPC tiers                |
 | `cloudstack_network_acl_rule` | Creates optional ACL rules                              |
 
-## ZCP Offering Alignment
+## ACS Offering Alignment
 
 This module keeps offering names as inputs so it can be reused across prd,
 nonprd, demo, and customer stacks.
 
-| Offering type    | ZCP names                                                           |
+| Offering type    | ACS names                                                           |
 | ---------------- | ------------------------------------------------------------------- |
 | VPC              | `Standard VPC offering`, `Standard VPC offering - nonprd`           |
 | VPC tier network | `VPC Tier`                                                          |
@@ -35,7 +36,7 @@ module "networking" {
   name         = "dev-vpc-01"
   display_text = "Development VPC"
   cidr         = "10.20.0.0/16"
-  zone         = "yow-1"
+  zone         = "your-zone-name"
   vpc_offering = "Standard VPC offering - nonprd"
 
   network_acls = {
@@ -71,7 +72,9 @@ See `examples/demo-stack` for the combined demo stack example.
 
 ## Stack Access — Required ACL Rules
 
-When deploying application stacks into a VPC tier, the network ACL must explicitly allow inbound SSH and all outbound traffic. By default VPC tiers deny all traffic.
+When deploying application stacks into a VPC tier, the network ACL must
+explicitly allow inbound SSH and all outbound traffic. By default VPC tiers deny
+all traffic.
 
 ```hcl
 network_acls = {
@@ -96,4 +99,6 @@ network_acls = {
 }
 ```
 
-Add additional ingress rules per stack as needed — for example port 80/443 for web stacks, port 25565 for Minecraft, port 443 for Pritunl. See `examples/test-images-templates` for a complete working reference.
+Add additional ingress rules per stack as needed — for example port 80/443 for
+web stacks, port 25565 for Minecraft, port 443 for Pritunl. See
+`examples/test-images-templates` for a complete working reference.

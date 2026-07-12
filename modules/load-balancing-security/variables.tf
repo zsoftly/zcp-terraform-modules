@@ -1,6 +1,11 @@
 variable "name" {
   description = "Logical name for this traffic and security configuration."
   type        = string
+
+  validation {
+    condition     = length(trimspace(var.name)) > 0
+    error_message = "name must not be empty."
+  }
 }
 
 variable "zone" {
@@ -59,6 +64,16 @@ variable "firewalls" {
     }))
   }))
   default = {}
+
+  validation {
+    condition = alltrue(flatten([
+      for k, fw in var.firewalls : [
+        for rule in fw.rules :
+        contains(["tcp", "udp", "icmp", "all"], lower(rule.protocol))
+      ]
+    ]))
+    error_message = "Firewall rule protocol must be one of: tcp, udp, icmp, all."
+  }
 }
 
 variable "egress_firewalls" {
@@ -76,6 +91,16 @@ variable "egress_firewalls" {
     }))
   }))
   default = {}
+
+  validation {
+    condition = alltrue(flatten([
+      for k, fw in var.egress_firewalls : [
+        for rule in fw.rules :
+        contains(["tcp", "udp", "icmp", "all"], lower(rule.protocol))
+      ]
+    ]))
+    error_message = "Egress firewall rule protocol must be one of: tcp, udp, icmp, all."
+  }
 }
 
 variable "static_nats" {
@@ -104,6 +129,16 @@ variable "port_forwards" {
     }))
   }))
   default = {}
+
+  validation {
+    condition = alltrue(flatten([
+      for k, pf in var.port_forwards : [
+        for fwd in pf.forwards :
+        contains(["tcp", "udp"], lower(fwd.protocol))
+      ]
+    ]))
+    error_message = "Port forward protocol must be 'tcp' or 'udp'."
+  }
 }
 
 variable "load_balancer_rules" {
@@ -121,6 +156,11 @@ variable "load_balancer_rules" {
     member_ids    = list(string)
   }))
   default = {}
+
+  validation {
+    condition     = alltrue([for k, lb in var.load_balancer_rules : contains(["tcp", "udp"], lower(lb.protocol))])
+    error_message = "Load balancer rule protocol must be 'tcp' or 'udp'."
+  }
 }
 
 check "public_ip_reference_required" {

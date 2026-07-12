@@ -50,7 +50,7 @@ output "network_cidrs" {
   }
 }
 
-output "zcp_offerings" {
-  description = "ZCP offering names this module is designed to consume."
-  value       = local.zcp_offerings
+output "acs_offerings" {
+  description = "ACS offering names this module is designed to consume."
+  value       = local.acs_offerings
 }

@@ -1,6 +1,11 @@
 variable "zone" {
   description = "CloudStack zone name or ID where templates will be registered."
   type        = string
+
+  validation {
+    condition     = length(trimspace(var.zone)) > 0
+    error_message = "zone must not be empty."
+  }
 }
 
 variable "tags" {
@@ -51,5 +56,15 @@ variable "templates" {
   validation {
     condition     = alltrue([for k, t in var.templates : t.version == null || can(regex("^[0-9]", t.version))])
     error_message = "template version must start with a digit (e.g. \"1.0.0\") — do not include a leading \"v\"."
+  }
+
+  validation {
+    condition     = alltrue([for k, t in var.templates : can(regex("^https?://", t.url))])
+    error_message = "Each template url must start with http:// or https://."
+  }
+
+  validation {
+    condition     = alltrue([for k, t in var.templates : can(regex("^[1-9][0-9]*[smh]$", t.is_ready_timeout))])
+    error_message = "Each template is_ready_timeout must be a duration string ending in s, m, or h (e.g. 30m, 1h, 3600s)."
   }
 }

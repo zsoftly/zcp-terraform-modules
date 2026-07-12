@@ -1,6 +1,11 @@
 variable "name" {
   description = "Name of the CloudStack Kubernetes Service cluster."
   type        = string
+
+  validation {
+    condition     = length(trimspace(var.name)) > 0
+    error_message = "name must not be empty."
+  }
 }
 
 variable "description" {
@@ -18,6 +23,11 @@ variable "kubernetes_version" {
   description = "Registered Kubernetes semantic version to use for the cluster."
   type        = string
   default     = "1.34.3"
+
+  validation {
+    condition     = can(regex("^\\d+\\.\\d+\\.\\d+$", var.kubernetes_version))
+    error_message = "kubernetes_version must be a semantic version without a leading 'v' (e.g. 1.28.0)."
+  }
 }
 
 variable "service_offering" {
@@ -123,6 +133,11 @@ variable "hypervisor" {
   description = "Hypervisor used for CKS nodes."
   type        = string
   default     = "KVM"
+
+  validation {
+    condition     = contains(["KVM", "VMware", "XenServer", "BareMetal", "Simulator", "Hyperv", "LXC"], var.hypervisor)
+    error_message = "hypervisor must be one of: KVM, VMware, XenServer, BareMetal, Simulator, Hyperv, LXC."
+  }
 }
 
 variable "cni_configuration_id" {

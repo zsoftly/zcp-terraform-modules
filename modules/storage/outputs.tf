@@ -37,7 +37,7 @@ output "snapshot_ids" {
   }
 }
 
-output "zcp_offerings" {
-  description = "ZCP disk offering names this module is designed to consume."
-  value       = local.zcp_offerings
+output "acs_offerings" {
+  description = "ACS disk offering names this module is designed to consume."
+  value       = local.acs_offerings
 }

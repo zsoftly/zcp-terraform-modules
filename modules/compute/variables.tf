@@ -1,6 +1,11 @@
 variable "zone" {
   description = "CloudStack zone name or ID."
   type        = string
+
+  validation {
+    condition     = length(trimspace(var.zone)) > 0
+    error_message = "zone must not be empty."
+  }
 }
 
 variable "project" {
@@ -57,6 +62,11 @@ variable "affinity_groups" {
     description = optional(string)
   }))
   default = {}
+
+  validation {
+    condition     = alltrue([for k, ag in var.affinity_groups : contains(["host anti-affinity", "host affinity"], ag.type)])
+    error_message = "affinity_groups type must be 'host anti-affinity' or 'host affinity'."
+  }
 }
 
 variable "instances" {
@@ -86,6 +96,35 @@ variable "instances" {
   validation {
     condition     = length(var.instances) > 0
     error_message = "At least one instance must be defined."
+  }
+
+  validation {
+    condition     = alltrue([for k, i in var.instances : i.root_disk_size == null || i.root_disk_size >= 10])
+    error_message = "Instance root_disk_size must be at least 10 GB when specified."
+  }
+
+  validation {
+    condition = alltrue(flatten([
+      for k, i in var.instances : [
+        for dk, disk in i.data_disks :
+        disk.device_id == null || (disk.device_id >= 1 && disk.device_id <= 6)
+      ]
+    ]))
+    error_message = "Data disk device_id must be between 1 and 6 when specified."
+  }
+}
+
+check "ssh_keypair_name_required" {
+  assert {
+    condition     = !var.create_ssh_keypair || var.ssh_keypair_name != null
+    error_message = "ssh_keypair_name is required when create_ssh_keypair is true."
+  }
+}
+
+check "ssh_public_key_required" {
+  assert {
+    condition     = !var.create_ssh_keypair || var.ssh_public_key != null
+    error_message = "ssh_public_key is required when create_ssh_keypair is true."
   }
 }
 
