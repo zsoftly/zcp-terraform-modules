@@ -7,13 +7,13 @@ to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-## [v1.0.0] - 2026-07-12
+## [v1.0.0] - 2026-07-13
 
 Initial public release of the Apache CloudStack Terraform modules by ZSoftly.
 
 ### Added
 
-9 modules covering the full Apache CloudStack (ACS) provisioning surface:
+9 modules for Apache CloudStack infrastructure and workload provisioning:
 
 - `networking` - VPCs, VPC tiers/networks, IP ranges, and ACLs
 - `compute` - Instances, SSH keypairs, affinity groups, and data disks
@@ -24,14 +24,12 @@ Initial public release of the Apache CloudStack Terraform modules by ZSoftly.
 - `accounts-projects` - Domains, accounts, users, roles, projects, and quotas
 - `vpn-connectivity` - Site-to-site VPN gateway and connections
 - `images-templates` - Template registration, versioning, and sharing
-- `stacks` - Pre-configured app stack selection and cloud-init userdata
-  rendering (in progress)
+- `stacks` - App stack selection and cloud-init userdata rendering (in progress)
 
 Examples:
 
-- `examples/demo-stack` - Composable demo stack using all implemented modules,
-  with a full `terraform.tfvars.example`
-- `examples/test-images-templates` - Standalone test for the stacks module:
-  provisions a VM with a selected app stack cloud-init payload
+- `examples/demo-stack` - Composable demo stack using all modules, with a full
+  `terraform.tfvars.example`
+- `examples/test-images-templates` - End-to-end test for the stacks module
 
 Provider: `cloudstack/cloudstack ~> 0.6`. Requires Terraform >= 1.5.

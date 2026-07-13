@@ -4,8 +4,8 @@ Initial public release of the Apache CloudStack Terraform modules by ZSoftly.
 
 ## What Is Included
 
-9 reusable Terraform modules covering the full Apache CloudStack (ACS)
-provisioning surface:
+9 reusable Terraform modules for Apache CloudStack infrastructure and workload
+provisioning:
 
 | Module                    | Purpose                                                             |
 | ------------------------- | ------------------------------------------------------------------- |
@@ -19,10 +19,10 @@ provisioning surface:
 | `images-templates`        | Template registration, versioning, and sharing                      |
 | `stacks`                  | App stack selection and cloud-init userdata rendering (in progress) |
 
-Two runnable examples:
+Examples:
 
-- `examples/demo-stack`: composable demo stack using all implemented modules
-- `examples/test-images-templates`: end-to-end test for the stacks module
+- `examples/demo-stack` — composable demo stack using all modules
+- `examples/test-images-templates` — end-to-end test for the stacks module
 
 Provider: `cloudstack/cloudstack ~> 0.6`. Requires Terraform >= 1.5.
 
@@ -49,13 +49,12 @@ module "networking" {
 }
 ```
 
-Pin to a tag (`?ref=v1.0.0`) rather than the main branch to get reproducible
-plans.
+Pin to a tag (`?ref=v1.0.0`) rather than the main branch for reproducible plans.
 
 ## Notes
 
-- The `stacks` module is functional for the `docker` stack. Remaining stacks
-  (`cpanel`, `drupal`, `gitlab`, etc.) have cloud-init templates in progress.
+- The `stacks` module is functional for the `docker` stack. Additional stacks
+  have cloud-init templates in progress.
 - CKS clusters require post-create integration steps for the cloud controller
   manager and persistent storage. The `kubernetes` module output
   `acs_post_create_notes` documents this explicitly.

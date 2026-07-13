@@ -59,7 +59,6 @@ variable "hostname" {
 variable "service_offering" {
   description = "CloudStack service offering name for the test VM."
   type        = string
-  default     = "CI1-1"
 
   validation {
     condition     = length(trimspace(var.service_offering)) > 0

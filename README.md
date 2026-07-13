@@ -11,7 +11,6 @@ infrastructure automation:
 - spin up demo environments quickly
 - standardize customer onboarding infrastructure
 - keep Terraform usage aligned with ZSoftly ACS service offerings
-- provide a growing end-to-end demo stack as modules are added
 
 ## Structure
 
@@ -25,27 +24,26 @@ modules/
 ├── accounts-projects/          # Domains, accounts, users, roles, projects, quotas
 ├── vpn-connectivity/           # Site-to-site VPN gateway and connections
 ├── images-templates/           # Template registration, versioning, and sharing
-└── stacks/                     # Pre-configured app stack selection and cloud-init rendering
+└── stacks/                     # App stack selection and cloud-init userdata rendering
 
 examples/
-└── demo-stack/   # combined demo stack using the modules
+├── demo-stack/                 # combined demo stack using the modules
+└── test-images-templates/      # end-to-end test for the stacks module
 ```
 
 ## Module Roadmap
 
-| Module                    | Status      | Purpose                                                              |
-| ------------------------- | ----------- | -------------------------------------------------------------------- |
-| `networking`              | Ready       | VPCs, VPC tiers/networks, IP ranges, ACLs                            |
-| `compute`                 | Ready       | Instances, templates, service offerings                              |
-| `storage`                 | Ready       | Volumes and snapshots                                                |
-| `accounts-projects`       | Ready       | Domains, accounts, users, roles, projects, quotas                    |
-| `load-balancing-security` | Ready       | Load balancing, firewall, NAT                                        |
-| `kubernetes`              | Ready       | Managed clusters and node pools                                      |
-| `vpn-connectivity`        | Ready       | Site-to-site VPN gateway and connections                             |
-| `images-templates`        | Ready       | Image/template upload, versioning, sharing                           |
-| `stacks`                  | In Progress | Pre-configured app stack selection and cloud-init userdata rendering |
-
-Only modules with a directory under `modules/` are currently implemented.
+| Module                    | Status      | Purpose                                               |
+| ------------------------- | ----------- | ----------------------------------------------------- |
+| `networking`              | Ready       | VPCs, VPC tiers/networks, IP ranges, ACLs             |
+| `compute`                 | Ready       | Instances, SSH keypairs, affinity groups, data disks  |
+| `storage`                 | Ready       | Volumes and snapshots                                 |
+| `accounts-projects`       | Ready       | Domains, accounts, users, roles, projects, quotas     |
+| `load-balancing-security` | Ready       | Load balancing, firewall, NAT                         |
+| `kubernetes`              | Ready       | Managed clusters and node pools                       |
+| `vpn-connectivity`        | Ready       | Site-to-site VPN gateway and connections              |
+| `images-templates`        | Ready       | Template registration, versioning, and sharing        |
+| `stacks`                  | In Progress | App stack selection and cloud-init userdata rendering |
 
 ## Validation
 
@@ -97,5 +95,4 @@ git switch -c feature/<module-or-change-name>
 terraform fmt -recursive .
 ```
 
-Run `terraform validate` and `terraform plan` from the relevant example root
-before opening a PR.
+Run `terraform validate` from the relevant example root before opening a PR.

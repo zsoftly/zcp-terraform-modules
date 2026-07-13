@@ -58,3 +58,9 @@ variable "template_name_overrides" {
     error_message = "template_name_overrides keys must be valid stack slugs: cpanel, docker, lamp, drupal, joomla, wordpress, wp-squared, gitlab, jitsi, magento, minecraft, pritunl."
   }
 }
+
+variable "cloud_init_templates_dir" {
+  description = "Directory containing cloud-init .tftpl template files. Defaults to the bundled templates shipped with this module. Override to use your own templates."
+  type        = string
+  default     = null
+}
