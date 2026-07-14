@@ -45,7 +45,7 @@ Set `size_gb` only when the selected disk offering supports custom sizing.
 module "storage" {
   source = "../../modules/storage"
 
-  zone    = "yow-1"
+  zone    = "your-zone-name"
   project = null
 
   volumes = {

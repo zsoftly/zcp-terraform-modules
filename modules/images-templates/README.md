@@ -9,10 +9,10 @@ sharing, and deletion.
 module "images_templates" {
   source = "../../modules/images-templates"
 
-  zone = "yow-1"
+  zone = "your-zone-name"
 
   tags = {
-    service = "zcp"
+    service = "acs"
     managed = "terraform"
   }
 

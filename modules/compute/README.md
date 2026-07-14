@@ -15,8 +15,9 @@ groups (e.g. web/app/db tiers) by calling the module with `for_each`.
 
 ## Notes
 
-- **Service offerings** are passed as plain names (e.g. `CI1-1`, `CA1-1`) and
-  not validated by the module — new offerings work without a module release.
+- **Service offerings** are passed as plain names (e.g. `small-offering`,
+  `large-offering`) and not validated by the module — new offerings work without
+  a module release.
 - **SSH keypair** is opt-in. With `create_ssh_keypair = false` and
   `ssh_keypair_name = null`, instances launch without a module-injected key; use
   only with templates that bake in credentials or accept `user_data`.
@@ -32,8 +33,8 @@ groups (e.g. web/app/db tiers) by calling the module with `for_each`.
 module "web" {
   source = "../../modules/compute"
 
-  zone                     = "yow-1"
-  default_service_offering = "CI1-1"
+  zone                     = "your-zone-name"
+  default_service_offering = "your-service-offering"
   default_template         = "Ubuntu-24.04-LTS"
   default_network_id       = module.networking["demo"].network_ids["web"]
 
@@ -43,7 +44,7 @@ module "web" {
 
   instances = {
     web1 = { name = "web-01" }
-    web2 = { name = "web-02", service_offering = "CI1-2" }
+    web2 = { name = "web-02", service_offering = "your-large-offering" }
   }
 }
 ```
@@ -80,7 +81,7 @@ cp terraform.tfvars.example terraform.tfvars
 Edit `terraform.tfvars` and set:
 
 - `cloudstack_api_url`, `cloudstack_api_key`, `cloudstack_secret_key`
-- `zone` (e.g. `yow-1`)
+- `zone` (your CloudStack zone name or ID)
 - `networking_vpcs` and `compute_groups` per the example block
 
 Then:
@@ -99,7 +100,7 @@ created. Confirm the counts match expectations before applying.
 | #   | Case                           | How to test                                                    | Pass criteria                                                                    |
 | --- | ------------------------------ | -------------------------------------------------------------- | -------------------------------------------------------------------------------- |
 | 1   | Single instance, defaults      | One entry in `instances`, only `name` set                      | VM reaches `Running` state; outputs include `instance_ids` and `instance_ips`    |
-| 2   | Per-instance offering override | `service_offering = "CI1-2"` on one instance                   | That VM has 1 vCPU / 2 GB; siblings use the default                              |
+| 2   | Per-instance offering override | `service_offering = "your-large-offering"` on one instance     | That VM has 1 vCPU / 2 GB; siblings use the default                              |
 | 3   | SSH keypair created            | `create_ssh_keypair = true` + valid `ssh_public_key`           | `ssh_keypair` output non-null; key visible in CloudStack UI                      |
 | 4   | Inline data disk               | Add a `data_disks` block on one instance                       | Disk attached; visible in `compute_data_disks` output and CloudStack volume list |
 | 5   | Affinity group                 | Define `affinity_groups` + reference via `affinity_group_keys` | Group created; VM is a member                                                    |

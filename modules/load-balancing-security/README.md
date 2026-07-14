@@ -42,7 +42,7 @@ module "load_balancing_security" {
   source = "../../modules/load-balancing-security"
 
   name       = "demo-edge"
-  zone       = "yow-1"
+  zone       = "your-zone-name"
   project    = null
   network_id = module.networking["demo"].network_ids["web"]
 

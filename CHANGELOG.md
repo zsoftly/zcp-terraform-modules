@@ -7,7 +7,7 @@ to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-## [v1.0.0] - 2026-07-13
+## [v1.0.0] - 2026-07-14
 
 Initial public release of the Apache CloudStack Terraform modules by ZSoftly.
 
